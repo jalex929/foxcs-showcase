@@ -86,6 +86,7 @@ FoxCS is in daily use by real students. The Moodle platform, interactive lessons
 - [System architecture](docs/architecture.md)
 - [Grading pipeline and capability status](docs/grading-pipeline.md)
 - [On-submission grading](docs/on-submission-grading.md)
+- [Assessment access: a daily class code](docs/assessment-access-design.md)
 - [Testing and validation](docs/testing.md)
 - [AI reliability and boundaries](docs/ai-reliability-and-boundaries.md)
 - [Privacy and data boundaries](docs/privacy-and-data.md)
