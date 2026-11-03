@@ -250,8 +250,7 @@ def run_program(path: Path, stdin: str, spec: ExerciseSpec) -> RunResult:
             [sys.executable, "-I", "-c", CHILD_BOOTSTRAP, str(path), str(spec.memory_limit_mb)],
             input=stdin,
             capture_output=True,
-            text=True,
-            encoding="utf-8",
+            encoding="utf-8",  # implies text mode
             errors="replace",
             timeout=spec.timeout_seconds,
             cwd=str(path.parent),
@@ -412,7 +411,7 @@ class ResultStore:
     def append(self, record: dict) -> None:
         self.path.parent.mkdir(parents=True, exist_ok=True)
         with self.path.open("a", encoding="utf-8") as f:
-            f.write(json.dumps(record, sort_keys=True) + "\n")
+            f.write(json.dumps(record) + "\n")
 
 
 # ---------------------------------------------------------------- entry point

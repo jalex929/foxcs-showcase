@@ -80,7 +80,7 @@ See [grading-pipeline.md](grading-pipeline.md) for how this runs today and [ai-r
 
 ### Release Gate
 
-Every result, deterministic or AI-assisted, is a draft until the teacher approves it. Approved grades are written to the Moodle gradebook by script.
+Every result, deterministic or AI-assisted, is a draft until the teacher approves it. Approval is per batch: the [release check](release-check.md) first blocks results that can't be correct, flags disagreements between score and rationale, and picks a spot-check sample to read in full. Approved grades are written to the Moodle gradebook by script.
 
 ## Key design trade-offs
 

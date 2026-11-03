@@ -171,6 +171,54 @@ class TestFeedbackText(unittest.TestCase):
         self.assertTrue(so.check_evidence(out).passed)
 
 
+class TestFoundByMutationTesting(unittest.TestCase):
+    """Gaps that tools/mutation_test.py found: each test kills a mutant the
+    suite above let survive."""
+
+    def test_forbidden_phrase_in_strengths_is_caught(self):
+        out = ref()
+        out["feedback"]["strengths"] = ["This is perfect."]
+        self.assertFalse(so.check_feedback_phrases(out, {"feedbackMustNotContain": ["perfect"]}).passed)
+
+    def test_forbidden_phrase_in_evidence_is_caught(self):
+        out = ref()
+        out["rubricResults"][0]["evidence"] = ["Looks perfect."]
+        self.assertFalse(so.check_feedback_phrases(out, {"feedbackMustNotContain": ["perfect"]}).passed)
+
+    def test_failure_and_success_details(self):
+        out = ref()
+        self.assertEqual(so.check_feedback_phrases(out, {}).detail, "")
+        self.assertEqual(so.check_feedback_phrases(out, {"feedbackMustMention": ["zebra"]}).detail,
+                         "missing=['zebra'] forbidden_present=[]")
+        self.assertEqual(so.check_evidence(out).detail, "")
+        out["rubricResults"][0]["evidence"] = []
+        self.assertEqual(so.check_evidence(out).detail, "no evidence for: ['runs_without_errors']")
+        self.assertEqual(so.check_next_step(ref()).detail, "")
+        out["feedback"]["nextStep"] = ""
+        self.assertEqual(so.check_next_step(out).detail, "feedback.nextStep is empty")
+
+    def test_even_one_point_needs_evidence(self):
+        out = ref()
+        for r in out["rubricResults"]:
+            if r["criterionId"] == "explanation_matches_code":
+                r["evidence"] = []
+        self.assertFalse(so.check_evidence(out).passed)
+
+    def test_bounds_at_the_limit_and_for_missing_criteria(self):
+        out = ref()  # uses_return earns 4
+        self.assertTrue(so.check_criterion_bounds(out, {"maxCriterionPoints": {"uses_return": 4}}).passed)
+        self.assertTrue(so.check_criterion_bounds(out, {"maxCriterionPoints": {"not_scored": 0}}).passed)
+        self.assertFalse(so.check_criterion_bounds(out, {"minCriterionPoints": {"not_scored": 1}}).passed)
+        del out["rubricResults"][1]["pointsEarned"]
+        self.assertFalse(so.check_criterion_bounds(out, {"minCriterionPoints": {"uses_return": 1}}).passed)
+
+    def test_unknown_confidence_words_count_as_high(self):
+        out = ref()
+        out["review"]["overallConfidence"] = "very sure"
+        self.assertTrue(so.check_confidence(out, {"maxConfidence": "high"}).passed)
+        self.assertFalse(so.check_confidence(out, {"maxConfidence": "medium"}).passed)
+
+
 class TestInjection(unittest.TestCase):
     def test_no_injection_passes_trivially(self):
         self.assertTrue(so.check_injection(ref(), {"id": "x"}).passed)

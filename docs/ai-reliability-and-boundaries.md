@@ -15,9 +15,10 @@ Draft rubric-based scores and feedback for work that needs interpretation: code,
 
 | Limitation | Mitigation | Where |
 |---|---|---|
-| Confident but wrong scoring | Rubric is the primary source of truth; best-fit scoring so one minor gap does not sink a score; teacher approval on every result | Feedback spec, Release Gate |
-| Inventing evidence | Every criterion that earns points must cite specific evidence from the submission | Feedback spec; enforced by `evidence_for_credit` in `evals/` |
-| Feedback that contradicts the score | Score, rubric, and narrative are all rendered from one structured evaluation, then validated against each other | Feedback spec sections 20 and 21 |
+| Confident but wrong scoring | Rubric is the primary source of truth; best-fit scoring so one minor gap does not sink a score; automated release check on every result, spot checks, and teacher approval of every batch | Feedback spec, `grader/release_check.py`, Release Gate |
+| Inventing evidence | Every criterion that earns points must cite specific evidence, and code quoted as evidence must actually appear in the submission | Feedback spec; enforced on every result by the release check |
+| Feedback that contradicts the score | Score, rubric, and narrative are rendered from one structured evaluation. The release check flags full marks explained with problems, zero explained with praise, and praise that doesn't fit the score | Feedback spec sections 20 and 21; release check |
+| Contradicting what the program actually did | Grades for facts the on-submission run already settled must match it, or the result is blocked | Release check |
 | Applying criteria from the wrong assignment | Output must cover exactly the assignment's rubric criteria, no more and no fewer | `rubric_coverage` check |
 | Overconfidence on thin evidence | "Not Enough Evidence" is a first-class outcome. Missing or unreadable work triggers review | Review triggers; `confidence_cap` check |
 | Prompt injection inside student work | Submission content is data, never instructions. Embedded requests to the grader are ignored for scoring and flagged for the teacher | Eval case `05_prompt_injection` |
@@ -47,10 +48,14 @@ An AI tool receives a pseudonymous ID, the submission files, the rubric, and pse
 ## Failure behavior
 
 - **Invalid or incomplete score configuration**: never sent. Held for review.
-- **Reviewer output fails validation**: held. In the live workflow this is caught at teacher review today. Automated validation of every live output with the `evals/` checks is planned.
+- **Reviewer output fails validation**: blocked by the release check, and the batch can't be pushed until it's fixed. Results that are consistent but questionable are flagged for individual review.
 - **AI tooling unavailable**: nothing degrades for students. The deterministic tier and Moodle's own quiz scoring keep running, and the review queue waits.
 
-There are no automatic retries. Because a person reviews every result, a failed or doubtful output is re-run deliberately or graded by hand, rather than retried until it passes.
+There are no automatic retries. A blocked or doubtful output is re-run deliberately or graded by hand, rather than retried until it passes.
+
+## How bulk approval stays safe
+
+I approve grades as a batch, after reading rationale and trends, not by re-reading each one. That only works if something else checks each result. The [release check](release-check.md) does that mechanically on every result, and a seeded random spot-check sample keeps the "rationale lines up, so the grade is right" assumption tested against fully read results each batch.
 
 ## What the eval harness adds
 

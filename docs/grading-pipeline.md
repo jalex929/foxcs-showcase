@@ -21,7 +21,8 @@
 | Weekly batch grader (`grader/auto_grade.py`) | Implemented | Tested against synthetic and generated submissions. Built for the folder-based delivery format; the live course now records most of the same facts through Moodle and the telemetry plugin |
 | AI-assisted review of code and written work | Deployed, teacher-operated | Run in a local AI coding session with the rubric and feedback spec as context. Not an API service |
 | Required rubric file before any coding exercise is published | Deployed | Added after a batch of exercises went live without one |
-| Structured output and score validation rules | Specified | Defined in the feedback spec and followed by the reviewer. Programmatic enforcement exists in `evals/` but is not yet wired into the live path |
+| Structured output and score validation rules | Specified | Defined in the feedback spec and followed by the reviewer |
+| Release check before every bulk push (`grader/release_check.py`) | Implemented | Blocks results that can't be right, flags score-rationale disagreements, and draws a spot-check sample. 100% line and branch coverage in CI. See [release-check.md](release-check.md) |
 | Eval harness for AI grading outputs (`evals/`) | Implemented | Validates outputs. Baseline runs against a model are planned |
 | Writing approved grades back to Moodle | Deployed, teacher-run | CLI scripts against Moodle's own APIs, for example a tool that converts a project tier to the correct grade |
 | Above-and-beyond bonus points | Not active | Two specifications define overlapping bonus mechanisms that would double-count. Held until reconciled. The eval harness rejects any output that applies a bonus |
@@ -50,7 +51,7 @@ The feedback spec requires the reviewer to produce structured data first (criter
 - The narrative feedback matches the rubric, and no correct criterion is described as incorrect.
 - Low-confidence work is held for teacher review.
 
-Then the teacher reviews every result. `evals/score_output.py` implements the mechanically checkable subset of these rules as code.
+I don't re-read every grade. I read the rationale, check the criteria and the batch's grading trends, and approve the batch. So before that happens, the [release check](release-check.md) runs on every result. It blocks anything that cannot be correct, flags anything where the score and its explanation disagree, and picks a few results for me to read in full. `evals/score_output.py` applies case-specific expectations to the same output format, to compare grading prompts and models.
 
 ### 4. How does feedback return to Moodle?
 
@@ -58,7 +59,7 @@ After approval, by script. Grades are written through Moodle's own grade APIs ra
 
 ### 5. What requires teacher approval?
 
-Everything. No score, feedback, XP award, or recommendation reaches a student without approval, including high-confidence results.
+Everything. No score, feedback, XP award, or recommendation reaches a student without approval, including high-confidence results. Approval happens per batch: blocked results must be fixed, flagged results are reviewed individually, a spot-check sample is read in full, and then the rest is approved together.
 
 ### 6. What happens when grading fails?
 

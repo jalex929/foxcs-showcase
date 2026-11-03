@@ -7,20 +7,21 @@ Every suite here runs with a standard Python install (3.10+), no dependencies. C
 ```bash
 python -m unittest discover -s grader/tests -v    # both deterministic graders
 
-# 100% line and branch coverage gate for on-submission grading (needs: pip install coverage)
-python -m coverage run --branch --include=grader/on_submission.py -m unittest discover -s grader/tests
+# 100% line and branch coverage gate for on-submission grading and the release check (needs: pip install coverage)
+python -m coverage run --branch --include=grader/on_submission.py,grader/release_check.py -m unittest discover -s grader/tests
 python -m coverage report -m --fail-under=100
 python -m unittest discover -s evals/tests -v     # eval harness
 python -m unittest discover -s tools/tests -v     # leak scanner
 python tools/check_showcase_clean.py              # leak scan of this repo
 python evals/run_evals.py                         # eval suite vs. reference judgments
+python tools/mutation_test.py                     # mutation testing (under two minutes)
 ```
 
 Successful output ends with `OK` for each unittest suite, `Clean: no known private-workspace patterns found.` for the scanner, and `Cases passed: 6/6` for the eval run.
 
 ## What is covered
 
-### On-submission grader: 42 tests, 100% line and branch coverage
+### On-submission grader: 46 tests, 100% line and branch coverage
 
 CI fails if any line or branch of `grader/on_submission.py` goes untested. The only exclusion is the `if __name__ == "__main__":` line, and the command line behind it is tested by calling `main()` directly. Most tests run real programs through the real subprocess path rather than mocks.
 
@@ -35,7 +36,11 @@ CI fails if any line or branch of `grader/on_submission.py` goes untested. The o
 | Command line | Success, invalid event, malformed and missing event files |
 | Golden files | Committed example results in `examples/on-submission/` match fresh runs |
 
-**Mutation check.** Four bugs were injected one at a time (crashes scored as half credit, the path check removed, duplicate detection broken, the grader's environment leaked to the child). Each was caught by a failing test.
+**Mutation tested.** See [Mutation testing](#mutation-testing) below. At 100% coverage, the first run still let 19 changes survive, including a missed check that partial credit rounds to cents and that a 1-point exercise is accepted. All are now covered or documented as equivalent.
+
+### Release check: 68 tests, 100% line and branch coverage
+
+Batches are built from the eval suite's synthetic cases and reference judgments, so the good batch is known-good. The known-good batch raises no false alarms; the only results flagged are the ones the grader escalated itself. Every check gets a deliberately broken result: a criterion from another rubric, a criterion scored twice, points out of range, arithmetic off, an unapproved bonus, credit without evidence, evidence quoting code that isn't in the submission, a grade contradicting the program run, full marks explained with a problem, zero explained with praise, praise below full marks, and the same feedback on different scores. Spot-check sampling is tested for spread across low, middle and high scores (across 30 seeds) and for reproducibility. See [release-check.md](release-check.md).
 
 ### Weekly batch grader: 55 tests
 
@@ -70,6 +75,27 @@ Beyond that:
 - Scanner exit codes and `file:line` reporting work as CI relies on, and `.git` and `__pycache__` are skipped.
 - **Committed fixtures are byte-identical to `tools/make_fixtures.py` output**, so nothing can be hand-edited into them unnoticed.
 - Every relative link in the Markdown docs resolves.
+
+## Mutation testing
+
+Coverage shows that every line ran during the tests. It doesn't show that a test would notice if a line were wrong. `tools/mutation_test.py` checks that directly. It makes one small change at a time to the grading code: flips a comparison, swaps `and` for `or`, inverts a condition, nudges a number, returns `None`. Then it runs the tests and expects them to fail. A change the tests don't catch is a surviving mutant, and it points at behavior nothing checks.
+
+| Module | First run (already at 100% coverage) | Now | Documented equivalents |
+| --- | --- | --- | --- |
+| On-submission grading | 88.7%: 19 of 168 mutants survived | 100% of 166 | 3 |
+| Release check | 83.0%: 37 of 218 mutants survived | 100% of 204 | 2 |
+| Eval scorer | 90.5%: 13 of 137 mutants survived | 100% of 137 | 1 |
+
+Mutant counts dropped where the first run exposed code that could be removed.
+
+What the survivors pointed at, and what changed:
+
+- **Untested behavior, now tested.** Examples: a 1-point credit with no evidence would not have been blocked. A forbidden phrase hidden in a "strength" was invisible to the eval. Partial credit wasn't pinned to cents. Bounds exactly at the limit were never exercised.
+- **Code that didn't need to exist, now removed.** A guard in the spot-check sampler that could never change the result. A length check implied by the one after it. A `text=True` already implied by `encoding=`.
+- **A bug in the mutation tester itself.** Two identical changes on one line shared an identity, so excusing one would have silently excused the other. Fixed, with a regression test.
+- **Genuinely equivalent changes, written down.** For example, `> 1e-6` versus `>= 1e-6` on a sum of rubric points, or JSON indentation in command-line output. Each is listed in `tools/mutation_equivalents.json` with its reason. A test fails if an entry goes stale.
+
+The tester is standard-library Python, like the rest of the repository. Its own 15 tests run it against a tiny sample module with two test suites: one that checks behavior, and one that runs every line but asserts almost nothing. The weak suite has full coverage and a low mutation score, which is the difference the tool exists to show. CI runs mutation testing as a separate job and fails on any unexplained survivor. The full run takes under two minutes.
 
 ## What is not covered here
 
