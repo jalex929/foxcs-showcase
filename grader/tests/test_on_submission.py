@@ -96,6 +96,9 @@ class TestBands(TempCase):
         r = self.submit("partial_zero_case.py")
         self.assertEqual(r["band"], "runs_with_issues")
         self.assertEqual(r["score"]["standardPointsEarned"], 8.33)  # 5 + 5 * 2/3
+        self.assertEqual(r["rubricResults"][1]["pointsEarned"], 3.33)  # rounded to cents, not 3.333
+        self.assertIn("but 1 of 3 test inputs did not produce", r["feedback"]["overallFeedback"])
+        self.assertTrue(r["review"]["reasons"][0].startswith("Runs, but 1 of 3 test inputs failed."))
         self.assertIn("zero coins", r["feedback"]["nextStep"])
         self.assertEqual(r["review"]["overallConfidence"], "medium")
 
@@ -144,6 +147,7 @@ class TestSafety(TempCase):
         self.assertTrue(r["review"]["teacherReviewRequired"])
         self.assertIn("timed out", r["review"]["reasons"][0])
         self.assertTrue(r["tests"][0]["timedOut"])
+        self.assertIs(r["tests"][0]["passed"], False)
 
     @unittest.skipUnless(sys.platform != "win32", "resource limits are POSIX only")
     def test_memory_limit_stops_runaway_allocation(self):
@@ -259,6 +263,13 @@ class TestHeldForReview(TempCase):
     def test_empty_file(self):
         self.assertHeld(self.handle(event_for(self.write("empty.py", ""))), "is empty")
 
+    def test_file_exactly_at_size_limit_is_accepted(self):
+        body = 'print("You have 30 points.")\n'
+        path = self.write("edge.py", body + "#" * (FAST_SPEC.max_bytes - len(body) - 1) + "\n")
+        self.assertEqual(path.stat().st_size, FAST_SPEC.max_bytes)
+        r = self.handle(event_for(path))
+        self.assertIsNotNone(r["band"])
+
     def test_oversized_file(self):
         big = self.write("big.py", "# " + "x" * (FAST_SPEC.max_bytes + 10) + "\n")
         self.assertHeld(self.handle(event_for(big)), "over the")
@@ -350,6 +361,13 @@ class TestExerciseSpecs(unittest.TestCase):
         with self.assertRaisesRegex(osub.InvalidExercise, "int or float"):
             osub.parse_exercise({**self.base(), "pointsPossible": "10"})
 
+    def test_one_point_and_one_second_are_valid(self):
+        data = {**self.base(), "pointsPossible": 1, "timeoutSeconds": 1}
+        spec = osub.parse_exercise(data)
+        self.assertEqual((spec.points_possible, spec.timeout_seconds), (1.0, 1.0))
+        with self.assertRaises(osub.InvalidExercise):
+            osub.parse_exercise({**self.base(), "timeoutSeconds": 0})
+
     def test_duplicate_assignment_ids_rejected(self):
         with tempfile.TemporaryDirectory() as tmp:
             for name in ("a.json", "b.json"):
@@ -368,6 +386,8 @@ class TestHelpers(unittest.TestCase):
         self.assertEqual(osub._clip(None), "")
         self.assertEqual(osub._clip(b"caf\xc3\xa9"), "café")
         self.assertEqual(osub._clip("short"), "short")
+        exact = "x" * osub.MAX_CAPTURED_CHARS
+        self.assertEqual(osub._clip(exact), exact)  # at the limit: untouched
         long = osub._clip("x" * (osub.MAX_CAPTURED_CHARS + 5))
         self.assertTrue(long.endswith("[output truncated]"))
         self.assertEqual(len(long), osub.MAX_CAPTURED_CHARS + len("\n[output truncated]"))
@@ -394,6 +414,13 @@ class TestResultStore(unittest.TestCase):
     def test_missing_file_returns_none(self):
         with tempfile.TemporaryDirectory() as tmp:
             self.assertIsNone(osub.ResultStore(Path(tmp) / "none.jsonl").latest("x"))
+
+    def test_store_creates_nested_folders(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            store = osub.ResultStore(Path(tmp) / "a" / "b" / "c" / "r.jsonl")
+            store.append({"submission_id": "a"})
+            store.append({"submission_id": "a", "v": 2})
+            self.assertEqual(store.latest("a")["v"], 2)
 
     def test_latest_record_wins_and_blank_lines_are_skipped(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -444,7 +471,16 @@ class TestMain(unittest.TestCase):
                 with self.subTest(path=path.name):
                     code, result = self.run_main(path, tmp)
                     self.assertEqual(code, 2)
+                    self.assertIs(result["accepted"], False)
                     self.assertIn("could not read event", result["error"])
+
+    def test_required_options(self):
+        import contextlib
+        full = {"--exercises": str(EXERCISES_DIR), "--submissions-root": str(FIXTURES), "--store": "x.jsonl"}
+        for missing in full:
+            args = ["event.json"] + [v for k, val in full.items() if k != missing for v in (k, val)]
+            with self.subTest(missing=missing), contextlib.redirect_stderr(io.StringIO()), self.assertRaises(SystemExit):
+                osub.main(args)
 
 
 if __name__ == "__main__":

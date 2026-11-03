@@ -82,7 +82,7 @@ This stops runaway programs. It is **not a security boundary** against hostile c
 
 ## Testing
 
-`grader/tests/test_on_submission.py` runs real student-style programs through the real subprocess path. CI enforces **100% line and branch coverage** of `on_submission.py`. Fixtures cover a correct solution, a valid alternative, string repetition instead of multiplication, a partially correct program, a syntax error, a runtime error, an infinite loop, a memory hog, a program trying to talk to "the autograder," and a program that reports its own environment to prove isolation. As a check on the tests themselves, four deliberately injected bugs (wrong scoring for crashes, the path check removed, duplicate detection broken, the environment leaked to the child) were each caught. See [testing.md](testing.md).
+`grader/tests/test_on_submission.py` runs real student-style programs through the real subprocess path. CI enforces **100% line and branch coverage** of `on_submission.py`. Fixtures cover a correct solution, a valid alternative, string repetition instead of multiplication, a partially correct program, a syntax error, a runtime error, an infinite loop, a memory hog, a program trying to talk to "the autograder," and a program that reports its own environment to prove isolation. Mutation testing then changes the grading code one small step at a time (about 170 changes) and requires a test to catch each one, beyond what coverage can show. See [testing.md](testing.md).
 
 ## Try it
 
