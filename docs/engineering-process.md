@@ -44,6 +44,7 @@ When something reaches students that should not have, the fix includes a check t
 | A set of practice questions went live as static text with no way to answer | Same checker fails on any response-eliciting block with no interactive control |
 | Coding exercises went live with no rubric, forcing ad-hoc grading later | No coding exercise is published without a rubric file |
 | Live content was at risk with no backups | Nightly backups, plus a required manual backup as the first step of any live edit |
+| Handing quiz passwords to self-paced students one at a time did not scale | A daily class code, rotated automatically, plus gates that enforce themselves. See [assessment-access-design.md](assessment-access-design.md) |
 | Licensed and private material in a public repository | This showcase was extracted with fresh history, and CI fails if such material appears |
 
 ## Ground truth over summaries

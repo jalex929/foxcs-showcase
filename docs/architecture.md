@@ -46,7 +46,7 @@ flowchart TB
 | Instruction | Self-contained HTML: concept content, vocabulary flashcards, a drag-and-drop vocab quiz, quick checks, and a Reinforce / Core / Extend practice ladder in one fixed linear sequence | Native Moodle Lesson pages could not deliver the interaction design. A single self-contained page could, at the cost of building completion tracking myself |
 | Coding Exercise | Native Moodle Assignment, `.py` file upload only | Students practice the real workflow of saving and submitting a file |
 | Project | Native Moodle Assignment with a rubric and tiered XP goals | Same submission path, separate module so grading weight stays clear |
-| Mastery Check | Native Moodle Quiz, gated, three attempts, averaged rather than best | Averaging rewards preparation over guessing |
+| Mastery Check | Native Moodle Quiz, three attempts, averaged rather than best, gated by a daily class code plus automatic gates (see [assessment-access-design.md](assessment-access-design.md)) | Averaging rewards preparation over guessing. The gate scales with self-paced work instead of a per-student password hand-off |
 | Feedback | Native Moodle Feedback activity | Student reflection, rating each lesson skill individually |
 
 **Custom telemetry plugin.** Because the Instruction module is custom HTML rather than a native activity, I wrote a Moodle local plugin that the page calls directly. It logs one row per interaction (quiz checks, drill attempts, lane transitions in the practice ladder, hint reveals), stores save/resume state so students never lose work, and marks completion. That event stream is what makes instruction completion gradable at all.
