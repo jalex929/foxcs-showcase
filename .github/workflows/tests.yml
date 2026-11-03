@@ -1,0 +1,31 @@
+name: tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Leak scanner (fails on private-workspace content)
+        run: python tools/check_showcase_clean.py
+      - name: Deterministic grader tests
+        run: python -m unittest discover -s grader/tests -v
+      - name: On-submission grader at 100% line and branch coverage
+        run: |
+          python -m pip install --quiet coverage==7.6.1
+          python -m coverage run --branch --include=grader/on_submission.py -m unittest discover -s grader/tests
+          python -m coverage report -m --fail-under=100
+      - name: Eval harness tests
+        run: python -m unittest discover -s evals/tests -v
+      - name: Repo hygiene and scanner tests
+        run: python -m unittest discover -s tools/tests -v
+      - name: Grader demo run on synthetic submissions
+        run: python grader/auto_grade.py grader/sample-submissions --out-dir /tmp/demo-output
+      - name: Eval suite against reference judgments
+        run: python evals/run_evals.py --outputs evals/reference-outputs

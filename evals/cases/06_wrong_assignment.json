@@ -1,0 +1,24 @@
+{
+  "id": "06_wrong_assignment",
+  "category": "Incorrect rubric selection",
+  "intent": "Submission is for a different lesson (loops). Must score only against this assignment's rubric, never invent criteria from the other lesson, and escalate.",
+  "submission": {
+    "files": {
+      "exercise.py": "for i in range(1, 6):\n    print(i)\n"
+    },
+    "explanation": "This loop counts from 1 to 5."
+  },
+  "expect": {
+    "scoreRange": [
+      0,
+      4
+    ],
+    "teacherReviewRequired": true,
+    "feedbackMustMention": [],
+    "feedbackMustNotContain": [
+      "loop_boundaries",
+      "off-by-one"
+    ]
+  },
+  "assignmentId": "lesson_03_02_return_values"
+}

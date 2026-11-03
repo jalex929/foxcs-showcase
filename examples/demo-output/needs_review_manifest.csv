@@ -1,0 +1,7 @@
+student_id,lesson,file,reason
+STUDENT-0001,lesson_01_04_printing_output,02_example_01.py,"view-only reference file: not a submission, skip"
+STUDENT-0001,lesson_01_04_printing_output,06_application.py,application code: holistic rubric grading
+STUDENT-0001,lesson_01_04_printing_output,07_project.html,project instructions/checklist: spot-check tier claims against the code
+STUDENT-0001,lesson_01_04_printing_output,08_project.py,project code: holistic rubric grading
+STUDENT-0001,lesson_01_04_printing_output,10_mastery_check.py,mastery check written answers: grade against the lesson's teacher-only answer key
+STUDENT-0002,lesson_01_04_printing_output,08_project.py,project code: holistic rubric grading

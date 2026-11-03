@@ -1,0 +1,12 @@
+{
+  "submission_id": "demo-flawless",
+  "student_id": "STUDENT-0001",
+  "assignment_id": "lesson_02_06_coins_to_points",
+  "submitted_at": "2026-01-12T14:00:00Z",
+  "files": [
+    {
+      "name": "exercise.py",
+      "path": "grader/tests/on_submission_fixtures/flawless.py"
+    }
+  ]
+}

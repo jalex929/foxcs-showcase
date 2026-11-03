@@ -1,0 +1,63 @@
+{
+  "_note": "Hand-authored reference judgment for the eval harness. Not a model output.",
+  "assignment": {
+    "id": "lesson_03_02_return_values",
+    "standardPointsPossible": 15
+  },
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [],
+      "rationale": "The file only contains a TODO comment, so there is no program to run.",
+      "confidence": "low"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [],
+      "rationale": "No function was submitted.",
+      "confidence": "low"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [],
+      "rationale": "No output is produced.",
+      "confidence": "low"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 0,
+      "pointsPossible": 3,
+      "evidence": [],
+      "rationale": "No explanation was submitted.",
+      "confidence": "low"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 0,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 0
+  },
+  "feedback": {
+    "strengths": [],
+    "priorityImprovements": [
+      "Submit the file with your add_points function and explanation."
+    ],
+    "overallFeedback": "There is not enough work in this submission to evaluate yet.",
+    "nextStep": "Open exercise.py, write add_points as described in the directions, save, and upload the saved file again."
+  },
+  "review": {
+    "teacherReviewRequired": true,
+    "reasons": [
+      "Required work is missing: the file contains only a TODO comment.",
+      "Not enough evidence to make a fair decision."
+    ],
+    "overallConfidence": "low"
+  }
+}

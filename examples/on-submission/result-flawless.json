@@ -1,0 +1,64 @@
+{
+  "assignment_id": "lesson_02_06_coins_to_points",
+  "band": "flawless",
+  "content_hash": "fcb1377c14d3bf64a0d762f28918c64934c42710ac86589137ae5a9cc91373dc",
+  "feedback": {
+    "nextStep": "Try one more input of your own and predict the output before you run it.",
+    "overallFeedback": "Your program runs without errors and produces the expected output for all 3 test inputs."
+  },
+  "release": "pending_teacher_approval",
+  "review": {
+    "overallConfidence": "high",
+    "reasons": [],
+    "teacherReviewRequired": false
+  },
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "evidence": [
+        "3 of 3 runs exited cleanly."
+      ],
+      "pointsEarned": 5.0,
+      "pointsPossible": 5.0
+    },
+    {
+      "criterionId": "correct_output",
+      "evidence": [
+        "3 of 3 test inputs produced the expected output."
+      ],
+      "pointsEarned": 5.0,
+      "pointsPossible": 5.0
+    }
+  ],
+  "score": {
+    "bonusRecommended": 0,
+    "finalPointsEarned": 10.0,
+    "standardPointsEarned": 10.0,
+    "standardPointsPossible": 10.0
+  },
+  "student_id": "STUDENT-0001",
+  "submission_id": "demo-flawless",
+  "tests": [
+    {
+      "exitCode": 0,
+      "name": "three coins",
+      "passed": true,
+      "problems": [],
+      "timedOut": false
+    },
+    {
+      "exitCode": 0,
+      "name": "seven coins",
+      "passed": true,
+      "problems": [],
+      "timedOut": false
+    },
+    {
+      "exitCode": 0,
+      "name": "zero coins",
+      "passed": true,
+      "problems": [],
+      "timedOut": false
+    }
+  ]
+}

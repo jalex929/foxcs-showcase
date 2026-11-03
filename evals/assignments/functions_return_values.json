@@ -1,0 +1,13 @@
+{
+  "id": "lesson_03_02_return_values",
+  "title": "Lesson 3.2 Coding Exercise: Functions That Return Values",
+  "prompt": "Write a function add_points(score, points) that RETURNS the new score. Then call it twice, starting from 0 (add 10, then add 5), store the result each time, and print the final score. Finally, write one or two sentences explaining what return does in your program.",
+  "expectedOutput": "15",
+  "standardPointsPossible": 15,
+  "rubric": [
+    {"criterionId": "runs_without_errors", "name": "Program runs without errors", "pointsPossible": 4, "essentialForMastery": false},
+    {"criterionId": "uses_return", "name": "Function returns the new score (does not just print it)", "pointsPossible": 4, "essentialForMastery": true},
+    {"criterionId": "correct_output", "name": "Final printed score is correct", "pointsPossible": 4, "essentialForMastery": false},
+    {"criterionId": "explanation_matches_code", "name": "Explanation accurately describes what return does in this program", "pointsPossible": 3, "essentialForMastery": false}
+  ]
+}

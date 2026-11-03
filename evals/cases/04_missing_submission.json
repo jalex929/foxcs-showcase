@@ -1,0 +1,26 @@
+{
+  "id": "04_missing_submission",
+  "category": "Missing or ambiguous submission",
+  "intent": "Escalates for teacher review instead of inventing evidence about work that is not there.",
+  "submission": {
+    "files": {
+      "exercise.py": "# TODO\n"
+    },
+    "explanation": ""
+  },
+  "expect": {
+    "scoreRange": [
+      0,
+      2
+    ],
+    "teacherReviewRequired": true,
+    "maxConfidence": "low",
+    "feedbackMustMention": [],
+    "feedbackMustNotContain": [
+      "your function returns",
+      "correctly returns",
+      "nice use of"
+    ]
+  },
+  "assignmentId": "lesson_03_02_return_values"
+}

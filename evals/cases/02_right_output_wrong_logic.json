@@ -1,0 +1,30 @@
+{
+  "id": "02_right_output_wrong_logic",
+  "category": "Correct output, flawed underlying logic",
+  "intent": "Identifies the print-instead-of-return misconception even though the screen output looks right.",
+  "submission": {
+    "files": {
+      "exercise.py": "def add_points(score, points):\n    print(score + points)\n\nadd_points(0, 10)\nadd_points(10, 5)\n"
+    },
+    "explanation": "The function returns the score by printing it."
+  },
+  "expect": {
+    "scoreRange": [
+      5,
+      10
+    ],
+    "teacherReviewRequired": null,
+    "maxCriterionPoints": {
+      "uses_return": 1,
+      "explanation_matches_code": 1
+    },
+    "feedbackMustMention": [
+      "return"
+    ],
+    "feedbackMustNotContain": [
+      "perfect",
+      "great job using return"
+    ]
+  },
+  "assignmentId": "lesson_03_02_return_values"
+}

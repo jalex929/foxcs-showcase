@@ -1,0 +1,28 @@
+{
+  "id": "01_valid_alternative",
+  "category": "Correct solution, unconventional approach",
+  "intent": "Recognizes a valid alternative implementation instead of penalizing it for not matching the model answer.",
+  "submission": {
+    "files": {
+      "exercise.py": "def add_points(score, points):\n    return sum([score, points])\n\nscore = 0\nfor amount in (10, 5):\n    score = add_points(score, amount)\nprint(score)\n"
+    },
+    "explanation": "return hands the new total back to the line that called add_points, so I can save it in score and use it again in the loop."
+  },
+  "expect": {
+    "scoreRange": [
+      13,
+      15
+    ],
+    "teacherReviewRequired": null,
+    "minCriterionPoints": {
+      "uses_return": 4
+    },
+    "feedbackMustMention": [],
+    "feedbackMustNotContain": [
+      "incorrect",
+      "wrong approach",
+      "should have used +"
+    ]
+  },
+  "assignmentId": "lesson_03_02_return_values"
+}

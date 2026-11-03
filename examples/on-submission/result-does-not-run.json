@@ -1,0 +1,70 @@
+{
+  "assignment_id": "lesson_02_06_coins_to_points",
+  "band": "does_not_run",
+  "content_hash": "b146ab95f4030e66803b58d5ffbb015027ca00ddbf94b0d2e198448d3f800f85",
+  "feedback": {
+    "nextStep": "Run your file, read the last line of the error message, fix that line, and run it again before resubmitting.",
+    "overallFeedback": "Your program stopped with an error before it could finish: TypeError: can only concatenate str (not \"int\") to str"
+  },
+  "release": "pending_teacher_approval",
+  "review": {
+    "overallConfidence": "high",
+    "reasons": [],
+    "teacherReviewRequired": false
+  },
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "evidence": [
+        "0 of 3 runs exited cleanly."
+      ],
+      "pointsEarned": 0.0,
+      "pointsPossible": 5.0
+    },
+    {
+      "criterionId": "correct_output",
+      "evidence": [
+        "0 of 3 test inputs produced the expected output."
+      ],
+      "pointsEarned": 0.0,
+      "pointsPossible": 5.0
+    }
+  ],
+  "score": {
+    "bonusRecommended": 0,
+    "finalPointsEarned": 0.0,
+    "standardPointsEarned": 0.0,
+    "standardPointsPossible": 10.0
+  },
+  "student_id": "STUDENT-0001",
+  "submission_id": "demo-does-not-run",
+  "tests": [
+    {
+      "exitCode": 1,
+      "name": "three coins",
+      "passed": false,
+      "problems": [
+        "TypeError: can only concatenate str (not \"int\") to str"
+      ],
+      "timedOut": false
+    },
+    {
+      "exitCode": 1,
+      "name": "seven coins",
+      "passed": false,
+      "problems": [
+        "TypeError: can only concatenate str (not \"int\") to str"
+      ],
+      "timedOut": false
+    },
+    {
+      "exitCode": 1,
+      "name": "zero coins",
+      "passed": false,
+      "problems": [
+        "TypeError: can only concatenate str (not \"int\") to str"
+      ],
+      "timedOut": false
+    }
+  ]
+}

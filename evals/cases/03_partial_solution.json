@@ -1,0 +1,30 @@
+{
+  "id": "03_partial_solution",
+  "category": "Partially correct solution",
+  "intent": "Gives appropriate partial credit and a specific, actionable next step.",
+  "submission": {
+    "files": {
+      "exercise.py": "def add_points(score, points):\n    return score + points\n\nscore = add_points(0, 10)\nprint(score)\n"
+    },
+    "explanation": "return gives back the answer."
+  },
+  "expect": {
+    "scoreRange": [
+      9,
+      13
+    ],
+    "teacherReviewRequired": null,
+    "minCriterionPoints": {
+      "uses_return": 4
+    },
+    "maxCriterionPoints": {
+      "correct_output": 2
+    },
+    "feedbackMustMention": [
+      "add_points"
+    ],
+    "nextStepRequired": true,
+    "feedbackMustNotContain": []
+  },
+  "assignmentId": "lesson_03_02_return_values"
+}

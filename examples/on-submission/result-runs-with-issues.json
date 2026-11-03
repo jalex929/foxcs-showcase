@@ -1,0 +1,73 @@
+{
+  "assignment_id": "lesson_02_06_coins_to_points",
+  "band": "runs_with_issues",
+  "content_hash": "5c219b4700ce775fd6c14c55e280fc1e83856bcaff9064f7a51c81135a55e39c",
+  "feedback": {
+    "nextStep": "Check the 'three coins' case: expected output to contain 'You have 30 points.'.",
+    "overallFeedback": "Your program runs without errors, but 3 of 3 test inputs did not produce the expected output."
+  },
+  "release": "pending_teacher_approval",
+  "review": {
+    "overallConfidence": "medium",
+    "reasons": [
+      "Runs, but 3 of 3 test inputs failed. Credit on the correct-output half is a judgment call under the rubric."
+    ],
+    "teacherReviewRequired": true
+  },
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "evidence": [
+        "3 of 3 runs exited cleanly."
+      ],
+      "pointsEarned": 5.0,
+      "pointsPossible": 5.0
+    },
+    {
+      "criterionId": "correct_output",
+      "evidence": [
+        "0 of 3 test inputs produced the expected output."
+      ],
+      "pointsEarned": 0.0,
+      "pointsPossible": 5.0
+    }
+  ],
+  "score": {
+    "bonusRecommended": 0,
+    "finalPointsEarned": 5.0,
+    "standardPointsEarned": 5.0,
+    "standardPointsPossible": 10.0
+  },
+  "student_id": "STUDENT-0001",
+  "submission_id": "demo-runs-with-issues",
+  "tests": [
+    {
+      "exitCode": 0,
+      "name": "three coins",
+      "passed": false,
+      "problems": [
+        "expected output to contain 'You have 30 points.'",
+        "output should not contain '3333333333'"
+      ],
+      "timedOut": false
+    },
+    {
+      "exitCode": 0,
+      "name": "seven coins",
+      "passed": false,
+      "problems": [
+        "expected output to contain 'You have 70 points.'"
+      ],
+      "timedOut": false
+    },
+    {
+      "exitCode": 0,
+      "name": "zero coins",
+      "passed": false,
+      "problems": [
+        "expected output to contain 'You have 0 points.'"
+      ],
+      "timedOut": false
+    }
+  ]
+}

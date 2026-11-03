@@ -1,0 +1,14 @@
+{
+  "assignmentId": "lesson_02_06_coins_to_points",
+  "title": "Coding Exercise: Coins to Points (type conversion)",
+  "prompt": "Ask how many coins the player has. Each coin is worth 10 points. Print: You have N points.",
+  "pointsPossible": 10,
+  "timeoutSeconds": 5,
+  "maxBytes": 20000,
+  "memoryLimitMb": 256,
+  "tests": [
+    {"name": "three coins", "stdin": "3\n", "expectedContains": ["You have 30 points."], "expectedNotContains": ["3333333333"]},
+    {"name": "seven coins", "stdin": "7\n", "expectedContains": ["You have 70 points."]},
+    {"name": "zero coins", "stdin": "0\n", "expectedContains": ["You have 0 points."]}
+  ]
+}
