@@ -107,7 +107,12 @@ try:
 except OSError:
     report["network"] = False
 report["neighbor"] = os.path.exists({neighbor!r}) or os.path.exists("/sandbox/" + os.path.basename({neighbor!r}))
-report["host_dirs"] = [d for d in {host_dirs!r} if os.path.exists(d)]
+def only_the_path_to_python(d):
+    # A folder that exists only because a Python install outside /usr is
+    # bound below it (CI's /opt/hostedtoolcache/...) holds nothing else.
+    needed = {{p[len(d) + 1:].split("/")[0] for p in {allowed!r} if p.startswith(d + "/")}}
+    return bool(needed) and set(os.listdir(d)) <= needed
+report["host_dirs"] = [d for d in {host_dirs!r} if os.path.exists(d) and not only_the_path_to_python(d)]
 report["env"] = sorted(os.environ)
 report["grader_process"] = os.path.exists("/proc/{parent}/environ")
 def writable(path):
@@ -123,8 +128,10 @@ print(json.dumps(report))
 '''
 
 
-def probe_source(neighbor: Path, parent_pid: int) -> str:
-    return PROBE.format(neighbor=str(neighbor), host_dirs=HOST_DIRS, parent=parent_pid)
+def probe_source(neighbor: Path, parent_pid: int, allowed: tuple[str, ...] = ()) -> str:
+    """The probe, filled in. `allowed` are the read-only Python prefixes bound
+    outside /usr: the folders above them may exist, holding only that path."""
+    return PROBE.format(neighbor=str(neighbor), host_dirs=HOST_DIRS, parent=parent_pid, allowed=tuple(allowed))
 
 
 def check_probe(exit_code: int | None, stdout: str, stderr: str) -> list[str]:

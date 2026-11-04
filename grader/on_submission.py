@@ -283,7 +283,8 @@ def sandbox_self_test(sandbox: sbx.Bwrap) -> list[str]:
         neighbor = Path(tmp) / "another_students_file.py"
         neighbor.write_text("print('private')\n", encoding="utf-8")
         probe = Path(tmp) / "probe.py"
-        probe.write_text(sbx.probe_source(neighbor, os.getpid()), encoding="utf-8")
+        allowed = tuple(x for x in getattr(sandbox, "prefixes", ()) if not sbx._under_usr(x))
+        probe.write_text(sbx.probe_source(neighbor, os.getpid(), allowed), encoding="utf-8")
         spec = ExerciseSpec("sandbox-self-test", 0, (), timeout_seconds=15)
         run = run_program(probe, "", spec, sandbox)
     return sbx.check_probe(run.exit_code, run.stdout, run.stderr)

@@ -157,6 +157,8 @@ class TestCheckProbe(unittest.TestCase):
         self.assertEqual(sbx.check_probe(None, "not json", "  \n"), ["sandbox did not run (exit None): no output"])
 
     def test_probe_source_is_filled_in(self):
+        self.assertIn("('/opt/py',)", sbx.probe_source(Path("/t/other.py"), 1, ("/opt/py",)))
+        self.assertIn("for p in ()", sbx.probe_source(Path("/t/other.py"), 1))
         source = sbx.probe_source(Path("/t/other.py"), 4242)
         self.assertIn("'/t/other.py'", source)
         self.assertIn("/proc/4242/environ", source)
@@ -213,6 +215,19 @@ class TestRealSandbox(unittest.TestCase):
 
     def test_self_test_passes(self):
         self.assertEqual(osub.sandbox_self_test(self.box), [])
+
+    def test_a_folder_holding_only_the_python_path_is_allowed(self):
+        """CI's Python lives under /opt/hostedtoolcache, so /opt must exist inside, holding only that path."""
+        box = sbx.Bwrap(prefixes=(sys.base_prefix, "/etc/ssl"))
+        self.assertEqual(osub.sandbox_self_test(box), [])
+
+    def test_binding_a_whole_host_folder_is_still_caught(self):
+        class Wide(sbx.Bwrap):
+            def _system_binds(self):
+                return [*super()._system_binds(), "--ro-bind", "/etc", "/etc"]
+
+        problems = osub.sandbox_self_test(Wide(prefixes=(sys.base_prefix, "/etc/ssl")))
+        self.assertEqual(problems, ["host folders are visible: /etc"])
 
     def test_escape_attempt_finds_nothing(self):
         before = self.target.read_text(encoding="utf-8")
