@@ -23,7 +23,8 @@
 | Required rubric file before any coding exercise is published | Deployed | Added after a batch of exercises went live without one |
 | Structured output and score validation rules | Specified | Defined in the feedback spec and followed by the reviewer |
 | Release check before every bulk push (`grader/release_check.py`) | Implemented | Blocks results that can't be right, flags score-rationale disagreements, and draws a spot-check sample. 100% line and branch coverage in CI. See [release-check.md](release-check.md) |
-| Eval harness for AI grading outputs (`evals/`) | Implemented | Validates outputs. Baseline runs against a model are planned |
+| Eval harness for AI grading outputs (`evals/`) | Implemented | Validates outputs from any source |
+| Model runner for the eval harness (`evals/run_model.py`) | Implemented | Calls Claude with structured outputs, records cost and score spread across repeated runs. Tested with a fake client. Baseline numbers need a run with an API key |
 | Writing approved grades back to Moodle | Deployed, teacher-run | CLI scripts against Moodle's own APIs, for example a tool that converts a project tier to the correct grade |
 | Above-and-beyond bonus points | Not active | Two specifications define overlapping bonus mechanisms that would double-count. Held until reconciled. The eval harness rejects any output that applies a bonus |
 | Spreadsheet dashboard with intervention lists | In development | |

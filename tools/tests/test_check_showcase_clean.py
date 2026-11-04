@@ -6,7 +6,7 @@ import unittest
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-import check_showcase_clean as scanner  # noqa: E402
+import check_showcase_clean as scanner
 
 # Built from pieces so this test file does not itself trip the scanner.
 SAMPLES = {

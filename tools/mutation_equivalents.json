@@ -28,5 +28,15 @@
     "key": "constant | print(json.dumps(result, indent=2, sort_keys=True)) | col 45 | True -> False",
     "file": "grader/on_submission.py",
     "reason": "Command-line output formatting. Key order changes the text layout only; the printed JSON parses to the same result."
+  },
+  {
+    "key": "constant | seconds = round(time.monotonic() - start, 2) | col 42 | 2 -> 3",
+    "file": "evals/run_model.py",
+    "reason": "Timing precision in the run log. Seconds to 2 or 3 decimals is a display choice; no result or check depends on it."
+  },
+  {
+    "key": "constant | \"total_cost_usd\": round(spent, 6), \"consistency\": consistency(run_dirs, cases)} | col 31 | 6 -> 7",
+    "file": "evals/run_model.py",
+    "reason": "Rounding a sum of costs that are already rounded to 6 decimals. Rounding to 6 or 7 places gives the same number; the round only removes float noise."
   }
 ]

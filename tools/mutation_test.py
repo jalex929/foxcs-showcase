@@ -56,6 +56,7 @@ TARGETS = {
     "on_submission": ("grader/on_submission.py", "grader/tests", "test_on_submission.py"),
     "release_check": ("grader/release_check.py", "grader/tests", "test_release_check.py"),
     "score_output": ("evals/score_output.py", "evals/tests", "test_*.py"),
+    "run_model": ("evals/run_model.py", "evals/tests", "test_run_model.py"),
 }
 
 COMPARE_SWAP = {
@@ -170,19 +171,21 @@ class _Mutator(ast.NodeTransformer):
     def visit_Constant(self, node):
         if not self.depth:
             return node  # module-level settings are configuration, not behavior
-        if isinstance(node.value, bool):
-            if self._site(node, "constant", f"{node.value} -> {not node.value}"):
-                return ast.copy_location(ast.Constant(not node.value), node)
+        if isinstance(node.value, bool):  # checked first: a bool is also an int
+            new = not node.value
         elif isinstance(node.value, (int, float)):
-            if self._site(node, "constant", f"{node.value} -> {node.value + 1}"):
-                return ast.copy_location(ast.Constant(node.value + 1), node)
+            new = node.value + 1
+        else:
+            return node
+        if self._site(node, "constant", f"{node.value} -> {new}"):
+            return ast.copy_location(ast.Constant(new), node)
         return node
 
     def visit_Return(self, node):
         self.generic_visit(node)
-        if node.value is not None and not (isinstance(node.value, ast.Constant) and node.value.value is None):
-            if self._site(node, "return", "value -> None"):
-                node.value = ast.Constant(None)
+        returns_value = node.value is not None and not (isinstance(node.value, ast.Constant) and node.value.value is None)
+        if returns_value and self._site(node, "return", "value -> None"):
+            node.value = ast.Constant(None)
         return node
 
 
@@ -216,7 +219,7 @@ def run_tests(workdir: Path, test_dir: str, pattern: str, timeout: float) -> str
 
 
 def _copy_repo(root: Path, dest: Path) -> Path:
-    ignore = shutil.ignore_patterns(".git", "__pycache__", "*.pyc", ".coverage", "htmlcov", "mutants")
+    ignore = shutil.ignore_patterns(".git", "__pycache__", "*.pyc", ".coverage", "htmlcov", ".ruff_cache", "mutants")
     shutil.copytree(root, dest, ignore=ignore)
     return dest
 

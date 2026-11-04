@@ -59,4 +59,4 @@ I approve grades as a batch, after reading rationale and trends, not by re-readi
 
 ## What the eval harness adds
 
-The rules above are only as good as the evidence that they hold. `evals/` turns the mechanically checkable subset into code that can score any grading output, so a prompt change or a model change can be compared on the same adversarial cases before it touches real student work. See [`evals/README.md`](../evals/README.md).
+The rules above are only as good as the evidence that they hold. `evals/run_model.py` grades the eval cases with Claude using the same rules, a strict output schema, and the submission marked as untrusted input. Its prompt is pinned by snapshot tests. `evals/` turns the mechanically checkable subset into code that can score any grading output, so a prompt change or a model change can be compared on the same adversarial cases before it touches real student work. See [`evals/README.md`](../evals/README.md).

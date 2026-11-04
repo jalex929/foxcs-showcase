@@ -1,0 +1,24 @@
+# Lint rules for the showcase. CI runs `ruff check .`.
+target-version = "py310"
+
+# Synthetic student work is supposed to contain mistakes (a syntax error,
+# a misspelled Print) because the graders are tested against it.
+extend-exclude = [
+    "grader/sample-submissions",
+    "grader/tests/on_submission_fixtures",
+    "tools/tests/mutation_sample",
+]
+
+[lint]
+select = [
+    "E", "W",  # pycodestyle
+    "F",       # pyflakes: undefined names, unused imports
+    "I",       # import order
+    "B",       # bugbear: likely bugs
+    "UP",      # modern syntax for the target Python
+    "SIM",     # simplifications
+    "RUF",     # ruff-specific
+]
+ignore = [
+    "E501",    # long lines: messages and docstrings read better unwrapped
+]

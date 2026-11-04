@@ -1,0 +1,1 @@
+return hands the new total back to the line that called add_points, so I can save it in score and use it again in the loop.

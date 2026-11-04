@@ -45,9 +45,9 @@ import hashlib
 import json
 import subprocess
 import sys
+from collections.abc import Callable
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
-from typing import Callable
 
 RUBRIC_RUNS = "runs_without_errors"
 RUBRIC_CORRECT = "correct_output"
@@ -357,7 +357,9 @@ def grade_file(event: SubmissionEvent, spec: ExerciseSpec, path: Path, runner: R
     else:
         band, runs_pts = "runs_with_issues", half
         correct_pts = round(half * passed_count / total, 2)
-        first_problem = [r for r in results if not r["passed"]][0]
+        # A list, not next(...): a failing test always exists on this path, so
+        # next()'s "ran out" branch could never run and would hold coverage below 100%.
+        first_problem = [r for r in results if not r["passed"]][0]  # noqa: RUF015
         feedback = {
             "overallFeedback": f"Your program runs without errors, but {total - passed_count} of {total} test inputs did not produce the expected output.",
             "nextStep": f"Check the '{first_problem['name']}' case: {first_problem['problems'][0]}.",

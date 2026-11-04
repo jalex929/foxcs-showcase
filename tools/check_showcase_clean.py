@@ -46,7 +46,7 @@ RULES = [
 
 TEXT_SUFFIXES = {".py", ".md", ".json", ".html", ".csv", ".txt", ".yml", ".yaml", ".sh", ".toml", ".cfg", ".js", ".mjs"}
 TEXT_NAMES = {".gitignore", ".gitattributes", "LICENSE"}
-SKIP_DIRS = {".git", "__pycache__", "node_modules", ".venv", "htmlcov"}
+SKIP_DIRS = {".git", "__pycache__", "node_modules", ".venv", "htmlcov", ".ruff_cache"}
 SKIP_FILES = {".coverage"}  # local test artifacts, gitignored
 
 

@@ -25,8 +25,7 @@ import unittest
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-import auto_grade  # noqa: E402
-
+import auto_grade
 
 REAL_FIXTURE = Path(__file__).resolve().parents[1] / "sample-submissions" / "STUDENT-0001_lesson_01_04_printing_output"
 
@@ -92,11 +91,13 @@ class TestScoreTelemetryFile(unittest.TestCase):
         saved, attempts, first_ok, last_ok = auto_grade.score_telemetry_file(path, "quiz_check")
         self.assertTrue(saved)
         self.assertEqual(attempts, 0)
+        self.assertIsNone(first_ok)
+        self.assertIsNone(last_ok)
 
     def test_no_matching_event_type(self):
         events = [{"type": "drill_attempt", "attempted": [{"correct": True}]}]
         path = write(self.folder, "x.html", self._telemetry_html(events))
-        saved, attempts, first_ok, last_ok = auto_grade.score_telemetry_file(path, "quiz_check")
+        _saved, attempts, first_ok, _last_ok = auto_grade.score_telemetry_file(path, "quiz_check")
         self.assertEqual(attempts, 0)
         self.assertIsNone(first_ok)
 

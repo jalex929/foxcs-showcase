@@ -300,9 +300,8 @@ class TestParseEvent(unittest.TestCase):
             "file missing path": {**self.base(), "files": [{"name": "x.py"}]},
         }
         for label, data in cases.items():
-            with self.subTest(label):
-                with self.assertRaises(osub.InvalidEvent):
-                    osub.parse_event(data)
+            with self.subTest(label), self.assertRaises(osub.InvalidEvent):
+                osub.parse_event(data)
 
     def test_invalid_event_is_rejected_without_storing(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -353,9 +352,8 @@ class TestExerciseSpecs(unittest.TestCase):
             "timeout negative": with_(timeoutSeconds=-1),
         }
         for label, data in cases.items():
-            with self.subTest(label):
-                with self.assertRaises(osub.InvalidExercise):
-                    osub.parse_exercise(data)
+            with self.subTest(label), self.assertRaises(osub.InvalidExercise):
+                osub.parse_exercise(data)
 
     def test_type_error_message_names_all_accepted_types(self):
         with self.assertRaisesRegex(osub.InvalidExercise, "int or float"):

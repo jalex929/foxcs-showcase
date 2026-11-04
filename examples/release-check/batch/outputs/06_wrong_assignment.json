@@ -1,0 +1,69 @@
+{
+  "_note": "Hand-authored reference judgment for the eval harness. Not a model output.",
+  "assignment": {
+    "id": "lesson_03_02_return_values",
+    "standardPointsPossible": 15
+  },
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "The file runs, but it is a counting loop, not this exercise's program."
+      ],
+      "rationale": "No add_points program to evaluate.",
+      "confidence": "medium"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [],
+      "rationale": "No add_points function was submitted.",
+      "confidence": "medium"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "Output is 1 through 5, not a final score."
+      ],
+      "rationale": "Does not match this assignment.",
+      "confidence": "medium"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 0,
+      "pointsPossible": 3,
+      "evidence": [],
+      "rationale": "The explanation describes a different program.",
+      "confidence": "medium"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 0,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 0
+  },
+  "feedback": {
+    "strengths": [],
+    "priorityImprovements": [
+      "Upload the add_points exercise for this lesson."
+    ],
+    "overallFeedback": "This file looks like it belongs to a different lesson. It does not contain the add_points function this exercise asks for.",
+    "nextStep": "Check that you uploaded the right file. If this was a mix-up, upload your add_points exercise."
+  },
+  "review": {
+    "teacherReviewRequired": true,
+    "reasons": [
+      "The submitted file appears unrelated to this assignment."
+    ],
+    "overallConfidence": "medium"
+  },
+  "submission_id": "06_wrong_assignment",
+  "student_id": "STUDENT-06",
+  "assignment_id": "lesson_03_02_return_values"
+}

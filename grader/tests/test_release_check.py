@@ -521,28 +521,32 @@ class TestMain(TempCase):
         report = (self.tmp / "report" / "release_report.md").read_text()
         self.assertLess(report.index("**06_wrong_assignment** (blocked)"), report.index("**04_missing_submission** (review)"))
 
-    def test_default_sample_is_three_and_seeded_by_batch(self):
-        for i in range(6):
+    def add_copies(self, n):
+        files = load(EVALS / "cases" / "01_valid_alternative.json")["submission"]["files"]
+        for i in range(n):
             out = reference("01_valid_alternative")
-            out.update(submission_id=f"c{i}", student_id=f"S{i}")
-            case = load(EVALS / "cases" / "01_valid_alternative.json")
-            self.batch.add(out, case["submission"]["files"])
-        self.main()
+            out.update(submission_id=f"c{i:02}", student_id=f"S{i:02}")
+            self.batch.add(out, files)
+
+    def manifest_sample(self):
         with (self.tmp / "report" / "release_manifest.csv").open(encoding="utf-8") as f:
-            picked = [r["submission_id"] for r in csv.DictReader(f) if r["spot_check"]]
-        results, _ = self.batch.run()
-        expected = rc.spot_check_sample(list(results.values()), 3, rc.batch_seed(list(results.values())))
-        self.assertEqual(sorted(picked), sorted(expected))
-        self.assertEqual(len(picked), 3)
+            return sorted(r["submission_id"] for r in csv.DictReader(f) if r["spot_check"])
+
+    def test_default_sample_is_three_and_seeded_by_batch(self):
+        self.add_copies(30)  # large enough that a random draw can't match by luck
+        self.main()
+        results = list(self.batch.run()[0].values())
+        expected = sorted(rc.spot_check_sample(results, 3, rc.batch_seed(results)))
+        self.assertEqual(self.manifest_sample(), expected)
+        self.assertEqual(len(expected), 3)
 
     def test_explicit_seed_is_used(self):
-        for i in range(6):
-            out = reference("01_valid_alternative")
-            out.update(submission_id=f"c{i}", student_id=f"S{i}")
-            self.batch.add(out, load(EVALS / "cases" / "01_valid_alternative.json")["submission"]["files"])
-        _, out = self.main("--seed", "fixed", "--sample", "1")
-        results, _ = self.batch.run()
-        self.assertIn(f"Spot check: {rc.spot_check_sample(list(results.values()), 1, 'fixed')[0]}", out)
+        self.add_copies(30)
+        results = list(self.batch.run()[0].values())
+        by_seed = sorted(rc.spot_check_sample(results, 3, "fixed"))
+        self.assertNotEqual(by_seed, sorted(rc.spot_check_sample(results, 3, rc.batch_seed(results))))  # precondition
+        self.main("--seed", "fixed")
+        self.assertEqual(self.manifest_sample(), by_seed)
 
     def test_outputs_and_rubrics_are_required(self):
         for args in (["--rubrics", str(RUBRICS)], ["--outputs", str(self.batch.outputs)]):
