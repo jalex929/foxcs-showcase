@@ -1,4 +1,4 @@
-"""Generates the synthetic sample submissions for the portfolio showcase.
+"""Generates the synthetic sample submissions for the public showcase.
 Everything here is invented. No real student work, no licensed content."""
 import json
 import sys

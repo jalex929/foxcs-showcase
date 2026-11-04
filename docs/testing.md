@@ -153,7 +153,7 @@ Honest gaps, so nobody has to guess:
 - **The eval checks are deterministic.** They catch structural and rule violations (arithmetic, rubric coverage, escalation, forbidden claims). They do not judge whether feedback is genuinely helpful. That needs educator review or a carefully validated model-graded rubric, and is planned.
 - **Platform tests live in the private workspace.** The live platform has its own CI: content checkers with their own test suites, a PHP harness for the practice-ladder wiring checker, and a headless-browser test proving a student's typed answer survives save on a real lesson page. Those depend on licensed course content and are not reproduced here.
 - **No load or concurrency testing.** Class sizes have not required it. The on-submission store is a single append-only file, which suits one worker. Several concurrent workers would need a real queue or database.
-- **On-submission isolation is not tested against hostile code**, because it is not designed to stop it. That is the container's job in production. See [on-submission-grading.md](on-submission-grading.md).
+- **The sandbox is tested on one kernel setup at a time.** The tests prove its isolation on the machine they run on, which is why the worker repeats the self-test on the server before every start. It is a namespace sandbox, not a virtual machine: a kernel vulnerability could still break out of it. See [on-submission-grading.md](on-submission-grading.md#the-sandbox).
 - **Six eval cases is a starting set**, chosen for coverage of distinct failure modes rather than statistical power.
 
 ## Why this shape

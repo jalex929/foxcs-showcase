@@ -33,7 +33,7 @@ RULES = [
     ("district-email", re.compile(r"@cps\.edu\b", re.I),
      "School-district email addresses are never published."),
     ("district-name", re.compile(r"chicago public schools|\bCPS\b"),
-     "Keep the employer/district unnamed in the public showcase."),
+     "Keep the school district unnamed in the public showcase."),
     ("live-domain", re.compile(r"foxcs\.online", re.I),
      "Live student-facing infrastructure is not linked from the public showcase."),
     # Localhost, 0.0.0.0, and the RFC 5737 documentation ranges (reserved, never a real host) are allowed.
