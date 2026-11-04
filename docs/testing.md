@@ -1,6 +1,6 @@
 # Testing and validation
 
-Every suite here runs with a standard Python install (3.10+), no dependencies. The model runner's tests use a fake API client and a fake `claude` CLI, so they need no API key, no subscription, and no `anthropic` package. CI runs everything on every push, plus a lint check and a separate mutation-testing job: [`.github/workflows/tests.yml`](../.github/workflows/tests.yml). 275 tests in total.
+Every suite here runs with a standard Python install (3.10+), no Python packages. The real-sandbox tests also need bubblewrap (`apt install bubblewrap`) and skip without it, except in CI, where they are required. The model runner's tests use a fake API client and a fake `claude` CLI, so they need no API key, no subscription, and no `anthropic` package. CI runs everything on every push, plus a lint check and a separate mutation-testing job: [`.github/workflows/tests.yml`](../.github/workflows/tests.yml). 346 tests in total.
 
 ## How to run
 
@@ -11,8 +11,8 @@ python -m unittest discover -s evals/tests -v     # eval harness and model runne
 python -m unittest discover -s tools/tests -v     # mutation tester, leak scanner, repository hygiene
 
 # 100% line and branch coverage gate (needs: pip install coverage)
-python -m coverage run --branch --include=grader/on_submission.py,grader/release_check.py,grader/review_worker.py,evals/run_model.py -m unittest discover -s grader/tests
-python -m coverage run --append --branch --include=grader/on_submission.py,grader/release_check.py,grader/review_worker.py,evals/run_model.py -m unittest discover -s evals/tests
+python -m coverage run --branch --include=grader/on_submission.py,grader/sandbox.py,grader/release_check.py,grader/review_worker.py,evals/run_model.py -m unittest discover -s grader/tests
+python -m coverage run --append --branch --include=grader/on_submission.py,grader/sandbox.py,grader/release_check.py,grader/review_worker.py,evals/run_model.py -m unittest discover -s evals/tests
 python -m coverage report -m --fail-under=100
 
 ruff check .                                      # lint (needs: pip install ruff)
@@ -78,7 +78,17 @@ Batches are built from the eval suite's synthetic cases and reference judgments,
 
 **Prompt snapshots.** The exact system prompt and a sample user message are committed in `evals/tests/snapshots/`. Any change to what the model sees fails the tests until the snapshots are regenerated (`python tools/update_prompt_snapshots.py`), so a prompt change always shows up as a reviewable diff.
 
-### Queue worker: 24 tests, 100% line and branch coverage
+### Sandbox: 23 tests, 100% line and branch coverage
+
+`grader/tests/test_on_submission_sandbox.py` covers both halves of [the sandbox](on-submission-grading.md#the-sandbox):
+
+- **The command line:** every isolation flag, the order that keeps `/tmp` writable under a read-only root, only the submitted file bound (read-only), a cleared environment, a Python install outside `/usr` bound read-only, and `/bin` and `/lib` following the host.
+- **The self-test:** each broken property is named, all problems are reported at once, and a sandbox that fails to start says why. A fake "sandbox" that isolates nothing is caught.
+- **A real sandbox:** a hostile program that is also a correct answer finds nothing it shouldn't, can't reach the network, can't change its own file, and still gets full marks. Run without the sandbox, the same program finds the planted secret. Grades, time limits, and memory limits are the same inside, and programs can still save files to `/tmp`.
+
+These run inside a real bubblewrap sandbox in CI. CI sets `FOXCS_REQUIRE_SANDBOX=1`, so a missing sandbox fails the build instead of skipping the tests.
+
+### Queue worker: 27 tests, 100% line and branch coverage
 
 `grader/review_worker.py` runs the real deterministic grader on the fixture programs, with a fake AI backend. The tests pin:
 
@@ -87,7 +97,7 @@ Batches are built from the eval suite's synthetic cases and reference judgments,
 - **Duplicates and resubmissions:** the same file is reviewed once; new code is reviewed again and replaces the old review.
 - **Failures:** a failed review goes to `failed/` with its reason and no grade; requeuing it by hand gets it reviewed even though the draft store has already seen the file. Losing the subscription mid-run puts the event back and stops the worker. A crash leaves the event in `processing/`, and the next start recovers it.
 - **Handoff to the release check:** a consistent review passes; a review that contradicts the program run, or quotes code the student didn't write, is blocked.
-- **The command line:** one pass by default, `--watch` keeps polling, and it refuses to start without a subscription.
+- **The command line:** one pass by default, `--watch` keeps polling, and it refuses to start without a subscription. The sandbox is on by default and checked before anything else; running without it prints a warning.
 
 A contract test in the working repository feeds an event written by the Moodle plugin's PHP into this worker's parser, so the two sides of the queue can't drift apart.
 
@@ -116,11 +126,12 @@ Coverage shows that every line ran during the tests. It doesn't show that a test
 
 | Module | First run (already at 100% coverage) | Now | Documented equivalents |
 | --- | --- | --- | --- |
-| On-submission grading | 88.7%: 19 of 168 mutants survived | 100% of 166 | 3 |
+| On-submission grading | 88.7%: 19 of 168 mutants survived | 100% of 186 | 5 |
+| Sandbox | 100% of 30 | 100% of 30 | 0 |
 | Release check | 83.0%: 37 of 218 mutants survived | 100% of 205 | 2 |
 | Eval scorer | 90.5%: 13 of 137 mutants survived | 100% of 137 | 1 |
 | Model runner | 22 survived on the first run | 100% of 128 | 3 |
-| Queue worker | 93.7%: 5 of 79 mutants survived | 100% of 78 | 0 |
+| Queue worker | 93.7%: 5 of 79 mutants survived | 100% of 83 | 0 |
 
 Mutant counts dropped where the first run exposed code that could be removed.
 

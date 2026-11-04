@@ -36,7 +36,9 @@ The AI step uses the same backend, prompt and schema the eval harness
 measures (evals/run_model.py), so what gets evaluated is what runs. On the
 default claude-code backend it refuses to start unless Claude Code is
 signed in to a subscription, and it stops, putting the event back, if that
-ever changes mid-run. Standard library only.
+ever changes mid-run. Student code runs in the bubblewrap sandbox by default
+(grader/sandbox.py), and the worker refuses to start if the sandbox's
+self-test finds any isolation property broken. Standard library only.
 """
 
 from __future__ import annotations
@@ -162,7 +164,7 @@ def run_pass(queue: Path, exercises: dict, rubrics: dict, submissions_root: Path
     return outcomes
 
 
-def main(argv: list[str] | None = None, backend=None, sleep=time.sleep, runner=osub.run_program) -> int:
+def main(argv: list[str] | None = None, backend=None, sleep=time.sleep) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--queue", type=Path, required=True)
     parser.add_argument("--exercises", type=Path, required=True, help="Folder of exercise spec JSON files")
@@ -172,9 +174,19 @@ def main(argv: list[str] | None = None, backend=None, sleep=time.sleep, runner=o
                         help="claude-code uses your Claude subscription (default); api is billed per token")
     parser.add_argument("--model", default=rm.MODEL)
     parser.add_argument("--effort", default=rm.EFFORT, choices=["low", "medium", "high", "xhigh", "max"])
+    parser.add_argument("--sandbox", choices=["bwrap", "none"], default="bwrap",
+                        help="bwrap (default) runs student code in a bubblewrap sandbox; none is for trusted test files only")
     parser.add_argument("--watch", type=float, metavar="SECONDS", help="Keep running, checking the queue this often")
     parser.add_argument("--max-passes", type=int, help=argparse.SUPPRESS)  # for tests: stop watching after N passes
     args = parser.parse_args(argv)
+    # The sandbox is checked first: student code must never run next to the subscription token unprotected.
+    sandbox, problems = osub.build_sandbox(args.sandbox)
+    if problems:
+        print(f"Stopped: sandbox check failed: {'; '.join(problems)}", file=sys.stderr)
+        return 3
+    if sandbox is None:
+        print("Warning: --sandbox none. Student code runs unsandboxed, next to the subscription token.", file=sys.stderr)
+    runner = osub.make_runner(sandbox)
     if backend is None:
         backend = rm.ClaudeCodeBackend() if args.backend == "claude-code" else rm.ApiBackend(*rm.default_client())
     ensure_queue(args.queue)

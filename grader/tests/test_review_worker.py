@@ -248,7 +248,7 @@ class TestReleaseCheckHandoff(QueueTest):
 class TestPassAndMain(QueueTest):
     def args(self, *extra):
         return ["--queue", str(self.queue), "--exercises", str(GRADER / "exercises"), "--rubrics", str(GRADER / "rubrics"),
-                "--submissions-root", str(FIXTURES), *extra]
+                "--submissions-root", str(FIXTURES), "--sandbox", "none", *extra]
 
     def test_pass_handles_every_pending_event_in_order(self):
         self.enqueue("flawless.py", sid="b")
@@ -328,6 +328,42 @@ class TestPassAndMain(QueueTest):
             with self.subTest(flag), contextlib.redirect_stderr(io.StringIO()) as err, self.assertRaises(SystemExit):
                 rw.main(full[:i] + full[i + 2:], backend=self.backend)
             self.assertIn(f"the following arguments are required: {flag}", err.getvalue())
+
+    def test_sandbox_is_on_by_default_and_checked_first(self):
+        seen = []
+        saved = osub.build_sandbox
+        osub.build_sandbox = lambda choice: seen.append(choice) or (None, ["the network is reachable"])
+        self.enqueue("string_repetition.py")
+        args = [a for a in self.args() if a not in ("--sandbox", "none")]
+        try:
+            with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()) as err:
+                code = rw.main(args, backend=FakeBackend(preflight_error=AssertionError("must not get this far")))
+        finally:
+            osub.build_sandbox = saved
+        self.assertEqual((code, seen), (3, ["bwrap"]))
+        self.assertIn("Stopped: sandbox check failed: the network is reachable", err.getvalue())
+        self.assertEqual(self.names("incoming"), ["sub-1.json"])
+        self.assertFalse((self.queue / "drafts.jsonl").exists())
+
+    def test_running_without_the_sandbox_is_loud(self):
+        with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()) as err:
+            rw.main(self.args(), backend=self.backend)
+        self.assertIn("Warning: --sandbox none. Student code runs unsandboxed", err.getvalue())
+
+    def test_sandboxed_runner_is_used(self):
+        box = object()
+        saved = osub.build_sandbox
+        osub.build_sandbox = lambda choice: (box, [])
+        runners = []
+        saved_pass = rw.run_pass
+        rw.run_pass = lambda *a, **kw: runners.append(kw["runner"]) or []
+        try:
+            with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()) as err:
+                rw.main([a for a in self.args() if a not in ("--sandbox", "none")], backend=self.backend)
+        finally:
+            osub.build_sandbox, rw.run_pass = saved, saved_pass
+        self.assertEqual(runners[0].keywords, {"sandbox": box})
+        self.assertEqual(err.getvalue(), "")
 
     def test_default_backends(self):
         built = []

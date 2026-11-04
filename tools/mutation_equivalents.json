@@ -43,5 +43,15 @@
     "key": "constant | \"usage\": totals, \"cost_usd\": round(billed, 6), \"records\": records, | col 43 | 6 -> 7",
     "file": "evals/run_model.py",
     "reason": "Each case's cost is already rounded to 6 places, so the batch total is a sum of whole micro-dollars. Rounding it to 6 or 7 places removes the same float noise and gives the same figure."
+  },
+  {
+    "key": "constant | spec = ExerciseSpec(\"sandbox-self-test\", 0, (), timeout_seconds=15) | col 41 | 0 -> 1",
+    "file": "grader/on_submission.py",
+    "reason": "The self-test's spec only carries limits for running the probe. Its points are never read: the probe is not graded."
+  },
+  {
+    "key": "constant | spec = ExerciseSpec(\"sandbox-self-test\", 0, (), timeout_seconds=15) | col 64 | 15 -> 16",
+    "file": "grader/on_submission.py",
+    "reason": "A generous ceiling for the probe, which finishes in well under a second. Any ceiling above that behaves the same."
   }
 ]

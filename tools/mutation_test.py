@@ -53,7 +53,8 @@ EQUIVALENTS = ROOT / "tools" / "mutation_equivalents.json"
 
 # target name -> (module path, unittest discover dir, test file pattern)
 TARGETS = {
-    "on_submission": ("grader/on_submission.py", "grader/tests", "test_on_submission.py"),
+    "on_submission": ("grader/on_submission.py", "grader/tests", "test_on_submission*.py"),
+    "sandbox": ("grader/sandbox.py", "grader/tests", "test_on_submission_sandbox.py"),
     "release_check": ("grader/release_check.py", "grader/tests", "test_release_check.py"),
     "score_output": ("evals/score_output.py", "evals/tests", "test_*.py"),
     "run_model": ("evals/run_model.py", "evals/tests", "test_run_model.py"),

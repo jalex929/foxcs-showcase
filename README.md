@@ -64,7 +64,7 @@ On known-good synthetic batches it raises no false alarms: the only results flag
 | Path | What it is | Status |
 |---|---|---|
 | [`grader/`](grader/) | Weekly batch grader for lesson activity, synthetic submissions | Implemented, tested in CI |
-| [`grader/on_submission.py`](grader/on_submission.py) | **On-submission grading** of Coding Exercises: runs the student's code in an isolated process the moment it is uploaded, scores 50% runs / 50% correct, returns a draft pending teacher approval | Implemented, **100% line and branch coverage** enforced in CI. Not yet connected to live Moodle |
+| [`grader/on_submission.py`](grader/on_submission.py) | **On-submission grading** of Coding Exercises: runs the student's code in a self-testing bubblewrap sandbox (no network, no view of other files or processes) the moment it is uploaded, scores 50% runs / 50% correct, returns a draft pending teacher approval | Implemented, **100% line and branch coverage** enforced in CI. Not yet connected to live Moodle |
 | [`grader/review_worker.py`](grader/review_worker.py) | **Queue worker** for on-submission grading: picks up each submission event, grades it deterministically, and sends only the judgment cases to Claude Code in non-interactive mode on a Claude subscription. Results wait for the release check | Implemented, **100% line and branch coverage** enforced in CI. Not yet running on the live server |
 | [`grader/release_check.py`](grader/release_check.py) | **Release check** before every bulk grade push: blocks results that can't be right (wrong rubric, bad arithmetic, invented evidence, contradicting the program run), flags score-rationale disagreements, draws a spot-check sample | Implemented, **100% line and branch coverage** enforced in CI |
 | [`evals/`](evals/) | Evaluation harness for AI grading outputs: 6 adversarial cases, 11 deterministic checks per case, reference judgments. **Model runner** that grades the cases with Claude through Claude Code on a subscription (default, no API bill) or the API, and measures score spread across repeated runs. Prompt snapshot tests | Implemented, tested in CI with a fake CLI and a fake client. Baseline numbers not yet run |
@@ -74,7 +74,7 @@ On known-good synthetic batches it raises no false alarms: the only results flag
 
 ## Try it
 
-Requires Python 3.10+ and nothing else.
+Requires Python 3.10+ and nothing else. The sandboxed run (`--sandbox bwrap`) also needs bubblewrap: `apt install bubblewrap`.
 
 ```bash
 # Grade the synthetic submissions
@@ -83,6 +83,7 @@ python grader/auto_grade.py grader/sample-submissions --out-dir out
 # Grade one Coding Exercise submission the moment it arrives
 python grader/on_submission.py examples/on-submission/event-runs-with-issues.json \
   --exercises grader/exercises --submissions-root grader/tests/on_submission_fixtures --store out/drafts.jsonl
+# ...the same, inside the self-testing sandbox (add: --sandbox bwrap)
 
 # Check a batch of AI-assisted grades before a bulk push
 python grader/release_check.py --outputs BATCH/outputs --rubrics evals/assignments --submissions BATCH/submissions

@@ -74,4 +74,12 @@ The decisions that shape this system, each with what was rejected and what it co
 **Context.** The AI review runs every week on a teacher's budget. Per-token API billing would make every submission a cost.
 **Decision.** The grading call goes through Claude Code in non-interactive mode (`claude -p`) on a Claude subscription, with the same prompt and strict output schema as the API path. Before any work, the worker checks how Claude Code is signed in and refuses to run unless it is a subscription. API-key variables are removed from the child process, and each call is isolated from the machine's own Claude configuration. The API backend stays available for comparison, by explicit choice only.
 **Rejected.** Defaulting to the API, and trusting the environment to be set up right. A stray API key would quietly turn free runs into billed ones.
-**Cost.** Calls count against the plan's usage limits, shared with interactive use, and the CLI's result format is pinned by a fake until a first real run confirms it. The worker holds the subscription token, so student code must run as a different user. See [on-submission-grading.md](on-submission-grading.md#moodle-integration).
+**Cost.** Calls count against the plan's usage limits, shared with interactive use, and the CLI's result format is pinned by a fake until a first real run confirms it. The worker holds the subscription token, so student code has to be sandboxed (decision 10). See [on-submission-grading.md](on-submission-grading.md#moodle-integration).
+
+## 10. Sandbox student code with bubblewrap, and test the sandbox itself
+
+**Context.** The grader runs untrusted programs, and the queue worker beside them holds the AI subscription token. Process limits stop runaway code, not hostile code.
+**Decision.** Every run happens in a bubblewrap sandbox. It has no network, its own process list, a read-only filesystem holding only `/usr` and the one submitted file, an empty writable `/tmp`, and an empty environment. Before grading, a self-test runs a probe inside it and names any isolation property that doesn't hold, and the worker refuses to start on any failure.
+**Rejected.** A separate Unix user: it would still see the network and every world-readable file. A container runtime: more to install and run for one short program at a time. Trusting the sandbox without checking it on the machine it runs on.
+**Cost.** It needs unprivileged user namespaces, which some Linux distributions restrict, so the self-test has to pass on the server before going live. A test also proves the sandbox changes no grade. See [on-submission-grading.md](on-submission-grading.md#the-sandbox).
+

@@ -15,7 +15,7 @@ SAMPLES = {
     "pseudonym-term": "each student gets a code" + "name",
     "district-email": "teacher@" + "cps.edu",
     "live-domain": "https://foxcs" + ".online/course",
-    "ipv4": "server at 203.0." + "113.7",
+    "ipv4": "server at 10.20." + "30.7",
     "hardcoded-password": "PASS" + 'WORD = "ABC123"',
 }
 
@@ -33,6 +33,15 @@ class TestScanner(unittest.TestCase):
 
     def test_clean_text_passes(self):
         self.assertEqual(self._scan_text("Pseudonymous IDs like STUDENT-0001. Localhost is 127.0.0.1."), set())
+
+    def test_documentation_addresses_pass(self):
+        # RFC 5737 ranges are reserved for examples, so they can never point at a real server.
+        self.assertEqual(self._scan_text("Probe 192.0.2.1, 198.51.100.7 and 203.0.113.255."), set())
+
+    def test_neighbors_of_documentation_ranges_are_still_flagged(self):
+        for text in ("192.0." + "3.1", "198.51." + "101.7", "203.0." + "114.9", "10.192." + "0.2"):  # pieces, as above
+            with self.subTest(text):
+                self.assertIn("ipv4", self._scan_text("host " + text))
 
     def test_binary_files_are_flagged_for_review(self):
         with tempfile.TemporaryDirectory() as tmp:
