@@ -57,6 +57,7 @@ TARGETS = {
     "release_check": ("grader/release_check.py", "grader/tests", "test_release_check.py"),
     "score_output": ("evals/score_output.py", "evals/tests", "test_*.py"),
     "run_model": ("evals/run_model.py", "evals/tests", "test_run_model.py"),
+    "review_worker": ("grader/review_worker.py", "grader/tests", "test_review_worker.py"),
 }
 
 COMPARE_SWAP = {

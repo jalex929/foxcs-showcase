@@ -73,12 +73,18 @@ Each test runs the student's file in a separate Python process:
 
 This stops runaway programs. It is **not a security boundary** against hostile code: a determined program can still read files the grading user can read, or open network connections. A production deployment should run the handler inside a disposable container with no network access, a read-only filesystem except a scratch folder, and a non-privileged user. That is the main remaining work before connecting it to the live course.
 
-## Planned Moodle integration
+## Moodle integration
 
-1. A small Moodle plugin observes `\mod_assign\event\assessable_submitted` and writes an event JSON (submission ID, pseudonymous username, assignment ID, stored file path) to a queue folder.
-2. A worker on the server, running in the container described above, calls `on_submission.py` for each queued event.
-3. Drafts appear in the teacher's review queue. Flawless and does-not-run drafts can be approved in bulk; held drafts go to the AI-assisted review tier first.
-4. On approval, the grade and feedback are written back through Moodle's grade API, the same way approved grades are written today.
+Built and tested; not yet running on the live server.
+
+1. **Event listener.** A small Moodle plugin observes `\mod_assign\event\assessable_submitted`. For an allowlisted Coding Exercise, it copies the submitted file out of Moodle's file store and atomically writes an event JSON (submission ID, pseudonymous username, assignment ID, file path) to the queue's `incoming/` folder. It never grades, and a queue failure never blocks a submission.
+2. **Worker.** [`grader/review_worker.py`](../grader/review_worker.py) picks up each event and runs `on_submission.py`. Flawless and does-not-run drafts need no model: the program run settled them. A `runs_with_issues` draft, the one band that needs judgment, goes to Claude with the code, the exercise rubric, and the run results marked as trusted facts. Held drafts go straight to the teacher.
+3. **Release check.** AI review results land in the folder layout the [release check](release-check.md) reads, alongside the draft store, so any review that contradicts the program run or quotes code the student didn't write is blocked before the teacher sees the batch.
+4. **Approval and write-back.** On approval, the grade and feedback are written back through Moodle's grade API, the same way approved grades are written today.
+
+**Cost.** The AI step runs through Claude Code in non-interactive mode (`claude -p`) on a Claude subscription, so it adds no per-token API bill. The worker checks `claude auth status` before it processes anything and refuses to start unless Claude Code is signed in to a subscription. It removes API-key variables from the child process, because Claude Code prefers an API key when one is present. Each call runs in an empty folder with tools, project instructions, hooks, plugins and MCP servers turned off. Calls count against the plan's usage limits; a review that fails for any reason goes to a `failed/` folder with its reason and is never retried automatically.
+
+**Before it goes live.** The sandbox described above, with one more requirement: student programs must run as a different user from the worker, because the worker holds the subscription token.
 
 ## Testing
 

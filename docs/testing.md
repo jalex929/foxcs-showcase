@@ -1,6 +1,6 @@
 # Testing and validation
 
-Every suite here runs with a standard Python install (3.10+), no dependencies. The model runner's tests use a fake client, so they need neither an API key nor the `anthropic` package. CI runs everything on every push, plus a lint check and a separate mutation-testing job: [`.github/workflows/tests.yml`](../.github/workflows/tests.yml). 275 tests in total.
+Every suite here runs with a standard Python install (3.10+), no dependencies. The model runner's tests use a fake API client and a fake `claude` CLI, so they need no API key, no subscription, and no `anthropic` package. CI runs everything on every push, plus a lint check and a separate mutation-testing job: [`.github/workflows/tests.yml`](../.github/workflows/tests.yml). 275 tests in total.
 
 ## How to run
 
@@ -11,8 +11,8 @@ python -m unittest discover -s evals/tests -v     # eval harness and model runne
 python -m unittest discover -s tools/tests -v     # mutation tester, leak scanner, repository hygiene
 
 # 100% line and branch coverage gate (needs: pip install coverage)
-python -m coverage run --branch --include=grader/on_submission.py,grader/release_check.py,evals/run_model.py -m unittest discover -s grader/tests
-python -m coverage run --append --branch --include=grader/on_submission.py,grader/release_check.py,evals/run_model.py -m unittest discover -s evals/tests
+python -m coverage run --branch --include=grader/on_submission.py,grader/release_check.py,grader/review_worker.py,evals/run_model.py -m unittest discover -s grader/tests
+python -m coverage run --append --branch --include=grader/on_submission.py,grader/release_check.py,grader/review_worker.py,evals/run_model.py -m unittest discover -s evals/tests
 python -m coverage report -m --fail-under=100
 
 ruff check .                                      # lint (needs: pip install ruff)
@@ -62,17 +62,34 @@ Batches are built from the eval suite's synthetic cases and reference judgments,
 | Second submission | Misnamed quiz found and penalized, empty practice attempt earns nothing, missing activities reported as not submitted |
 | Golden file | The committed `examples/demo-output/` must match a fresh run byte for byte, so the README never shows stale results |
 
-### Model runner: 27 tests, 100% line and branch coverage
+### Model runner: 48 tests, 100% line and branch coverage
 
-`evals/run_model.py` calls the model; its tests run against a fake client that records every request. They pin:
+`evals/run_model.py` calls the model through one of two backends: Claude Code in non-interactive mode on a subscription (the default), or the API. Its tests run against a fake CLI and a fake client that record every call. They pin:
 
 - **What is sent:** the model, effort, structured-output schema (strict at every level), refusal fallback, and a cacheable system prompt.
 - **What is never sent:** for every case, none of its expected answers (score ranges, forbidden phrases, criterion bounds, intent) reach the model.
 - **Untrusted input stays contained:** a submission containing `</submission>` cannot break out of its tags.
 - **Failures are recorded, never graded:** a refusal, a truncated response, a response with no text, invalid JSON, or an API error writes an error record and no output. An unexpected exception is not swallowed.
 - **Cost and consistency:** cost per token type at scale, token totals across a run, total cost across repeated runs, and the score spread per case.
+- **The subscription path stays free:** the run refuses to start, before any model call, unless `claude auth status` reports a subscription login with no API key in play. API-key variables never reach the `claude` process, and `--bare` (which needs an API key) is never used.
+- **The CLI call is isolated:** same system prompt and schema as the API path, tools off, safe mode, no session saved, a fresh empty folder per case, and the submission on stdin rather than the command line.
+- **CLI failures are recorded, never graded:** an error result, a missing structured output, non-JSON output (reporting the CLI's last error line, such as a usage limit), a timeout, or a missing `claude` binary.
+- **Run facts are trusted, student output is not:** the block of program-run results shown to the model is built only from the exercise spec and exit codes, sits outside the submission tags, and is escaped.
 
 **Prompt snapshots.** The exact system prompt and a sample user message are committed in `evals/tests/snapshots/`. Any change to what the model sees fails the tests until the snapshots are regenerated (`python tools/update_prompt_snapshots.py`), so a prompt change always shows up as a reviewable diff.
+
+### Queue worker: 24 tests, 100% line and branch coverage
+
+`grader/review_worker.py` runs the real deterministic grader on the fixture programs, with a fake AI backend. The tests pin:
+
+- **Routing:** only `runs_with_issues` drafts reach the model. Flawless, does-not-run, held, and no-rubric drafts never do.
+- **What the model gets:** the submitted code, the exercise rubric, and the run results, never the student ID.
+- **Duplicates and resubmissions:** the same file is reviewed once; new code is reviewed again and replaces the old review.
+- **Failures:** a failed review goes to `failed/` with its reason and no grade; requeuing it by hand gets it reviewed even though the draft store has already seen the file. Losing the subscription mid-run puts the event back and stops the worker. A crash leaves the event in `processing/`, and the next start recovers it.
+- **Handoff to the release check:** a consistent review passes; a review that contradicts the program run, or quotes code the student didn't write, is blocked.
+- **The command line:** one pass by default, `--watch` keeps polling, and it refuses to start without a subscription.
+
+A contract test in the working repository feeds an event written by the Moodle plugin's PHP into this worker's parser, so the two sides of the queue can't drift apart.
 
 ### Eval harness: 54 tests
 
@@ -102,7 +119,8 @@ Coverage shows that every line ran during the tests. It doesn't show that a test
 | On-submission grading | 88.7%: 19 of 168 mutants survived | 100% of 166 | 3 |
 | Release check | 83.0%: 37 of 218 mutants survived | 100% of 205 | 2 |
 | Eval scorer | 90.5%: 13 of 137 mutants survived | 100% of 137 | 1 |
-| Model runner | 22 survived on the first run | 100% of 79 | 2 |
+| Model runner | 22 survived on the first run | 100% of 128 | 3 |
+| Queue worker | 93.7%: 5 of 79 mutants survived | 100% of 78 | 0 |
 
 Mutant counts dropped where the first run exposed code that could be removed.
 
@@ -119,7 +137,8 @@ The tester is standard-library Python, like the rest of the repository. Its own 
 
 Honest gaps, so nobody has to guess:
 
-- **No committed baseline numbers yet.** The model runner is built and tested, but running it calls the paid API, so baseline results come from a run with an API key and are not in this repository yet.
+- **No committed baseline numbers yet.** The model runner is built and tested against a fake CLI and a fake client. Baseline results need a real run on a Claude subscription and are not in this repository yet.
+- **No real `claude -p` call in CI.** The CLI's JSON result shape (`structured_output`, `subtype`, `is_error`, `usage`) is pinned by the fake. A first real run is the check that it matches.
 - **The eval checks are deterministic.** They catch structural and rule violations (arithmetic, rubric coverage, escalation, forbidden claims). They do not judge whether feedback is genuinely helpful. That needs educator review or a carefully validated model-graded rubric, and is planned.
 - **Platform tests live in the private workspace.** The live platform has its own CI: content checkers with their own test suites, a PHP harness for the practice-ladder wiring checker, and a headless-browser test proving a student's typed answer survives save on a real lesson page. Those depend on licensed course content and are not reproduced here.
 - **No load or concurrency testing.** Class sizes have not required it. The on-submission store is a single append-only file, which suits one worker. Several concurrent workers would need a real queue or database.

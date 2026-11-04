@@ -6,20 +6,26 @@ The harness never calls a model. Producing outputs is a separate, swappable step
 
 ## Running it against a real model
 
-`run_model.py` produces outputs with Claude:
+`run_model.py` produces outputs with Claude, through either of two backends that send the same prompt and schema and write the same files:
 
 ```bash
-pip install anthropic                          # the only non-stdlib dependency in this repo
+# Claude Code in non-interactive mode, on a Claude subscription (default). No API bill.
 python evals/run_model.py --out evals/runs/baseline --repeats 3
+
+# The Claude API, billed per token. Needs ANTHROPIC_API_KEY and: pip install anthropic
+python evals/run_model.py --backend api --out evals/runs/baseline --repeats 3
+
 python evals/run_evals.py --outputs evals/runs/baseline/run-1
 ```
 
+- **Staying on the subscription.** The `claude-code` backend checks `claude auth status` before the first case and refuses to run unless Claude Code is signed in to a subscription with no API key in play. It removes API-key variables from the `claude` process and runs each case in an empty folder with tools, project instructions, hooks, plugins and MCP servers off. The queue worker uses this same backend, so what the eval measures is what runs.
+
 - **What the model sees.** The assignment rubric and the student's submission, with the submission marked as untrusted data. It never sees the case's expectations, and a test checks that for every case.
 - **How it answers.** Structured output against a strict JSON schema, in the same shape the release check reads. The model is `claude-opus-5-5` at effort `high`, with server-side refusal fallback on.
-- **What gets recorded.** Each run writes one result per case, plus token usage and estimated cost. `--repeats` runs the same cases again and reports the score spread per case, because one passing sample from a probabilistic system is weak evidence.
-- **Failures are never grades.** A refusal, a truncated response, invalid JSON, or an API error is written to `<case>.error.json`, and the eval reports that case as a missing output.
+- **What gets recorded.** Each run writes one result per case, plus token usage and, on the API backend, estimated cost. `--repeats` runs the same cases again and reports the score spread per case, because one passing sample from a probabilistic system is weak evidence.
+- **Failures are never grades.** A refusal, a truncated response, invalid JSON, an API error, or a CLI error is written to `<case>.error.json`, and the eval reports that case as a missing output.
 
-It is tested with a fake client, so CI needs no API key. Baseline numbers come from running it with one.
+It is tested with a fake CLI and a fake client, so CI needs neither a subscription nor an API key. Baseline numbers come from a real run.
 
 ## Running the checks
 
@@ -37,7 +43,7 @@ python -m unittest discover -s evals/tests -v
 | `reference-outputs/` | Hand-authored reference judgments, one per case. Not model outputs |
 | `score_output.py` | The checks |
 | `run_evals.py` | Runs every case against a folder of outputs and reports per-check pass rates |
-| `run_model.py` | Grades every case with Claude and writes outputs the checks can score |
+| `run_model.py` | Grades every case with Claude (Claude Code on a subscription, or the API) and writes outputs the checks can score |
 | `tests/` | Proves the reference outputs pass, that every check fails on a deliberately broken output, and how the model runner builds requests and handles failures |
 | `tests/snapshots/` | The exact system prompt and a sample user message, pinned so prompt changes show up in review |
 

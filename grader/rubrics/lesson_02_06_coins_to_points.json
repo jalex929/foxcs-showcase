@@ -1,0 +1,10 @@
+{
+  "id": "lesson_02_06_coins_to_points",
+  "title": "Coding Exercise: Coins to Points (type conversion)",
+  "prompt": "Ask how many coins the player has. Each coin is worth 10 points. Print: You have N points.",
+  "standardPointsPossible": 10,
+  "rubric": [
+    {"criterionId": "runs_without_errors", "name": "Program runs without errors on every test input", "pointsPossible": 5, "essentialForMastery": false},
+    {"criterionId": "correct_output", "name": "Converts the input to a number and prints the correct point total", "pointsPossible": 5, "essentialForMastery": true}
+  ]
+}

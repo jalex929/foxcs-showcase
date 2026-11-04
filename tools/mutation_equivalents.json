@@ -38,5 +38,10 @@
     "key": "constant | \"total_cost_usd\": round(spent, 6), \"consistency\": consistency(run_dirs, cases)} | col 31 | 6 -> 7",
     "file": "evals/run_model.py",
     "reason": "Rounding a sum of costs that are already rounded to 6 decimals. Rounding to 6 or 7 places gives the same number; the round only removes float noise."
+  },
+  {
+    "key": "constant | \"usage\": totals, \"cost_usd\": round(billed, 6), \"records\": records, | col 43 | 6 -> 7",
+    "file": "evals/run_model.py",
+    "reason": "Each case's cost is already rounded to 6 places, so the batch total is a sum of whole micro-dollars. Rounding it to 6 or 7 places removes the same float noise and gives the same figure."
   }
 ]

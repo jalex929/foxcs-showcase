@@ -37,7 +37,7 @@ The decisions that shape this system, each with what was rejected and what it co
 ## 4. Standard library only, with one optional exception
 
 **Context.** The grading machine allows no package installs.
-**Decision.** Everything runs on a plain Python install, including the mutation tester and the leak scanner. The one exception is the model runner, which imports the official `anthropic` SDK only when it actually calls the API. Its tests use a fake client.
+**Decision.** Everything runs on a plain Python install, including the mutation tester and the leak scanner. The one exception is the model runner's optional API backend, which imports the official `anthropic` SDK only when it is chosen. The default backend shells out to the `claude` CLI and needs no package. Its tests use a fake CLI and a fake client.
 **Rejected.** Third-party test and mutation tools. They would be more familiar, but couldn't run where the code has to run.
 **Cost.** Some tooling is hand-built and has to be tested itself. The mutation tester has its own test suite for that reason.
 
@@ -45,7 +45,7 @@ The decisions that shape this system, each with what was rejected and what it co
 
 **Context.** Several modules reached 100% line and branch coverage.
 **Decision.** Every small change to the grading code (a flipped comparison, an inverted condition, a nudged number) must be caught by a test. Any exception is listed with a written reason, and CI fails on anything else.
-**Rejected.** Treating coverage as the bar. At 100% coverage, the first mutation runs still found 91 untested behaviors across four modules, including a 1-point credit with no evidence that would have passed the release check.
+**Rejected.** Treating coverage as the bar. At 100% coverage, the first mutation runs still found 96 untested behaviors across five modules, including a 1-point credit with no evidence that would have passed the release check.
 **Cost.** About two minutes of CI per run, and occasional triage of equivalent mutants. See [testing.md](testing.md#mutation-testing).
 
 ## 6. Pin the prompt with snapshot tests and require structured output
@@ -68,3 +68,10 @@ The decisions that shape this system, each with what was rejected and what it co
 **Decision.** This repository was extracted with fresh history. Every student in it is synthetic. CI fails if a vendor name, a real ID format, a district contact, live infrastructure, a credential, or an unexpected binary file appears.
 **Rejected.** Cleaning up the working repository in place. Its history would still hold everything removed.
 **Cost.** Changes are ported by hand from the working repository, and checked by the scanner and tests. See [privacy-and-data.md](privacy-and-data.md).
+
+## 9. Run the AI step on a Claude subscription, behind a preflight
+
+**Context.** The AI review runs every week on a teacher's budget. Per-token API billing would make every submission a cost.
+**Decision.** The grading call goes through Claude Code in non-interactive mode (`claude -p`) on a Claude subscription, with the same prompt and strict output schema as the API path. Before any work, the worker checks how Claude Code is signed in and refuses to run unless it is a subscription. API-key variables are removed from the child process, and each call is isolated from the machine's own Claude configuration. The API backend stays available for comparison, by explicit choice only.
+**Rejected.** Defaulting to the API, and trusting the environment to be set up right. A stray API key would quietly turn free runs into billed ones.
+**Cost.** Calls count against the plan's usage limits, shared with interactive use, and the CLI's result format is pinned by a fake until a first real run confirms it. The worker holds the subscription token, so student code must run as a different user. See [on-submission-grading.md](on-submission-grading.md#moodle-integration).
