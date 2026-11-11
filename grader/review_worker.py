@@ -36,7 +36,10 @@ The AI step uses the same backend, prompt and schema the eval harness
 measures (evals/run_model.py), so what gets evaluated is what runs. On the
 default claude-code backend it refuses to start unless Claude Code is
 signed in to a subscription, and it stops, putting the event back, if that
-ever changes mid-run. Student code runs in the bubblewrap sandbox by default
+ever changes mid-run. On the api backend it stops the same way when the API
+rejects the key or the model ID, so an expired key never fails the whole
+queue. A result answered by a refusal-fallback model, not the one the evals
+measured, is marked for teacher review. Student code runs in the bubblewrap sandbox by default
 (grader/sandbox.py), and the worker refuses to start if the sandbox's
 self-test finds any isolation property broken. Standard library only.
 """
@@ -104,11 +107,17 @@ def ai_review(draft: dict, data: dict, rubric: dict, backend, model: str, effort
     name = event.files[0].name
     code = path.read_text(encoding="utf-8")
     case = {"submission": {"files": {name: code}, "explanation": ""}, "programRuns": draft["tests"]}
-    result, usage, billed = backend.grade(case, rubric, model, effort)
+    result, usage, billed, call = backend.grade(case, rubric, model, effort)
     sid = event.submission_id
+    if call["fallback"]:
+        # The evals measured the requested model, not the one that answered, so a person checks this result.
+        result["review"]["teacherReviewRequired"] = True
+        result["review"]["reasons"].append(f"{model} declined this request and {call['model']} answered instead")
     result.update(submission_id=sid, student_id=event.student_id, assignment_id=event.assignment_id,
                   release=osub.RELEASE_STATUS,
-                  reviewedBy={"backend": backend.name, "model": model, "effort": effort, "contentHash": draft["content_hash"]})
+                  reviewedBy={"backend": backend.name, "model": model, "servedBy": call["model"],
+                              "fallback": call["fallback"], "requestId": call["requestId"],
+                              "effort": effort, "contentHash": draft["content_hash"]})
     rm.write_json(queue / "review" / "outputs" / f"{sid}.json", result)
     copy_dir = queue / "review" / "submissions" / sid
     shutil.rmtree(copy_dir, ignore_errors=True)
@@ -145,7 +154,7 @@ def process_event(path: Path, queue: Path, exercises: dict, rubrics: dict, submi
             outcome.update(ai_review(draft, data, rubric, backend, model, effort, queue))
         except rm.GradingFailed as exc:
             return {**_fail(queue, claimed, f"AI review failed: {exc}"), "submission_id": draft["submission_id"]}
-        except rm.SubscriptionRequired:
+        except rm.BackendUnusable:
             shutil.move(claimed, queue / "incoming" / claimed.name)  # put it back untouched
             raise
         outcome["status"] = "ai_reviewed"
@@ -195,14 +204,14 @@ def main(argv: list[str] | None = None, backend=None, sleep=time.sleep) -> int:
     exercises, rubrics = osub.load_exercises(args.exercises), load_rubrics(args.rubrics)
     passes = 0
     try:
-        backend.preflight()
+        backend.preflight(args.model)
         while True:
             run_pass(args.queue, exercises, rubrics, args.submissions_root, backend, args.model, args.effort, runner=runner)
             passes += 1
             if args.watch is None or passes == args.max_passes:
                 return 0
             sleep(args.watch)
-    except rm.SubscriptionRequired as exc:
+    except rm.BackendUnusable as exc:
         print(f"Stopped: {exc}", file=sys.stderr)
         return 2
 

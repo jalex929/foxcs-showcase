@@ -16,6 +16,7 @@ import json
 import shutil
 import sys
 import tempfile
+import types
 import unittest
 from pathlib import Path
 
@@ -60,18 +61,21 @@ class FakeBackend:
     def __init__(self, script=None, preflight_error=None):
         self.script = list(script or [])
         self.preflight_error = preflight_error
-        self.calls = []
+        self.calls, self.preflights = [], []
 
-    def preflight(self):
+    def preflight(self, model):
+        self.preflights.append(model)
         if self.preflight_error:
             raise self.preflight_error
 
     def grade(self, case, assignment, model, effort):
+        """A script step is an exception, a result, or (result, call) to say which model answered."""
         self.calls.append({"case": case, "assignment": assignment, "model": model, "effort": effort})
         step = self.script.pop(0) if self.script else ai_result()
         if isinstance(step, Exception):
             raise step
-        return json.loads(json.dumps(step)), {"input_tokens": 10}, 0.0
+        result, call = step if isinstance(step, tuple) else (step, {"model": model, "fallback": False, "requestId": "req_1"})
+        return json.loads(json.dumps(result)), {"input_tokens": 10}, 0.0, call
 
 
 class QueueTest(unittest.TestCase):
@@ -107,7 +111,9 @@ class TestRouting(QueueTest):
         self.assertEqual((out["submission_id"], out["student_id"], out["assignment_id"]), ("sub-1", "STUDENT-0001", ASSIGNMENT))
         self.assertEqual(out["release"], "pending_teacher_approval")
         draft = self.store.latest("sub-1")
-        self.assertEqual(out["reviewedBy"], {"backend": "fake", "model": "m", "effort": "high", "contentHash": draft["content_hash"]})
+        self.assertEqual(out["reviewedBy"], {"backend": "fake", "model": "m", "servedBy": "m", "fallback": False,
+                                             "requestId": "req_1", "effort": "high", "contentHash": draft["content_hash"]})
+        self.assertEqual(out["review"], ai_result()["review"])  # no fallback, so nothing is added
         code = (FIXTURES / "string_repetition.py").read_text(encoding="utf-8")
         self.assertEqual((self.queue / "review" / "submissions" / "sub-1" / "exercise.py").read_text(encoding="utf-8"), code)
         self.assertEqual(self.names("done"), ["sub-1.json"])
@@ -169,6 +175,18 @@ class TestRouting(QueueTest):
         self.assertEqual(load(self.queue / "review" / "outputs" / "sub-1.json")["score"]["finalPointsEarned"], 7)
         self.assertEqual(self.names("review/submissions/sub-1"), ["exercise.py"])
         self.assertIn("# tried again", (self.queue / "review" / "submissions" / "sub-1" / "exercise.py").read_text(encoding="utf-8"))
+
+    def test_a_fallback_answer_is_recorded_and_sent_to_the_teacher(self):
+        result = ai_result()
+        result["review"]["reasons"] = ["the explanation is missing"]
+        self.backend.script = [(result, {"model": "claude-opus-5", "fallback": True, "requestId": "req_fb"})]
+        self.assertEqual(self.process(self.enqueue("string_repetition.py"))["status"], "ai_reviewed")
+        out = load(self.queue / "review" / "outputs" / "sub-1.json")
+        self.assertEqual((out["reviewedBy"]["model"], out["reviewedBy"]["servedBy"], out["reviewedBy"]["fallback"], out["reviewedBy"]["requestId"]),
+                         ("m", "claude-opus-5", True, "req_fb"))
+        self.assertEqual(out["review"], {"teacherReviewRequired": True, "overallConfidence": "high",
+                                         "reasons": ["the explanation is missing", "m declined this request and claude-opus-5 answered instead"]})
+        self.assertEqual(rc.check_escalation(out)[0].code, "grader_requested_review")  # the release check holds it
 
     def test_output_without_a_hash_is_reviewed_again(self):
         rm.write_json(self.queue / "review" / "outputs" / "sub-1.json", {"score": {}})
@@ -321,6 +339,21 @@ class TestPassAndMain(QueueTest):
         self.assertIn("Stopped: signed out", err.getvalue())
         self.assertEqual(self.names("incoming"), ["sub-1.json"])
 
+    def test_a_rejected_api_key_stops_the_worker_instead_of_failing_the_queue(self):
+        for sid in ("sub-1", "sub-2"):
+            self.enqueue("string_repetition.py", sid=sid)
+        self.backend.script = [rm.BackendUnusable("the Claude API rejected the request (401)")]
+        with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()) as err:
+            self.assertEqual(rw.main(self.args("--watch", "1"), backend=self.backend, sleep=self.fail), 2)
+        self.assertIn("Stopped: the Claude API rejected the request (401)", err.getvalue())
+        self.assertEqual((self.names("incoming"), self.names("failed")), (["sub-1.json", "sub-2.json"], []))
+        self.assertEqual(len(self.backend.calls), 1)  # stopped at the first rejection
+
+    def test_preflight_checks_the_chosen_model(self):
+        with contextlib.redirect_stdout(io.StringIO()):
+            rw.main(self.args("--model", "claude-sonnet-5-5"), backend=self.backend)
+        self.assertEqual(self.backend.preflights, ["claude-sonnet-5-5"])
+
     def test_every_folder_argument_is_required(self):
         full = self.args()
         for flag in ("--queue", "--exercises", "--rubrics", "--submissions-root"):
@@ -369,7 +402,7 @@ class TestPassAndMain(QueueTest):
         built = []
         saved = rm.ClaudeCodeBackend, rm.default_client
         rm.ClaudeCodeBackend = lambda: built.append("claude-code") or self.backend
-        rm.default_client = lambda: built.append("api") or (object(), ())
+        rm.default_client = lambda: built.append("api") or (types.SimpleNamespace(models=types.SimpleNamespace(retrieve=lambda model: None)), ())
         try:
             with contextlib.redirect_stdout(io.StringIO()):
                 rw.main(self.args())
