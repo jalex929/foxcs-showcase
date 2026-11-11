@@ -115,11 +115,12 @@ See [docs/testing.md](docs/testing.md) for what each suite covers and what it do
 
 ## Project status
 
-FoxCS is in daily use by real students. The Moodle platform, interactive lessons with in-browser Python, interaction telemetry through a custom Moodle plugin, and native quiz and assignment submission are deployed. The deterministic graders (including on-submission grading of Coding Exercises), the release check, the eval harness, and the model runner are implemented and tested. The release check's first live use is the next bulk grade push. AI-assisted review is used in practice as a teacher-operated workflow, not an unattended service. The full capability table, including what is still planned, is in [docs/grading-pipeline.md](docs/grading-pipeline.md).
+FoxCS was used daily by real students in fall 2026. Students are off the platform while the next version is built, starting with [rubric-first grading](docs/rubric-first-grading.md). The Moodle platform, interactive lessons with in-browser Python, interaction telemetry through a custom Moodle plugin, and native quiz and assignment submission are deployed. The deterministic graders (including on-submission grading of Coding Exercises), the release check, the eval harness, and the model runner are implemented and tested. The release check's first live use is the next bulk grade push. AI-assisted review is used in practice as a teacher-operated workflow, not an unattended service. The full capability table, including what is still planned, is in [docs/grading-pipeline.md](docs/grading-pipeline.md).
 
 ## Documentation
 
 - [Design decisions](docs/decisions.md)
+- [Rubric-first grading on submission (planned)](docs/rubric-first-grading.md)
 - [System architecture](docs/architecture.md)
 - [Grading pipeline and capability status](docs/grading-pipeline.md)
 - [On-submission grading](docs/on-submission-grading.md)

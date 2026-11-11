@@ -12,6 +12,9 @@ The decisions that shape this system, each with what was rejected and what it co
 | 6 | Pin the prompt with snapshot tests and require structured output | Free-form prompts and parsing prose |
 | 7 | A daily class code plus automatic gates | Handing out quiz passwords per student |
 | 8 | Extract the showcase with fresh history and a leak scanner | Publishing the working repository |
+| 9 | Run the AI step on a Claude subscription, behind a preflight | Defaulting to the API |
+| 10 | Sandbox student code with bubblewrap, and test the sandbox itself | A separate Unix user, or a container runtime |
+| 11 | Grade open-ended answers on submission against a rubric: release feedback now, hold the score (planned) | Weekly review, or releasing scores automatically |
 
 ## 1. Grade facts with code, judgment with AI, and release nothing without approval
 
@@ -83,3 +86,11 @@ The decisions that shape this system, each with what was rejected and what it co
 **Rejected.** A separate Unix user: it would still see the network and every world-readable file. A container runtime: more to install and run for one short program at a time. Trusting the sandbox without checking it on the machine it runs on.
 **Cost.** It needs unprivileged user namespaces, which some Linux distributions restrict, so the self-test has to pass on the server before going live. A test also proves the sandbox changes no grade. See [on-submission-grading.md](on-submission-grading.md#the-sandbox).
 
+## 11. Grade open-ended answers on submission against a rubric: release feedback now, hold the score
+
+**Status.** Planned. Nothing here is built.
+**Context.** Feedback is what helps students, and it helps most while the work is fresh. Weekly review delays it by days. Rubrics have also been the weakest link: questions went live without the rubrics they were assumed to have.
+**Decision.** Every question that is not closed-form is graded against its rubric when it is submitted. The student sees the feedback immediately, and the score stays pending until the teacher approves it. Each rubric criterion is checked by code where possible, so the AI scores only what needs judgment. Rubrics live with their questions, follow templates by question type, are drafted by AI and approved and rated by the teacher, and a publish gate refuses any question without an approved rubric and passing test answers. Scores move to automatic release one question type and one model at a time, only when agreement with the teacher and the rate of confidently wrong results clear thresholds set in advance.
+**Amends.** Decisions 1 and 3 for feedback only. Feedback now reaches students before approval. Scores still never do until a question type has earned it.
+**Rejected.** Releasing scores automatically from the start, because model comparison runs have already produced a confidently wrong score with no review requested. Holding feedback until approval, because late feedback loses most of its value.
+**Cost.** Grading on submission needs the API, about $0.01 to $0.03 per AI-graded answer in measured runs. Plausible but wrong feedback can reach a student before review. Writing a question now includes its rubric and test answers. See [rubric-first-grading.md](rubric-first-grading.md).
