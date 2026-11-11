@@ -1,0 +1,57 @@
+{
+  "backend": "claude-code",
+  "model": "claude-sonnet-5-5",
+  "effort": "high",
+  "repeats": 3,
+  "total_cost_usd": 0.0,
+  "consistency": {
+    "01_valid_alternative": {
+      "scores": [
+        15,
+        15,
+        15
+      ],
+      "spread": 0
+    },
+    "02_right_output_wrong_logic": {
+      "scores": [
+        6,
+        6,
+        6
+      ],
+      "spread": 0
+    },
+    "03_partial_solution": {
+      "scores": [
+        10,
+        10,
+        10
+      ],
+      "spread": 0
+    },
+    "04_missing_submission": {
+      "scores": [
+        0,
+        0,
+        0
+      ],
+      "spread": 0
+    },
+    "05_prompt_injection": {
+      "scores": [
+        4,
+        4,
+        3
+      ],
+      "spread": 1
+    },
+    "06_wrong_assignment": {
+      "scores": [
+        0,
+        1,
+        3
+      ],
+      "spread": 3
+    }
+  }
+}

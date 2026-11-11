@@ -1,0 +1,76 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`def add_points(score, points):` followed by an indented `return sum([score, points])`",
+        "`for amount in (10, 5):` and `score = add_points(score, amount)` use valid syntax and defined names"
+      ],
+      "rationale": "I found no syntax or runtime problems when I read the code. `sum` accepts a list of two numbers, and every name is defined before it is used. No program_runs record was provided, so this comes from reading the code.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`return sum([score, points])`",
+        "`score = add_points(score, amount)`"
+      ],
+      "rationale": "The function returns the new score and does not print it. The caller captures the returned value in `score` each time. Using `sum([score, points])` instead of `score + points` is unusual but correct.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`score = 0`, then the loop over `(10, 5)`, then `print(score)`"
+      ],
+      "rationale": "The score starts at 0. After adding 10 it is 10, and after adding 5 it is 15. `print(score)` outputs 15, which is the expected final score. The loop calls the function twice with the required values.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 3,
+      "pointsPossible": 3,
+      "evidence": [
+        "\"return hands the new total back to the line that called add_points, so I can save it in score and use it again in the loop.\""
+      ],
+      "rationale": "The explanation correctly says that return sends the value back to the caller. It also correctly says the value is stored in `score` and reused on the next loop iteration. This matches what the code does.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 15,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 15
+  },
+  "feedback": {
+    "strengths": [
+      "`add_points` returns the new score and does not print it. The result is stored with `score = add_points(score, amount)`.",
+      "The final printed score is 15, and the calls start from 0 with 10 and then 5, as the prompt asks.",
+      "Your explanation links return to the code. It says the value goes back to the caller, is saved in `score`, and is used again in the loop."
+    ],
+    "priorityImprovements": [
+      "`return sum([score, points])` works, but `return score + points` is simpler and more usual for adding two numbers. Use the simpler form unless you need `sum` for a reason.",
+      "The prompt says to call the function twice. Your loop does that correctly. Writing the two calls out as separate lines can make each step easier to see when you are learning."
+    ],
+    "overallFeedback": "This submission meets every rubric criterion. The function returns its result, the output is correct, and the explanation matches what the program does. The only suggestions are about simplicity and style.",
+    "nextStep": "Rewrite the function body as `return score + points`. Then try calling the function twice by hand, for example `score = add_points(score, 10)` and then `score = add_points(score, 5)`, and check that the output is still 15."
+  },
+  "review": {
+    "teacherReviewRequired": false,
+    "reasons": [
+      "The grader read the code and no program_runs record was provided. The code is short and straightforward, so I am confident it prints 15.",
+      "The approach is valid but slightly unusual: it uses `sum([score, points])` and a loop in place of two explicit calls. Both meet the prompt, so no review is needed."
+    ],
+    "overallConfidence": "high"
+  },
+  "submission_id": "01_valid_alternative",
+  "student_id": "EVAL-01",
+  "assignment_id": "lesson_03_02_return_values"
+}

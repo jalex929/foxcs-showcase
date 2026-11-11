@@ -1,0 +1,78 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`def add_points(score, points):` followed by `print(score + points)` is valid Python",
+        "The calls `add_points(0, 10)` and `add_points(10, 5)` match the function's two parameters"
+      ],
+      "rationale": "Reading the code, it is syntactically valid and the calls match the signature, so I expect no errors. No run record was provided, so this comes from reading the code.",
+      "confidence": "medium"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "`print(score + points)` is the only statement in the function body",
+        "The code has no `return` statement"
+      ],
+      "rationale": "The function prints the new score and never returns it, which is the behavior the criterion says to avoid. The calls also don't store results.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "`add_points(0, 10)` prints 10 and `add_points(10, 5)` prints 5",
+        "No final score of 15 is printed"
+      ],
+      "rationale": "The program prints 10 and then 5. The correct final score is 15. The second call uses a hard-coded 10 rather than a stored result, and no final score is printed.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 0,
+      "pointsPossible": 3,
+      "evidence": [
+        "\"The function returns the score by printing it.\""
+      ],
+      "rationale": "The explanation treats printing and returning as the same thing. `return` sends a value back to the caller so it can be stored and reused, while `print` only displays it. The explanation describes the code accurately but states the concept incorrectly.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 4,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 4
+  },
+  "feedback": {
+    "strengths": [
+      "Your function has the right name and takes the two parameters `score` and `points`.",
+      "The arithmetic `score + points` is correct, and your calls use the right starting values of 0 and 10 plus 5."
+    ],
+    "priorityImprovements": [
+      "Change `print(score + points)` to `return score + points`. The function should hand the new score back to the caller instead of displaying it.",
+      "Store each result in a variable, for example `score = add_points(0, 10)` and then `score = add_points(score, 5)`. This replaces the hard-coded 10 with the stored result.",
+      "Print the final score once at the end with `print(score)`. It should show 15.",
+      "Rewrite your explanation. `return` sends a value back to the code that called the function so it can be stored and reused, while `print` only shows text on the screen."
+    ],
+    "overallFeedback": "Your code prints 10 and then 5, but the assignment asks for a function that returns the new score and a final printed score of 15. The main gap is that `print` and `return` do different jobs. Fixing the function to use `return` will also fix the final output. It will also give you the right idea for your explanation.",
+    "nextStep": "Rewrite `add_points` to use `return score + points`. Then call it twice, storing the result in `score` each time, and print `score` once at the end."
+  },
+  "review": {
+    "teacherReviewRequired": false,
+    "reasons": [
+      "The submission is clear and the rubric applies directly. The core misconception, confusing print with return, is stated in both the code and the explanation.",
+      "No program_runs record was provided, so the 'runs without errors' score is based on reading the code."
+    ],
+    "overallConfidence": "high"
+  },
+  "submission_id": "02_right_output_wrong_logic",
+  "student_id": "EVAL-02",
+  "assignment_id": "lesson_03_02_return_values"
+}

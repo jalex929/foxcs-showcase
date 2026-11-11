@@ -67,7 +67,7 @@ On known-good synthetic batches it raises no false alarms: the only results flag
 | [`grader/on_submission.py`](grader/on_submission.py) | **On-submission grading** of Coding Exercises: runs the student's code in a self-testing bubblewrap sandbox (no network, no view of other files or processes) the moment it is uploaded, scores 50% runs / 50% correct, returns a draft pending teacher approval | Implemented, **100% line and branch coverage** enforced in CI. Not yet connected to live Moodle |
 | [`grader/review_worker.py`](grader/review_worker.py) | **Queue worker** for on-submission grading: picks up each submission event, grades it deterministically, and sends only the judgment cases to Claude Code in non-interactive mode on a Claude subscription. Results wait for the release check | Implemented, **100% line and branch coverage** enforced in CI. Not yet running on the live server |
 | [`grader/release_check.py`](grader/release_check.py) | **Release check** before every bulk grade push: blocks results that can't be right (wrong rubric, bad arithmetic, invented evidence, contradicting the program run), flags score-rationale disagreements, draws a spot-check sample | Implemented, **100% line and branch coverage** enforced in CI |
-| [`evals/`](evals/) | Evaluation harness for AI grading outputs: 6 adversarial cases, 11 deterministic checks per case, reference judgments. **Model runner** that grades the cases with Claude through Claude Code on a subscription (default, no API bill) or the API, and measures score spread across repeated runs. Prompt snapshot tests | Implemented, tested in CI with a fake CLI and a fake client. Baseline numbers not yet run |
+| [`evals/`](evals/) | Evaluation harness for AI grading outputs: 6 adversarial cases, 11 deterministic checks per case, reference judgments. **Model runner** that grades the cases with Claude through Claude Code on a subscription (default, no API bill) or the API, and measures score spread across repeated runs. Prompt snapshot tests | Implemented, tested in CI with a fake CLI and a fake client. [First model comparison recorded](docs/model-comparison.md) |
 | [`examples/`](examples/) | Real output from the code in this repo: the batch grader, on-submission grading, and a [release-check report](examples/release-check/report/release_report.md) on an 8-result demo batch | Regenerated and compared in CI |
 | [`tools/`](tools/) | Mutation tester, leak scanner, and generators for the fixtures, demo, and prompt snapshots | Implemented, tested in CI |
 | [`docs/`](docs/) | Architecture, grading pipeline, testing, AI reliability, privacy, engineering process, RAG roadmap | Current |
@@ -126,6 +126,7 @@ FoxCS is in daily use by real students. The Moodle platform, interactive lessons
 - [Release check before a bulk grade push](docs/release-check.md)
 - [Assessment access: a daily class code](docs/assessment-access-design.md)
 - [Testing and validation](docs/testing.md)
+- [Model comparison: fixing a confidence failure](docs/model-comparison.md)
 - [AI reliability and boundaries](docs/ai-reliability-and-boundaries.md)
 - [Privacy and data boundaries](docs/privacy-and-data.md)
 - [Engineering process](docs/engineering-process.md)

@@ -1,0 +1,74 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "The file contains only `# TODO` \u2014 no executable code."
+      ],
+      "rationale": "The file runs without error technically, but it contains no program, so there is no work to credit under this criterion.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "No function `add_points` is defined in the submission."
+      ],
+      "rationale": "No function exists, so nothing is returned.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "The submission has no print statement and no calls to add_points."
+      ],
+      "rationale": "No output is produced, so the final score of 15 is never printed.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 0,
+      "pointsPossible": 3,
+      "evidence": [
+        "The explanation section is empty."
+      ],
+      "rationale": "No explanation was provided.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 0,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 0
+  },
+  "feedback": {
+    "strengths": [
+      "You created the exercise file, which is a starting point."
+    ],
+    "priorityImprovements": [
+      "Define `add_points(score, points)` so it uses `return` to send back the new score instead of printing it.",
+      "Call the function twice, starting from 0 (add 10, then add 5). Store the result each time, for example `score = add_points(score, 10)`.",
+      "Print the final score. It should be 15.",
+      "Write one or two sentences explaining that `return` hands the new score back to the caller so it can be stored and used later."
+    ],
+    "overallFeedback": "The submission contains only a `# TODO` comment and an empty explanation, so there was no work to score yet. Once you add the function, the two calls, the print, and your explanation, this can be graded properly.",
+    "nextStep": "Write the `add_points` function with a `return` statement, then call it twice and print the result."
+  },
+  "review": {
+    "teacherReviewRequired": true,
+    "reasons": [
+      "The submission is an unfinished placeholder (`# TODO`) with an empty explanation, so there is no work to assess.",
+      "The student may have submitted the wrong file or may not have finished. The teacher may want to check before recording a zero."
+    ],
+    "overallConfidence": "low"
+  },
+  "submission_id": "04_missing_submission",
+  "student_id": "EVAL-04",
+  "assignment_id": "lesson_03_02_return_values"
+}

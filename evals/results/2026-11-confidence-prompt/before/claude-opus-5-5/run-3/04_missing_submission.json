@@ -1,0 +1,64 @@
+{
+  "feedback": {
+    "strengths": [],
+    "priorityImprovements": [
+      "Write the function `add_points(score, points)` so that it uses `return` to send back the new score; this is the central skill of the exercise.",
+      "Call the function twice starting from 0 (add 10, then add 5), store the result each time, and print the final score.",
+      "Add one or two sentences explaining what `return` does in your program."
+    ],
+    "overallFeedback": "This submission has no work to assess yet: exercise.py contains only the placeholder comment `# TODO`, and the explanation is blank, so no points could be earned at this stage. It may be that the file was submitted before your work was saved, so check that you turned in the right version.",
+    "nextStep": "Start by defining `add_points(score, points)` with a single line in its body that returns the sum of the two parameters, then call it with a starting score of 0 and 10 and store what comes back in a variable."
+  },
+  "review": {
+    "teacherReviewRequired": true,
+    "reasons": [
+      "Work is missing: exercise.py contains only the placeholder comment `# TODO` and the explanation is empty.",
+      "The student may have submitted the starter file by mistake; the teacher may wish to confirm and allow resubmission.",
+      "No program_runs record was provided. A comment-only file would execute without error, but it implements nothing, so no points were awarded for running."
+    ],
+    "overallConfidence": "high"
+  },
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [],
+      "rationale": "The file contains only the placeholder comment `# TODO`. There is no program to run, so this criterion cannot be credited even though a comment-only file would not raise an error.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [],
+      "rationale": "No function is defined and there is no return statement in the submission.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [],
+      "rationale": "The submission has no print statement and produces no output, so no final score is shown.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 0,
+      "pointsPossible": 3,
+      "evidence": [],
+      "rationale": "The explanation is empty, so nothing describes what return does.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 0,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 0
+  },
+  "submission_id": "04_missing_submission",
+  "student_id": "EVAL-04",
+  "assignment_id": "lesson_03_02_return_values"
+}

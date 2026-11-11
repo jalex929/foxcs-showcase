@@ -1,0 +1,72 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "The file contains only the comment `# TODO`; no executable code."
+      ],
+      "rationale": "The file technically doesn't raise an error, but there is no program to run, so no credit for a working program.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "No function `add_points` is defined in the submission."
+      ],
+      "rationale": "No function and no return statement were written.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "No print statement or output; expected final score of 15 is not produced."
+      ],
+      "rationale": "Nothing is printed.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 0,
+      "pointsPossible": 3,
+      "evidence": [
+        "The explanation section is empty."
+      ],
+      "rationale": "No explanation was provided.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 0,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 0
+  },
+  "feedback": {
+    "strengths": [
+      "You created the file, which is the first step."
+    ],
+    "priorityImprovements": [
+      "Define `add_points(score, points)` so it uses `return` to send back the new score instead of printing it.",
+      "Call the function twice starting from 0 (add 10, then add 5), saving the result each time, then print the final score (15).",
+      "Write one or two sentences explaining what `return` does in your program."
+    ],
+    "overallFeedback": "The submission contains only a `# TODO` placeholder, so none of the rubric criteria could be scored. It looks like the exercise was not started or the wrong file was submitted.",
+    "nextStep": "Write the `add_points` function with a `return` statement, then call it twice and print the result. Run it to confirm it prints 15, then add your explanation."
+  },
+  "review": {
+    "teacherReviewRequired": true,
+    "reasons": [
+      "Submission is an empty placeholder (`# TODO`) with no explanation; it may be a wrong or incomplete upload rather than the student's actual ability."
+    ],
+    "overallConfidence": "low"
+  },
+  "submission_id": "04_missing_submission",
+  "student_id": "EVAL-04",
+  "assignment_id": "lesson_03_02_return_values"
+}

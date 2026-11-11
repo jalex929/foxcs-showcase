@@ -1,0 +1,65 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [],
+      "rationale": "The file contains only a placeholder comment and no program code. No program runs were recorded, and there is no attempted work to assess for this criterion.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [],
+      "rationale": "No add_points function is defined and no return statement is present.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [],
+      "rationale": "The submission has no calls to a function and no print statement, so no final score is produced.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 0,
+      "pointsPossible": 3,
+      "evidence": [],
+      "rationale": "The explanation section is empty, so nothing describes what return does.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 0,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 0
+  },
+  "feedback": {
+    "strengths": [
+      "The exercise.py file is in place and ready for your code, but it does not contain any work to give credit for yet."
+    ],
+    "priorityImprovements": [
+      "Replace the `# TODO` placeholder with a function add_points(score, points) that returns the new score rather than printing it.",
+      "Call the function twice starting from 0 (add 10, then add 5), store the result each time, and print the final score.",
+      "Add one or two sentences explaining what return does in your program."
+    ],
+    "overallFeedback": "This submission has only the `# TODO` placeholder and an empty explanation, so there is no work to score yet and it earned 0 of 15 points. If you submitted this file by accident, check with your teacher about sending the finished version. If you were not sure how to begin, start with the function alone: it takes two inputs and hands back their sum.",
+    "nextStep": "Write add_points(score, points) with a return line, then store the result of the first call in a variable, such as the result of adding 10 to 0, and pass that variable into the second call."
+  },
+  "review": {
+    "teacherReviewRequired": true,
+    "reasons": [
+      "The work is missing: exercise.py contains only the placeholder comment `# TODO` and the explanation is empty.",
+      "The submission may be an accidental or unfinished upload, so the score does not show what the student can actually do."
+    ],
+    "overallConfidence": "low"
+  },
+  "submission_id": "04_missing_submission",
+  "student_id": "EVAL-04",
+  "assignment_id": "lesson_03_02_return_values"
+}

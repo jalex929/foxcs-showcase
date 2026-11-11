@@ -1,0 +1,81 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`def add_points(score, points):`",
+        "`score = add_points(score, amount)`",
+        "`print(score)`"
+      ],
+      "rationale": "No program run record was provided, so this is based on reading the code. The syntax and indentation are valid, the function is defined before it is called, and every name is assigned before use. `sum` receives a list of two numbers, which is valid.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`return sum([score, points])`",
+        "`score = add_points(score, amount)`"
+      ],
+      "rationale": "The function returns the new score and does not print inside the function. The caller stores the returned value. Using `sum` on a two-item list is an unusual way to add, but it correctly produces score plus points.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`score = 0`",
+        "`for amount in (10, 5):`",
+        "`print(score)`"
+      ],
+      "rationale": "Tracing the code: score starts at 0, becomes 10 on the first loop pass, then 15 on the second. The program prints 15 once, after the loop, which is the correct final score. This comes from a code trace, as no run record was provided.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 3,
+      "pointsPossible": 3,
+      "evidence": [
+        "Explanation: \"return hands the new total back to the line that called add_points, so I can save it in score and use it again in the loop.\"",
+        "`score = add_points(score, amount)`"
+      ],
+      "rationale": "The explanation accurately says that the value goes back to the calling line, is saved in `score`, and is reused on the next loop pass. This matches how the program works.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 15,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 15
+  },
+  "feedback": {
+    "strengths": [
+      "`add_points` returns its result instead of printing it, which is the main skill in this exercise.",
+      "`score = add_points(score, amount)` stores each returned value and passes it into the next call, so the total builds correctly from 0 to 15.",
+      "Your explanation follows the returned value back to the calling line and connects it to how the loop reuses `score`."
+    ],
+    "priorityImprovements": [
+      "Simplify the function body: `sum([score, points])` builds a list just to add two numbers, while the `+` operator would state the same idea more directly.",
+      "The exercise describes two calls, and your loop makes them through one line of code. That works, but when a task names a small fixed number of steps, consider whether writing them out would be clearer to a reader."
+    ],
+    "overallFeedback": "Your program meets every rubric criterion: the function returns the new score, each result is stored, the final printed score is 15, and your explanation matches the code. The most useful refinement is making the addition inside the function simpler and easier to read.",
+    "nextStep": "Rewrite the body of `add_points` using the `+` operator, then run the program again to confirm it still prints 15."
+  },
+  "review": {
+    "teacherReviewRequired": true,
+    "reasons": [
+      "Valid but unexpected approach: the prompt asks the student to call the function twice, and the submission does this with one call site inside a `for` loop that runs twice, storing the result on each pass. It was scored as meeting the requirement; please confirm that a loop is acceptable.",
+      "The function adds with `sum([score, points])` rather than `+`. This is correct but unusual for this lesson.",
+      "No program run record was provided, so the runs-without-errors and correct-output scores are based on reading and tracing the code."
+    ],
+    "overallConfidence": "high"
+  },
+  "submission_id": "01_valid_alternative",
+  "student_id": "EVAL-01",
+  "assignment_id": "lesson_03_02_return_values"
+}

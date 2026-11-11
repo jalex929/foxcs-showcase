@@ -1,0 +1,80 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`def add_points(score, points):` followed by `print(score + points)` is valid Python",
+        "`add_points(0, 10)` and `add_points(10, 5)` call the function with the right number of arguments"
+      ],
+      "rationale": "By reading the code, I found no syntax or runtime errors. No <program_runs> record was provided, so I could not confirm this by running it.",
+      "confidence": "medium"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "`print(score + points)` is the only line in the function body",
+        "The function has no `return` statement"
+      ],
+      "rationale": "The criterion asks for a function that returns the new score and doesn't just print it. This function only prints, so it returns `None`.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 2,
+      "pointsPossible": 4,
+      "evidence": [
+        "`add_points(0, 10)` prints 10 and `add_points(10, 5)` prints 15",
+        "The results are never stored, and there is no single print of the final score"
+      ],
+      "rationale": "The last line shown is 15, which is the correct final value. But the student hard-coded `10` in the second call instead of storing the first result, and the program prints an intermediate value too. It reaches 15 without the required return-and-store flow, so I gave partial credit.",
+      "confidence": "medium"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 0,
+      "pointsPossible": 3,
+      "evidence": [
+        "\"The function returns the score by printing it.\""
+      ],
+      "rationale": "The explanation treats printing as returning. The two are different: print displays a value, and return hands it back to the caller. The explanation does match the code, which also prints, but it describes what return does incorrectly.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 6,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 6
+  },
+  "feedback": {
+    "strengths": [
+      "Your function is defined correctly with two parameters, and the program runs cleanly.",
+      "Both calls use the right arguments and the final value shown is 15."
+    ],
+    "priorityImprovements": [
+      "Replace `print(score + points)` with `return score + points`. The exercise is about return, and your function currently doesn't return anything.",
+      "Store each result and pass it into the next call, for example `score = add_points(0, 10)` and then `score = add_points(score, 5)`. Right now you type the 10 in by hand.",
+      "Print only the final score once at the end, with `print(score)`.",
+      "Rewrite the explanation. `print` shows a value on the screen. `return` sends the value back to the code that called the function so you can store it or use it later."
+    ],
+    "overallFeedback": "Your function adds the numbers correctly and the program runs. But it uses print where the assignment asks for return, so the main skill, returning a value, isn't shown yet. Your explanation says a function \"returns the score by printing it,\" which mixes up the two ideas. Once you see the difference, this exercise should be quick to fix.",
+    "nextStep": "Change the function to `return score + points`, then call it twice, storing the result each time. Print the final score once, and rewrite your explanation to say what return does."
+  },
+  "review": {
+    "teacherReviewRequired": true,
+    "reasons": [
+      "The student's explanation shows a print/return misconception: 'returns the score by printing it'.",
+      "The essential criterion `uses_return` scored 0, so mastery is not met.",
+      "No <program_runs> record was provided, so the run and output scores come from reading the code.",
+      "The partial credit on `correct_output` is a judgment call, because the final value is right but was not produced through stored return values."
+    ],
+    "overallConfidence": "high"
+  },
+  "submission_id": "02_right_output_wrong_logic",
+  "student_id": "EVAL-02",
+  "assignment_id": "lesson_03_02_return_values"
+}
