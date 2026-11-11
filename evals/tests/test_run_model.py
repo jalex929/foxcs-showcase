@@ -507,11 +507,11 @@ class TestClaudeCodeBackend(unittest.TestCase):
     def test_failures_raise_with_a_reason(self):
         ok = {"subtype": "success", "is_error": False, "structured_output": {"a": 1}}
         scripts = {
-            "claude reported error_max_structured_output_retries: gave up": {
+            "claude returned an error \\(error_max_structured_output_retries\\): gave up": {
                 "subtype": "error_max_structured_output_retries", "is_error": True, "result": "gave up"},
-            "claude reported success: rate limited": {**ok, "is_error": True, "result": "rate limited"},
-            "claude reported error_during_execution: no detail": {"subtype": "error_during_execution", "is_error": False},
-            "claude reported None: no detail": {"is_error": False, "structured_output": {"a": 1}},
+            "claude returned an error: You've hit your 5-hour limit": {**ok, "is_error": True, "result": "You've hit your 5-hour limit"},
+            "claude did not finish \\(error_during_execution\\): no detail": {"subtype": "error_during_execution", "is_error": False},
+            "claude did not finish \\(None\\): no detail": {"is_error": False, "structured_output": {"a": 1}},
             "no structured output": {**ok, "structured_output": None},
             "no structured output ": {**ok, "structured_output": ["not", "an", "object"]},
         }

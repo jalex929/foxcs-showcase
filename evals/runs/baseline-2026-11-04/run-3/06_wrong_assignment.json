@@ -1,0 +1,68 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "The submitted file has only `for i in range(1, 6):` and `print(i)`. It has no `add_points` function and no score calculation."
+      ],
+      "rationale": "No program_runs record was provided. The loop would probably run without errors, but it is not a program for this assignment, so it earns no credit for running. The teacher may choose to give partial credit here.",
+      "confidence": "medium"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [],
+      "rationale": "The submission has no function and no `return` statement.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [],
+      "rationale": "The program never calculates or prints a score. The expected final score was 15, and the code prints the numbers 1 through 5.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 0,
+      "pointsPossible": 3,
+      "evidence": [],
+      "rationale": "The explanation, \"This loop counts from 1 to 5,\" correctly describes the submitted loop. However, the criterion asks what `return` does in the program, and the explanation never mentions `return`.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 0,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 0
+  },
+  "feedback": {
+    "strengths": [
+      "Your `for` loop with `range(1, 6)` is written correctly, and your explanation accurately describes what it does."
+    ],
+    "priorityImprovements": [
+      "Write the function this exercise asks for: `def add_points(score, points):`. It should use `return` to send back `score + points` instead of printing it.",
+      "Start a variable at 0. Call the function twice (add 10, then add 5), save the result in your variable each time, and print the final score. It should be 15.",
+      "Write one or two sentences explaining what `return` does in your program, for example how the new score gets back to the line that called the function."
+    ],
+    "overallFeedback": "This submission looks like it belongs to a different exercise. It's a counting loop, and Lesson 3.2 asks for a function that returns a value, so none of the rubric criteria could be met. Your loop does work, and your explanation matches it. Check that you uploaded the right file.",
+    "nextStep": "Make a new exercise.py that defines `add_points(score, points)` with a `return` statement. Then call it twice starting from 0, save each result, print the final score, and add your sentence about `return`."
+  },
+  "review": {
+    "teacherReviewRequired": true,
+    "reasons": [
+      "The submission seems to be for a different assignment: a 1\u20135 counting loop instead of an add_points function with return. The student may have uploaded the wrong file.",
+      "There was no program_runs record. The loop would probably run without errors, but I gave 0 on runs_without_errors because it isn't this assignment's program. The teacher may want to give partial credit.",
+      "The submission contains no text aimed at influencing grading."
+    ],
+    "overallConfidence": "high"
+  },
+  "submission_id": "06_wrong_assignment",
+  "student_id": "EVAL-06",
+  "assignment_id": "lesson_03_02_return_values"
+}

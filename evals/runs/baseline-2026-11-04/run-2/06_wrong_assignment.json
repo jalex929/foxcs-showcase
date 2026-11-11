@@ -1,0 +1,76 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "The submitted file contains only `for i in range(1, 6):` and `print(i)`.",
+        "No <program_runs> record was provided, so this program was not run during grading."
+      ],
+      "rationale": "The code looks like valid Python and would probably run, but it does not attempt this assignment. No add_points function and no score calls exist to run. I scored 0 because the work belongs to a different exercise. The teacher may decide whether running unrelated code should earn partial credit here.",
+      "confidence": "medium"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "The submission has no function definition and no `return` statement."
+      ],
+      "rationale": "No add_points(score, points) function exists, so nothing returns a new score. This criterion is essential for mastery and is not met.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "The only output comes from `print(i)` inside a loop over `range(1, 6)`. That prints the numbers 1 to 5, not a final score."
+      ],
+      "rationale": "The expected final score is 15 (0 + 10 + 5). The program never computes or prints a score.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 0,
+      "pointsPossible": 3,
+      "evidence": [
+        "The explanation reads: \"This loop counts from 1 to 5.\""
+      ],
+      "rationale": "The explanation describes the loop correctly, but the criterion asks what return does in this program. Return is never mentioned or used.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 0,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 0
+  },
+  "feedback": {
+    "strengths": [
+      "The loop `for i in range(1, 6):` is written correctly, and the explanation describes what it does accurately."
+    ],
+    "priorityImprovements": [
+      "Write a function `add_points(score, points)` that uses `return` to give back `score + points`, and doesn't just print it.",
+      "Start from a score of 0. Call the function twice (add 10, then add 5), store the result in a variable each time, and print the final score. It should be 15.",
+      "Rewrite your explanation in one or two sentences about what `return` does in your program. For example, explain how the returned value is saved and used in the next call."
+    ],
+    "overallFeedback": "This submission looks like it was meant for a different exercise. It's a counting loop, but Lesson 3.2 asks for a function that returns a new score. Your loop and its explanation match each other, which is a good habit. This assignment, though, is about writing a function that sends a value back with `return` so the rest of your program can store it and use it again.",
+    "nextStep": "Define `add_points(score, points)` with a `return` line. Then write `score = 0`, `score = add_points(score, 10)`, `score = add_points(score, 5)`, and `print(score)`. Check that it prints 15 before you write your explanation."
+  },
+  "review": {
+    "teacherReviewRequired": true,
+    "reasons": [
+      "The submission appears to be for a different assignment. It is a 1-5 counting loop with no add_points function, no return, and no score logic.",
+      "No <program_runs> record was provided, so whether the program runs was judged by reading the code only.",
+      "I gave runs_without_errors 0 because the code is unrelated to the task. The teacher may want to award partial credit, since the loop would likely run without errors.",
+      "The student may have uploaded the wrong file. Consider asking them to resubmit."
+    ],
+    "overallConfidence": "high"
+  },
+  "submission_id": "06_wrong_assignment",
+  "student_id": "EVAL-06",
+  "assignment_id": "lesson_03_02_return_values"
+}

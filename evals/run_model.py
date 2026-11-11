@@ -331,7 +331,13 @@ class ClaudeCodeBackend:
             detail = (proc.stderr or proc.stdout).strip().splitlines()
             raise GradingFailed(f"claude exited {proc.returncode} without a JSON result: {detail[-1] if detail else 'no output'}") from None
         if out.get("is_error") or out.get("subtype") != "success":
-            raise GradingFailed(f"claude reported {out.get('subtype')}: {out.get('result') or 'no detail'}")
+            detail = out.get("result") or "no detail"
+            if out.get("is_error"):
+                # A plan usage limit comes back as subtype "success" with is_error true, so only
+                # name the subtype when it says something.
+                kind = "" if out.get("subtype") == "success" else f" ({out.get('subtype')})"
+                raise GradingFailed(f"claude returned an error{kind}: {detail}")
+            raise GradingFailed(f"claude did not finish ({out.get('subtype')}): {detail}")
         result = out.get("structured_output")
         if not isinstance(result, dict):
             raise GradingFailed("claude returned no structured output")

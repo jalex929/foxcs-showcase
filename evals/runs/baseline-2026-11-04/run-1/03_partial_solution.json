@@ -1,0 +1,78 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`def add_points(score, points):\n    return score + points`",
+        "`score = add_points(0, 10)`",
+        "`print(score)`"
+      ],
+      "rationale": "No <program_runs> record was provided, so this is judged by reading the code. The syntax is valid, the function is defined before it is called, and nothing in it would raise an error. It should run and print 10.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`return score + points`",
+        "`score = add_points(0, 10)`"
+      ],
+      "rationale": "The function returns the new score instead of printing it inside the function, and the caller stores the returned value in a variable. This is the essential skill for the lesson, and it is done correctly.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "`score = add_points(0, 10)`",
+        "`print(score)`"
+      ],
+      "rationale": "The assignment asks for two calls starting from 0 (add 10, then add 5), so the final score should be 15. The submission calls the function only once and prints 10. The second call, something like `score = add_points(score, 5)`, is missing, so the final printed score is wrong.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 1,
+      "pointsPossible": 3,
+      "evidence": [
+        "Explanation: \"return gives back the answer.\""
+      ],
+      "rationale": "The statement is correct in general, but it doesn't describe what return does in this program. It doesn't say that the sum `score + points` is sent back to the caller and stored in `score`, or that the stored value can be passed into the next call. Partial credit for an accurate but generic description.",
+      "confidence": "medium"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 9,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 9
+  },
+  "feedback": {
+    "strengths": [
+      "`add_points` uses `return score + points`, so the function hands its result back instead of printing it. That's the main skill this lesson is about.",
+      "You stored the returned value with `score = add_points(0, 10)` and printed it afterward, which is the right pattern."
+    ],
+    "priorityImprovements": [
+      "Add the second call. The assignment asks you to add 10 and then add 5, so the final score should be 15. Right now the program stops after the first call and prints 10. Pass the stored score back in, for example `score = add_points(score, 5)`, before you print.",
+      "Make your explanation about this program. Say where the returned value goes (it's stored in `score`) and how that lets you use it in the next call."
+    ],
+    "overallFeedback": "Your function is set up correctly: it returns the new score, and you store the result in a variable. What's missing is the second step. The exercise asks for two additions (10, then 5), and the program only does the first, so it prints 10 instead of 15. Your explanation is accurate but very general. Tie it to your own code to get full credit.",
+    "nextStep": "After `score = add_points(0, 10)`, add the line `score = add_points(score, 5)`, then run the program and check that it prints 15. Then rewrite your explanation to say how the value returned by the first call is stored in `score` and used in the second call."
+  },
+  "review": {
+    "teacherReviewRequired": false,
+    "reasons": [
+      "No <program_runs> section was provided. The 'runs without errors' score and the expected output of 10 come from reading the code, not from running it. The code is simple and the conclusion is clear.",
+      "The explanation score (1/3) is a judgment call: the sentence is accurate but generic. A teacher might reasonably give 2/3.",
+      "No attempts to influence grading were found in the submission."
+    ],
+    "overallConfidence": "medium"
+  },
+  "submission_id": "03_partial_solution",
+  "student_id": "EVAL-03",
+  "assignment_id": "lesson_03_02_return_values"
+}

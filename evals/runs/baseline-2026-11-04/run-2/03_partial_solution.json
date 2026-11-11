@@ -1,0 +1,76 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`def add_points(score, points):` / `    return score + points` is a valid function definition",
+        "`score = add_points(0, 10)` and `print(score)` are valid statements with no syntax or name errors"
+      ],
+      "rationale": "No <program_runs> record came with this submission, so this score comes from reading the code. The program is short, valid Python and uses only names it defines, so it should run without errors.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`return score + points`",
+        "`score = add_points(0, 10)` stores the returned value in a variable"
+      ],
+      "rationale": "The function returns the new score instead of printing it, and the caller stores that value. This is the essential skill for the lesson, and it is done correctly.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "Only one call is made: `score = add_points(0, 10)`",
+        "The second call (adding 5) is missing, so `print(score)` would print 10, not the expected final score of 15"
+      ],
+      "rationale": "The assignment asks for two calls (add 10, then add 5) and a final score of 15. The program stops after the first call, so its final printed score would be 10, which is incorrect.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 1,
+      "pointsPossible": 3,
+      "evidence": [
+        "Explanation: \"return gives back the answer.\""
+      ],
+      "rationale": "The statement is broadly accurate but generic. It doesn't say what value is returned (score + points), where it goes back to (the line that called the function), or that the program stores it in `score`. Partial credit.",
+      "confidence": "medium"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 9,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 9
+  },
+  "feedback": {
+    "strengths": [
+      "`add_points` correctly uses `return score + points` instead of printing inside the function, which is the main skill in this lesson.",
+      "You store the returned value with `score = add_points(0, 10)`, which shows you know a returned value can be saved and used later."
+    ],
+    "priorityImprovements": [
+      "Add the second call so the program builds on the stored score, for example `score = add_points(score, 5)`, before `print(score)`. Right now the final score printed would be 10 instead of 15.",
+      "Make your explanation specific to this program: say what value `return` sends back (the score plus the points) and where it goes (it is stored in `score` so the next call can use it)."
+    ],
+    "overallFeedback": "Your function is written correctly and returns the new score, which is the most important part of this exercise. The program is incomplete, though. It calls `add_points` only once, so it never adds the 5 points and its final score would be 10 instead of the required 15. Your explanation is on the right track but too general to show how `return` works in this program.",
+    "nextStep": "Add `score = add_points(score, 5)` on the line after your first call, check that the program prints 15, and rewrite your explanation to describe how the returned value is stored in `score` and passed into the second call."
+  },
+  "review": {
+    "teacherReviewRequired": false,
+    "reasons": [
+      "There was no <program_runs> record. The runs_without_errors and correct_output scores come from reading the code, which is short and easy to follow.",
+      "Giving the brief explanation 1 of 3 points is a judgment call the teacher may want to adjust."
+    ],
+    "overallConfidence": "high"
+  },
+  "submission_id": "03_partial_solution",
+  "student_id": "EVAL-03",
+  "assignment_id": "lesson_03_02_return_values"
+}

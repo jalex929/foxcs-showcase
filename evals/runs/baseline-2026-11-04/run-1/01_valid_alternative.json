@@ -1,0 +1,80 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`def add_points(score, points):` and `return sum([score, points])` are valid Python syntax",
+        "`for amount in (10, 5):` loops over a valid tuple, and `print(score)` is a valid final statement",
+        "No <program_runs> record was provided. This judgment comes from reading the code, not from running it."
+      ],
+      "rationale": "The code is short and syntactically valid. It uses only built-ins (`sum`) and has no undefined names, so it should run without errors. Because the program was not actually executed, confidence is high but not certain.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`return sum([score, points])`",
+        "`score = add_points(score, amount)` stores the returned value"
+      ],
+      "rationale": "The function returns the new score and does not print it. The caller stores the returned value in `score` and passes it into the next call. This meets the essential-for-mastery requirement.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`score = 0` starting value",
+        "`for amount in (10, 5):` calls `add_points` twice, with 10 and then 5",
+        "Tracing the code: sum([0, 10]) = 10, then sum([10, 5]) = 15, so `print(score)` outputs 15"
+      ],
+      "rationale": "Tracing the code gives a final printed score of 15, which is correct. The loop calls the function exactly twice in the required order and stores the result each time, so it meets the prompt's requirements even though it doesn't write out two separate calls.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 3,
+      "pointsPossible": 3,
+      "evidence": [
+        "Explanation: \"return hands the new total back to the line that called add_points, so I can save it in score and use it again in the loop.\"",
+        "Matches `score = add_points(score, amount)` inside `for amount in (10, 5):`"
+      ],
+      "rationale": "The explanation is accurate and specific to this program. It says the value goes back to the calling line, gets saved in `score`, and is reused on the next pass through the loop. That is exactly what the code does.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 15,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 15
+  },
+  "feedback": {
+    "strengths": [
+      "`add_points` returns the new score instead of printing it, which is the main goal of this lesson.",
+      "`score = add_points(score, amount)` stores each returned value and feeds it into the next call. Return values exist to be used this way.",
+      "Your explanation ties `return` to your own code: the value goes back to the calling line and gets saved in `score`."
+    ],
+    "priorityImprovements": [
+      "`return sum([score, points])` works, but it builds a list just to add two numbers. `return score + points` does the same job and is easier to read.",
+      "The prompt asked for two calls. Your loop does call the function twice, but writing the two calls out (`score = add_points(score, 10)` then `score = add_points(score, 5)`) would match the instructions more directly. The loop is fine. Just know you chose a different structure."
+    ],
+    "overallFeedback": "Your function returns the new score, each result is stored and reused, and the program should print 15. Your explanation correctly describes what `return` does here. The main thing to change is to write the addition directly as `score + points` so the code is simpler.",
+    "nextStep": "Change the return line to `return score + points` and run the program to check that it still prints 15."
+  },
+  "review": {
+    "teacherReviewRequired": true,
+    "reasons": [
+      "The approach is valid but unexpected. The student used a `for` loop over `(10, 5)` instead of two separate calls, and `sum([score, points])` instead of `score + points`. Both meet the requirements, but the teacher may want to confirm the loop counts as 'call it twice'.",
+      "No <program_runs> record was provided, so the claims that the program runs and prints 15 come from tracing the code, not from running it."
+    ],
+    "overallConfidence": "high"
+  },
+  "submission_id": "01_valid_alternative",
+  "student_id": "EVAL-01",
+  "assignment_id": "lesson_03_02_return_values"
+}

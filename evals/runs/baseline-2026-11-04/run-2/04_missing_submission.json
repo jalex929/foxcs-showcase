@@ -1,0 +1,74 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "exercise.py contains only the placeholder comment `# TODO`.",
+        "No <program_runs> record was provided."
+      ],
+      "rationale": "There's no program to run. A file with only a comment would technically run without errors, but that doesn't count as a working program for this assignment, so no points are given.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "No `add_points` function is defined. The only line in the file is `# TODO`."
+      ],
+      "rationale": "The function wasn't written, so it can't return the new score.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "The file has no function calls and no print statement."
+      ],
+      "rationale": "Nothing gets printed, so the expected final score of 15 never appears.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 0,
+      "pointsPossible": 3,
+      "evidence": [
+        "The explanation section is empty."
+      ],
+      "rationale": "There's no explanation of what return does.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 0,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 0
+  },
+  "feedback": {
+    "strengths": [
+      "You submitted the exercise file, so it's ready for you to fill in."
+    ],
+    "priorityImprovements": [
+      "Write the `add_points(score, points)` function so it uses `return` to give back `score + points` instead of printing it.",
+      "Start a variable at 0. Call the function twice (add 10, then add 5) and save the result back into the variable each time. Then print the final score, which should be 15.",
+      "Add one or two sentences explaining how `return` sends the new score back to the line that called the function, so you can save it and use it again."
+    ],
+    "overallFeedback": "This submission has only the placeholder comment `# TODO` and an empty explanation, so none of the rubric criteria could be met yet. The exercise is short, and you can finish it in a few lines of code.",
+    "nextStep": "Replace `# TODO` with a function that ends in `return score + points`. Then run your program and check that it prints 15."
+  },
+  "review": {
+    "teacherReviewRequired": true,
+    "reasons": [
+      "The submission is basically empty: the code file only has `# TODO` and there's no explanation. It may have been submitted by accident or before it was finished.",
+      "A comment-only file would technically run without errors, but 0 points were given for 'runs without errors' because there's no program for this assignment. Please confirm this fits your policy."
+    ],
+    "overallConfidence": "high"
+  },
+  "submission_id": "04_missing_submission",
+  "student_id": "EVAL-04",
+  "assignment_id": "lesson_03_02_return_values"
+}

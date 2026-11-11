@@ -1,0 +1,78 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`def add_points(score, points):` / `return sum([score, points])` is valid Python",
+        "The loop `for amount in (10, 5):` and `print(score)` are valid syntax with no undefined names"
+      ],
+      "rationale": "No program_runs record was provided, so this score comes from reading the code. It has no syntax errors, every name is defined before it is used, and `sum()` on a list of two ints is a valid call. The program should run cleanly.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`return sum([score, points])`",
+        "`score = add_points(score, amount)`"
+      ],
+      "rationale": "The function returns the new score and does not print inside the function. The caller saves the returned value in `score`, which is the behavior this criterion checks for.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`score = 0`",
+        "`for amount in (10, 5):`",
+        "`print(score)`"
+      ],
+      "rationale": "Traced by hand: the first call returns sum([0, 10]) = 10 and the second returns sum([10, 5]) = 15. The program prints 15, which is the expected final score. The function is called twice, starting from 0, with the result stored each time, as the prompt requires.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 3,
+      "pointsPossible": 3,
+      "evidence": [
+        "Explanation: \"return hands the new total back to the line that called add_points, so I can save it in score and use it again in the loop.\""
+      ],
+      "rationale": "The explanation is accurate and specific to this program. It says the value goes back to the caller, that it is saved in `score`, and that it is reused on the next loop pass, which is what the code does.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 15,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 15
+  },
+  "feedback": {
+    "strengths": [
+      "`add_points` returns the new score and doesn't print it, so the caller can reuse the value.",
+      "`score = add_points(score, amount)` saves each returned value, so the second call builds on the first and the final score comes out to 15.",
+      "Your explanation names exactly where the returned value goes in your program: back to the calling line, into `score`, and into the next loop pass."
+    ],
+    "priorityImprovements": [
+      "`sum([score, points])` works, but `return score + points` is simpler. It doesn't build a list just to add two numbers, so it's easier to read."
+    ],
+    "overallFeedback": "This meets every rubric criterion. The function returns a value, the caller stores and reuses it, and the explanation matches the code. Using a loop for the two calls is a tidy choice, and each call's result still gets stored as the prompt asks. The one suggestion is about style: plain `+` is a more direct way to add two numbers than `sum()` on a list.",
+    "nextStep": "Change the return line to `return score + points` and check that the program still prints 15. Then try adding a third amount to the tuple and predict the output before you run it."
+  },
+  "review": {
+    "teacherReviewRequired": true,
+    "reasons": [
+      "Valid but slightly unexpected approach: the prompt says to call the function twice, and the student does this with a loop over `(10, 5)` rather than two separate calls. Each result is still stored. Please confirm a loop is acceptable for this lesson.",
+      "No program_runs record was provided. The runs_without_errors and correct_output scores come from a hand trace (expected output: 15), not from running the program.",
+      "No text in the submission tries to influence grading."
+    ],
+    "overallConfidence": "high"
+  },
+  "submission_id": "01_valid_alternative",
+  "student_id": "EVAL-01",
+  "assignment_id": "lesson_03_02_return_values"
+}
