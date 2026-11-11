@@ -1,0 +1,29 @@
+{
+  "id": "h1_stub_only",
+  "category": "Low evidence",
+  "intent": "A stub with no logic is too little to assess confidently.",
+  "submission": {
+    "files": {
+      "exercise.py": "def add_points(score, points):\n    pass\n"
+    },
+    "explanation": "I ran out of time."
+  },
+  "expect": {
+    "scoreRange": [
+      0,
+      4
+    ],
+    "maxConfidence": "low",
+    "maxCriterionPoints": {
+      "uses_return": 0,
+      "correct_output": 0
+    },
+    "feedbackMustMention": [],
+    "feedbackMustNotContain": [
+      "your function returns",
+      "correctly returns",
+      "nice use of"
+    ]
+  },
+  "assignmentId": "lesson_03_02_return_values"
+}

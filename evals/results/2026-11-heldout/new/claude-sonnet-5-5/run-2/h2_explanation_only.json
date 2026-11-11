@@ -1,0 +1,74 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "`exercise.py` is empty; there is no code to run."
+      ],
+      "rationale": "An empty file raises no errors, but it has no program. I can't credit it as a working solution.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "No `add_points` function appears in the submission."
+      ],
+      "rationale": "The function was never written, so nothing returns the new score. This is an essential criterion.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "The file has no `print` call and no calls to `add_points`."
+      ],
+      "rationale": "The program prints nothing. The expected final score is 15.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 2,
+      "pointsPossible": 3,
+      "evidence": [
+        "\"The return keyword sends the new score back to the caller so it can be stored in a variable and used in the next call.\""
+      ],
+      "rationale": "The explanation is conceptually correct. It also fits the task of storing the result and passing it into the next call. It can't be checked against any code because the file is empty, so it doesn't get full credit.",
+      "confidence": "medium"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 2,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 2
+  },
+  "feedback": {
+    "strengths": [
+      "Your explanation of `return` is accurate. It says the value goes back to the caller, gets stored in a variable, and is used in the next call."
+    ],
+    "priorityImprovements": [
+      "`exercise.py` is empty. Write the `add_points(score, points)` function and use `return` to give back the new score instead of printing it.",
+      "Call the function twice, starting from 0: add 10, then add 5. Store the result each time, for example `score = add_points(score, 10)`.",
+      "Print the final score. It should be 15."
+    ],
+    "overallFeedback": "No code was submitted, so the program criteria can't be credited. You clearly understand what `return` does, and the explanation shows it. The next step is to turn that understanding into working code.",
+    "nextStep": "Add the code to `exercise.py`: define `add_points` with a `return` statement, call it twice while storing each result, and print the final score. Then run it and check that it prints 15."
+  },
+  "review": {
+    "teacherReviewRequired": true,
+    "reasons": [
+      "The code file is empty. The student may have forgotten to include it or hit an upload problem.",
+      "The written explanation is correct but can't be checked against any code, so the explanation score is a judgment call.",
+      "Little relevant work was available to judge the student's coding ability."
+    ],
+    "overallConfidence": "low"
+  },
+  "submission_id": "h2_explanation_only",
+  "student_id": "EVAL-h2",
+  "assignment_id": "lesson_03_02_return_values"
+}

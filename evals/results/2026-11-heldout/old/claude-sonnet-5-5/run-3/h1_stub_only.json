@@ -1,0 +1,74 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsPossible": 4,
+      "pointsEarned": 1,
+      "evidence": [
+        "`def add_points(score, points):` followed by `pass`"
+      ],
+      "rationale": "The file is syntactically valid and would not raise an error, because it only defines a function with an empty body. It does none of the required work (no calls, no printing), so I gave only minimal credit. No program run record was provided, so this is based on reading the code.",
+      "confidence": "medium"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsPossible": 4,
+      "pointsEarned": 0,
+      "evidence": [
+        "The function body is only `pass`."
+      ],
+      "rationale": "The function has no `return` statement and does not compute a new score. This essential criterion is not met.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsPossible": 4,
+      "pointsEarned": 0,
+      "evidence": [
+        "The submission has no calls to `add_points` and no `print`."
+      ],
+      "rationale": "The program prints nothing. The expected final score of 15 is never calculated or shown.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsPossible": 3,
+      "pointsEarned": 0,
+      "evidence": [
+        "Explanation: \"I ran out of time.\""
+      ],
+      "rationale": "The explanation does not describe what `return` does, so it can't be matched to the code.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 1,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 1
+  },
+  "feedback": {
+    "strengths": [
+      "You started with the correct function signature, `def add_points(score, points):`, which matches the assignment."
+    ],
+    "priorityImprovements": [
+      "Replace `pass` with a body that returns the new score, for example `return score + points`. This is the most important part of the lesson.",
+      "Call the function twice, storing the result each time: start with `score = 0`, then `score = add_points(score, 10)`, then `score = add_points(score, 5)`.",
+      "Print the final score with `print(score)`. It should show 15.",
+      "Write one or two sentences about what `return` does. For example, it sends a value back to the code that called the function so you can store it in a variable."
+    ],
+    "overallFeedback": "This submission is an unfinished stub. The function signature is correct, but the function does nothing, the program never calls it or prints a result, and there is no explanation of `return`. Running out of time happens, and the first step is small: make the function return a value.",
+    "nextStep": "Change `pass` to `return score + points`, then add the two calls and the `print` so your program outputs 15."
+  },
+  "review": {
+    "teacherReviewRequired": true,
+    "reasons": [
+      "The submission is an incomplete stub, and the student wrote that they ran out of time.",
+      "I gave 1 point for 'runs without errors' because the stub is syntactically valid, but no program run record was provided. The teacher may want to adjust this to 0 or keep it."
+    ],
+    "overallConfidence": "high"
+  },
+  "submission_id": "h1_stub_only",
+  "student_id": "EVAL-h1",
+  "assignment_id": "lesson_03_02_return_values"
+}

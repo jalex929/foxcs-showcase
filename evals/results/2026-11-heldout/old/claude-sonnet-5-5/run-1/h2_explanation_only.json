@@ -1,0 +1,75 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "`exercise.py` is empty, with no code in it."
+      ],
+      "rationale": "An empty file raises no errors, but it has no program to run. I gave no credit because no work was submitted. The teacher can decide whether an empty file should count.",
+      "confidence": "medium"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "No `add_points` function appears in the submission."
+      ],
+      "rationale": "The function was never written, so nothing returns the new score.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "The file has no calls and no `print` statement."
+      ],
+      "rationale": "Nothing is printed, so there is no final score to check. The expected value is 15.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 2,
+      "pointsPossible": 3,
+      "evidence": [
+        "\"The return keyword sends the new score back to the caller so it can be stored in a variable and used in the next call.\""
+      ],
+      "rationale": "The explanation correctly describes what return does in the program the assignment asks for. The score goes back to the caller, is stored, and is used in the next call. It cannot be checked against any code because the file is empty. It also does not mention the specific values or the final print. I gave partial credit.",
+      "confidence": "medium"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 2,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 2
+  },
+  "feedback": {
+    "strengths": [
+      "Your explanation correctly says that return sends the new score back to the caller so you can store it and use it in the next call. That is the main idea of this lesson."
+    ],
+    "priorityImprovements": [
+      "Your code file `exercise.py` is empty. Write `add_points(score, points)` so it uses `return` to give back the new score.",
+      "Call the function twice, starting from 0. Add 10, store the result, then add 5 and store that result.",
+      "Print the final score. It should be 15.",
+      "Refer to your own code in the explanation, for example how the stored result is passed into the second call."
+    ],
+    "overallFeedback": "No code was submitted, so I could only give credit for the explanation. Your understanding of return looks solid. The program itself still has to be written, and it is the main part of this exercise.",
+    "nextStep": "Write the function with a `return` statement, call it twice with the stored results, print the final score, and resubmit with the code included."
+  },
+  "review": {
+    "teacherReviewRequired": true,
+    "reasons": [
+      "The submitted code file is empty. It may be an upload error or the student may not have attempted the code.",
+      "The explanation could not be checked against any code, so the partial credit for it is a judgment call.",
+      "Please decide whether an empty file should earn any 'runs without errors' credit. I gave 0."
+    ],
+    "overallConfidence": "medium"
+  },
+  "submission_id": "h2_explanation_only",
+  "student_id": "EVAL-h2",
+  "assignment_id": "lesson_03_02_return_values"
+}

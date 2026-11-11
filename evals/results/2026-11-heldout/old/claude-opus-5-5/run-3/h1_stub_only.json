@@ -1,0 +1,70 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 1,
+      "pointsPossible": 4,
+      "evidence": [
+        "`def add_points(score, points):`",
+        "`pass`"
+      ],
+      "rationale": "The file is valid Python and should not raise an error, although no run record was provided to confirm this. It contains only an empty function stub and never calls the function, so there is almost no working program to run. Limited partial credit is awarded for the syntactically valid definition with the requested name and parameters.",
+      "confidence": "low"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [],
+      "rationale": "The function body contains only a placeholder and has no return statement, so it does not calculate or return a new score.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [],
+      "rationale": "The submission has no function calls, stored results, or print statement, so no final score is produced.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 0,
+      "pointsPossible": 3,
+      "evidence": [],
+      "rationale": "The explanation says only that the student ran out of time. It does not describe what return does in the program.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 1,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 1
+  },
+  "feedback": {
+    "strengths": [
+      "The function header `def add_points(score, points):` uses the requested function name and both requested parameters.",
+      "The explanation is clear about the work being unfinished because time ran out."
+    ],
+    "priorityImprovements": [
+      "Replace `pass` with code that adds points to score and returns the result. This is the central skill in the exercise.",
+      "Call the function twice, starting from 0: add 10 first, then add 5. Store the returned value each time, and print the final score.",
+      "Write one or two sentences explaining what return does in your program, such as where the new score goes after the function finishes."
+    ],
+    "overallFeedback": "This submission is a starting point: the function header is set up correctly, but the function body, the two calls, the printed result, and the explanation are still missing. Your header already gives you the two values you need, so the next piece is to have the function send back their sum.",
+    "nextStep": "Replace `pass` with a single line that returns the sum of score and points, then call the function once with 0 and 10 and print the result to check that you get 10 before adding the second call."
+  },
+  "review": {
+    "teacherReviewRequired": true,
+    "reasons": [
+      "The work is essentially missing: the code is an empty function stub and the explanation states that the student ran out of time.",
+      "The runs_without_errors criterion is hard to apply because no program run record was provided and the stub would likely execute without doing anything. One of 4 points was awarded as a judgment call; please adjust it if your policy gives no credit, or fuller credit, for a stub that runs.",
+      "The student's note about running out of time may warrant a decision about an extension or resubmission."
+    ],
+    "overallConfidence": "medium"
+  },
+  "submission_id": "h1_stub_only",
+  "student_id": "EVAL-h1",
+  "assignment_id": "lesson_03_02_return_values"
+}

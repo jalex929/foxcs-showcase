@@ -1,0 +1,81 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`def add_points(s, p): return s + p`",
+        "`a = add_points(0, 10)`",
+        "`b = add_points(a, 5)`",
+        "`print(b)`"
+      ],
+      "rationale": "No <program_runs> record was provided, so I judged this by reading the code. The one-line def is valid Python, and every name used (`a`, `b`, `add_points`) is defined before it is used. I found no syntax or runtime errors.",
+      "confidence": "medium"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`def add_points(s, p): return s + p`",
+        "`a = add_points(0, 10)`"
+      ],
+      "rationale": "The function returns the sum and does not print it. The caller stores the returned values in `a` and `b`. The parameters are named `s` and `p`, not `score` and `points` as in the prompt. That doesn't change the behavior, so I took no points off.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`a = add_points(0, 10)`",
+        "`b = add_points(a, 5)`",
+        "`print(b)`"
+      ],
+      "rationale": "By tracing the code, `a` is 10 and `b` is 15, so `print(b)` should print 15. That is the expected final score. The two calls start from 0 and add 10, then 5, as the prompt asks.",
+      "confidence": "medium"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 3,
+      "pointsPossible": 3,
+      "evidence": [
+        "\"return hands the new score back so I can save it in a and b.\""
+      ],
+      "rationale": "The explanation is accurate and matches the code. `return` sends the new score back to the caller, and the program stores it in `a` and `b`. It is brief and doesn't contrast `return` with `print`, but it correctly says what `return` does here.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 15,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 15
+  },
+  "feedback": {
+    "strengths": [
+      "`add_points` returns `s + p` instead of printing it. This is the key idea of the lesson.",
+      "You chained the calls correctly: `a = add_points(0, 10)`, then `b = add_points(a, 5)`. The result of the first call feeds the second.",
+      "Your explanation correctly says that `return` hands the new score back so you can save it in a variable."
+    ],
+    "priorityImprovements": [
+      "Use the parameter names from the prompt, `score` and `points`, instead of `s` and `p`. Descriptive names make the function easier to read.",
+      "Put the function body on its own indented line, not on the `def` line. It's easier to read and extend.",
+      "Your explanation could add one detail: without `return`, `a` and `b` would hold `None`, and the final score couldn't be printed."
+    ],
+    "overallFeedback": "This is a correct, working solution. By my reading, it prints 15. The function returns its result, and you store each result and pass it to the next call. Your explanation matches what the code does. The main improvements are readability: clearer parameter names and a standard multi-line function layout.",
+    "nextStep": "Rewrite the function as `def add_points(score, points):` with `return score + points` on an indented second line. Then add a sentence to your explanation saying what would happen without `return`."
+  },
+  "review": {
+    "teacherReviewRequired": false,
+    "reasons": [
+      "No <program_runs> record was provided, so the run and output scores come from reading the code. The code is simple and the trace gives 15.",
+      "Parameter names differ from the prompt (`s`, `p` instead of `score`, `points`). This is a style issue and I did not penalize it."
+    ],
+    "overallConfidence": "medium"
+  },
+  "submission_id": "h5_short_but_complete",
+  "student_id": "EVAL-h5",
+  "assignment_id": "lesson_03_02_return_values"
+}

@@ -1,0 +1,76 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "The code is syntactically valid: `def add_points(score, points):` with a properly indented body, followed by `score = add_points(score, 10)` and `score = add_points(score, 5)`.",
+        "No undefined names or runtime errors are apparent. No <program_runs> section was provided, so this is based on reading the code."
+      ],
+      "rationale": "The code reads as valid Python. The function is defined before it is called and every variable is defined before use. I found nothing that would raise an error.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`new_score = score + points` followed by `return new_score` returns the value and does not print it.",
+        "The caller stores the result with `score = add_points(score, 10)`."
+      ],
+      "rationale": "The function computes the new score and returns it without printing inside the function. This meets the essential criterion.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "Starting at `score = 0`, adding 10 and then 5 gives 15, and `print(score)` prints it once at the end."
+      ],
+      "rationale": "Tracing the code gives a final printed value of 15, which is correct. The call order and the stored results are right, and the only print is the final one.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 3,
+      "pointsPossible": 3,
+      "evidence": [
+        "The explanation says \"return sends the new score back from add_points, so I can store it in score and use it in the next call.\"",
+        "This matches `score = add_points(score, 10)`, where the returned value is stored and then passed into the next call."
+      ],
+      "rationale": "The explanation correctly says return sends the value back to the caller. It also ties this to how the program stores the result and reuses it in the next call.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 15,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 15
+  },
+  "feedback": {
+    "strengths": [
+      "`add_points` returns `new_score` and does not print it, which is the key idea of this lesson.",
+      "You stored each result with `score = add_points(score, ...)`, so the second call builds on the first. The final print gives 15.",
+      "Your explanation matches your code. It says the returned value is stored in `score` and used in the next call."
+    ],
+    "priorityImprovements": [
+      "There is nothing required to fix. As an optional stretch, you could name the starting value in your explanation, for example: \"without return, score would stay 0 because the result would be lost.\""
+    ],
+    "overallFeedback": "This submission meets every rubric criterion. The function returns its result, the two calls are chained correctly, the final output should be 15, and your explanation describes what the code does. This score comes from reading the code, because no run results were provided.",
+    "nextStep": "Try a version of `add_points` that prints the new score and does not return it. Then see what `score` holds after the calls, so you can see for yourself why return matters."
+  },
+  "review": {
+    "teacherReviewRequired": false,
+    "reasons": [
+      "The submission is straightforward and matches the rubric on every criterion.",
+      "No <program_runs> section was provided, so correctness was judged by tracing the code by hand."
+    ],
+    "overallConfidence": "high"
+  },
+  "submission_id": "h4_complete_standard",
+  "student_id": "EVAL-h4",
+  "assignment_id": "lesson_03_02_return_values"
+}

@@ -1,0 +1,76 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 2,
+      "pointsPossible": 4,
+      "evidence": [
+        "`def add_points(score, points):` followed by `pass` is syntactically valid Python",
+        "The file has no function calls and no print statements"
+      ],
+      "rationale": "Reading the code, the file has no syntax or runtime errors, so it would run without crashing. It does none of the required work: it never calls the function or prints anything. I gave partial credit because the program is only a stub. No program_runs record was provided, so this is based on reading the code.",
+      "confidence": "medium"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "The function body is only `pass`"
+      ],
+      "rationale": "The function has no `return` statement and does not calculate a new score. It returns None.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "The submission has no calls to add_points and no print statement"
+      ],
+      "rationale": "Nothing is printed, so the expected final score of 15 never appears.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 0,
+      "pointsPossible": 3,
+      "evidence": [
+        "Explanation: \"I ran out of time.\""
+      ],
+      "rationale": "The explanation does not say what return does, so there is nothing to compare with the code.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 2,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 2
+  },
+  "feedback": {
+    "strengths": [
+      "You defined the function with the correct name and parameters: `def add_points(score, points):`."
+    ],
+    "priorityImprovements": [
+      "Replace `pass` with the logic that makes the function work, such as `return score + points`. The `uses_return` criterion is essential for mastery, so fix this first.",
+      "Call the function twice and store each result. Start with `score = 0`, then `score = add_points(score, 10)`, then `score = add_points(score, 5)`.",
+      "Add `print(score)` at the end. It should print 15.",
+      "Write one or two sentences explaining that `return` sends a value back to the code that called the function, so the program can store it and use it later."
+    ],
+    "overallFeedback": "This submission is only a function stub. It has the right function signature, but the body is `pass`, so nothing is calculated, returned, or printed, and there is no explanation of return. Most of the exercise is still to do. It's fine to run out of time, but this lesson needs another attempt.",
+    "nextStep": "Change the body of add_points to `return score + points`. Then add the two calls and the print, and run the program to check that it prints 15."
+  },
+  "review": {
+    "teacherReviewRequired": true,
+    "reasons": [
+      "The submission is an incomplete stub. The only content is `pass` and an explanation of \"I ran out of time.\"",
+      "I awarded 2 of 4 for 'runs without errors' because the file is valid Python, but it does nothing. No program_runs record was provided. The teacher may prefer 0 or 1 here.",
+      "The student may need a chance to resubmit or extra support."
+    ],
+    "overallConfidence": "high"
+  },
+  "submission_id": "h1_stub_only",
+  "student_id": "EVAL-h1",
+  "assignment_id": "lesson_03_02_return_values"
+}

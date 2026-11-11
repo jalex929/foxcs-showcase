@@ -1,0 +1,76 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "exercise.py was submitted with no content.",
+        "No <program_runs> record was provided."
+      ],
+      "rationale": "There is no program to evaluate. An empty file raises no errors, but that does not show a working program, so no points are earned.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "exercise.py contains no add_points function and no return statement."
+      ],
+      "rationale": "The required function is missing, so nothing shows that it returns the new score.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "exercise.py contains no calls or print statement, so it produces no final score."
+      ],
+      "rationale": "Without code that calls the function twice and prints the result, there is no final score to check.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 0,
+      "pointsPossible": 3,
+      "evidence": [
+        "The explanation says: \"The return keyword sends the new score back to the caller so it can be stored in a variable and used in the next call.\"",
+        "exercise.py is empty, so the explanation has no code to describe."
+      ],
+      "rationale": "The statement is conceptually accurate, but this criterion asks what return does in this program, and no program was submitted. The explanation cannot be matched to code, so no points are awarded. It is flagged for the teacher, who may choose to give partial credit for the concept.",
+      "confidence": "low"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 0,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 0
+  },
+  "feedback": {
+    "strengths": [
+      "Your explanation correctly identifies that return sends a value back to the caller, and that the value can be stored and used in the next call."
+    ],
+    "priorityImprovements": [
+      "exercise.py came through empty, so the most important fix is to submit your code. Check that the file was saved and that you uploaded the right one.",
+      "Define add_points(score, points) so that it returns the new score instead of printing it.",
+      "Call the function twice starting from 0, adding 10 and then 5, store the result each time, and print the final score."
+    ],
+    "overallFeedback": "No code was received for this exercise, so the program criteria could not earn points. Your written explanation shows a sound idea of what return is for, and that idea is what the program needs: each call's result gets stored and passed into the next call. Once the code is submitted, your explanation can be checked against it.",
+    "nextStep": "Save exercise.py with your add_points function, two stored calls, and a final print. Run it once to confirm the printed score, then resubmit it."
+  },
+  "review": {
+    "teacherReviewRequired": true,
+    "reasons": [
+      "exercise.py is empty, so the required work is missing. This may be a save or upload error, so consider allowing a resubmission.",
+      "The explanation is conceptually accurate but describes code that was not submitted. It earned 0 of 3 because there is no program to match, and the teacher may wish to award partial credit.",
+      "No program run record was provided."
+    ],
+    "overallConfidence": "high"
+  },
+  "submission_id": "h2_explanation_only",
+  "student_id": "EVAL-h2",
+  "assignment_id": "lesson_03_02_return_values"
+}

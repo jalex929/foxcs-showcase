@@ -1,0 +1,76 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "The file content is unreadable garbled bytes (e.g. `\u00ff\u00feP K\u00a7\u00a4\u00ef\u00bb\u00bf\u00d0\u00ac\u00c3\u00b1\u00fe\u00b6\u00a9\u00ff\u00a5\u00de\u00c2\u00bf \u00bd\u00be\u00f0\u00ff \u00c6\u00dc\u00b6\u00fe\u00a7 \u00a2\u00ac\u00d0\u00ae\u00ff`), not valid Python.",
+        "The `P K` prefix suggests a zip archive or binary file was submitted rather than a .py text file."
+      ],
+      "rationale": "The submitted file is not valid, readable Python source and would fail to run (syntax/encoding error). No program_runs section is present.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "No `def add_points` or `return` statement appears anywhere in the submission."
+      ],
+      "rationale": "There is no readable function definition, so I can't confirm the function returns the new score.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "No readable calls or print statements; the program can't produce the expected final score of 15."
+      ],
+      "rationale": "No usable output can be produced from the submitted file.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 0,
+      "pointsPossible": 3,
+      "evidence": [
+        "The explanation section is empty."
+      ],
+      "rationale": "No explanation was provided, so there's nothing to compare to the code.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 0,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 0
+  },
+  "feedback": {
+    "strengths": [
+      "You submitted a file named exercise.py, so the right assignment slot was used."
+    ],
+    "priorityImprovements": [
+      "The file I received is corrupted or binary (it looks like a zip or wrongly encoded file), so I couldn't read any Python code. Re-save it as a plain UTF-8 text .py file and resubmit.",
+      "Define `add_points(score, points)` so it uses `return` to send back the new score instead of printing it.",
+      "Call the function twice, starting from 0 (add 10, then add 5), and store the result each time. Print the final score, which should be 15.",
+      "Write one or two sentences explaining what `return` does in your program. The explanation was empty."
+    ],
+    "overallFeedback": "I couldn't grade your work because the submitted file isn't readable Python and the explanation is blank. The score reflects the missing content, not your ability. Once you resubmit a proper text file, it can be graded properly.",
+    "nextStep": "Open a new file in a plain text editor or IDE, retype or paste your add_points code, save it as exercise.py in UTF-8, add your written explanation, and resubmit."
+  },
+  "review": {
+    "teacherReviewRequired": true,
+    "reasons": [
+      "The submitted file is garbled or binary (starts with `P K`, likely a zip or wrongly encoded file) and is not readable Python.",
+      "The explanation is empty.",
+      "The student may have uploaded the wrong file or had an encoding problem. A resubmission may be appropriate."
+    ],
+    "overallConfidence": "high"
+  },
+  "submission_id": "h3_unreadable",
+  "student_id": "EVAL-h3",
+  "assignment_id": "lesson_03_02_return_values"
+}

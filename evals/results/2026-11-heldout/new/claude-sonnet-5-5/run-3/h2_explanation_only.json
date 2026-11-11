@@ -1,0 +1,74 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "`exercise.py` is empty; it contains no code."
+      ],
+      "rationale": "An empty file doesn't raise an error, but it has no program to run. There is nothing to show that the student can write a working program, so I gave no credit.",
+      "confidence": "medium"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "No `add_points` function appears in the submission."
+      ],
+      "rationale": "The function was never written, so nothing can be checked for a `return` statement.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "There are no calls and no `print` in the file, so the program prints nothing."
+      ],
+      "rationale": "The expected final score is 15. The program produces no output.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 2,
+      "pointsPossible": 3,
+      "evidence": [
+        "\"The return keyword sends the new score back to the caller so it can be stored in a variable and used in the next call.\""
+      ],
+      "rationale": "The explanation correctly describes what return does, and it matches the task: the result is stored and used in the next call. There is no code to compare it against, so I can't confirm it describes the student's own program. I withheld one point for that.",
+      "confidence": "medium"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 2,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 2
+  },
+  "feedback": {
+    "strengths": [
+      "Your explanation is accurate. It says `return` sends the new score back to the caller, where it can be stored and used in the next call."
+    ],
+    "priorityImprovements": [
+      "Your `exercise.py` is empty. Write the `add_points(score, points)` function and make it `return` the new score.",
+      "Call the function twice, starting from 0: add 10, then add 5. Store the result each time, for example `score = add_points(score, 10)`.",
+      "Print the final score, which should be 15."
+    ],
+    "overallFeedback": "The code file has no content, so the function, the two calls, and the printed output are all missing. The explanation shows you understand the idea of `return`, so you are probably close. Only the explanation earned credit, because there is no program yet.",
+    "nextStep": "Put the code in `exercise.py`: define `add_points` with a `return`, call it twice storing the result, print the final score, and run it to confirm it prints 15. Then resubmit."
+  },
+  "review": {
+    "teacherReviewRequired": true,
+    "reasons": [
+      "The code file `exercise.py` is empty. This may be a submission or upload error, so the student may have meant to send code.",
+      "The explanation can't be checked against any code, so the explanation_matches_code score is partly a judgment call.",
+      "The empty file runs without errors, but I gave 0 for runs_without_errors because there is no program. The teacher may weigh this differently."
+    ],
+    "overallConfidence": "low"
+  },
+  "submission_id": "h2_explanation_only",
+  "student_id": "EVAL-h2",
+  "assignment_id": "lesson_03_02_return_values"
+}

@@ -1,0 +1,76 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "The file `exercise.py` contains unreadable binary-looking characters, not Python code. It begins with `P K`, which is the header of a zip archive."
+      ],
+      "rationale": "The file has no readable Python, so it can't run as a program. No run record was provided. I scored this 0 based on the file contents.",
+      "confidence": "medium"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "No `def add_points` or `return` statement appears anywhere in the submission."
+      ],
+      "rationale": "There is no function definition and no return statement to evaluate.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "The submission has no `print` call and no calls to `add_points`."
+      ],
+      "rationale": "Nothing in the file could produce the expected final score of 15.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 0,
+      "pointsPossible": 3,
+      "evidence": [
+        "The explanation section is empty."
+      ],
+      "rationale": "No explanation was submitted, so there is nothing to compare against the code.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 0,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 0
+  },
+  "feedback": {
+    "strengths": [
+      "I couldn't find any readable work in this submission, so I have no strengths to point to yet."
+    ],
+    "priorityImprovements": [
+      "Re-save `exercise.py` as a plain-text Python file. The version I received is corrupted or is a different file type, such as a zip archive, so none of your code was readable.",
+      "Write `add_points(score, points)` so it uses `return` to give back the new score.",
+      "Call the function twice, starting from 0. Add 10, store the result, then add 5 and store that result. Print the final score, which should be 15.",
+      "Add your one or two sentence explanation of what `return` does in your program. That section was empty."
+    ],
+    "overallFeedback": "The file I received contained unreadable characters instead of Python code, and the explanation was blank. I couldn't assess your function, its output, or your understanding of `return`, so this scores 0. It may be an upload or encoding problem and not a problem with your coding, so please resubmit.",
+    "nextStep": "Open your original script in a text editor, confirm it shows readable Python code, save it as a plain UTF-8 `.py` file, and resubmit it with your explanation."
+  },
+  "review": {
+    "teacherReviewRequired": true,
+    "reasons": [
+      "The submitted `exercise.py` is unreadable binary-like content. It begins with `PK`, which suggests a zip archive or a corrupted upload, so it does not look like a real attempt.",
+      "The explanation field is empty.",
+      "No program run results were provided to confirm the file's behavior.",
+      "The student may have had an upload or encoding problem, so a resubmission may be appropriate before the 0 stands."
+    ],
+    "overallConfidence": "high"
+  },
+  "submission_id": "h3_unreadable",
+  "student_id": "EVAL-h3",
+  "assignment_id": "lesson_03_02_return_values"
+}
