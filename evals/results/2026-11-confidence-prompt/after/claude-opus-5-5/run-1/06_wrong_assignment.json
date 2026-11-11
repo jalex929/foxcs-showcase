@@ -1,0 +1,66 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [],
+      "rationale": "The submitted code, a loop that prints 1 to 5, is unrelated to this assignment and contains none of the requested program. No program run record was provided. The loop appears syntactically valid, but that does not show the assigned program runs, so no points are awarded. The teacher may choose to adjust this if the criterion is meant to credit any runnable code.",
+      "confidence": "medium"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [],
+      "rationale": "The submission does not define add_points or any other function, and it has no return statement.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [],
+      "rationale": "The program does not calculate or print a score. The expected final score is 15, while the code is written only to print the numbers 1 through 5.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 0,
+      "pointsPossible": 3,
+      "evidence": [],
+      "rationale": "The explanation describes a counting loop and does not address what return does. It matches the submitted loop, but it does not meet this criterion.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 0,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 0
+  },
+  "feedback": {
+    "strengths": [
+      "The explanation accurately describes the submitted code: the loop is written to count from 1 to 5."
+    ],
+    "priorityImprovements": [
+      "Submit code for this exercise, starting with a function named add_points(score, points) that uses return to send back the new score.",
+      "Call the function twice starting from 0, adding 10 and then 5, and store the result each time.",
+      "Print the final score after both calls.",
+      "Write one or two sentences explaining what return does in your program."
+    ],
+    "overallFeedback": "This submission appears to be for a different exercise: it has a counting loop, but not the add_points function this lesson asks for. Because the requested work isn't here, it can't earn points on this rubric yet. The most important fix is to write add_points so that it returns the new score instead of only printing it.",
+    "nextStep": "Check whether you uploaded the wrong file. If the Lesson 3.2 work isn't written yet, start by defining add_points(score, points) and returning the sum of its two inputs, then use the returned value in your two calls."
+  },
+  "review": {
+    "teacherReviewRequired": true,
+    "reasons": [
+      "The submission appears to be unrelated to the assignment: it contains a 1-to-5 counting loop and no add_points function, return statement, score calculation, or explanation of return. The student may have uploaded the wrong file.",
+      "No program run record was provided. The runs_without_errors criterion was scored 0 because the assigned program is absent, although the submitted loop appears syntactically valid; please confirm this interpretation."
+    ],
+    "overallConfidence": "low"
+  },
+  "submission_id": "06_wrong_assignment",
+  "student_id": "EVAL-06",
+  "assignment_id": "lesson_03_02_return_values"
+}

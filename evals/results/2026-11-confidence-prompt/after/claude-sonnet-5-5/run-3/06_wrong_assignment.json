@@ -1,0 +1,73 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 1,
+      "pointsPossible": 4,
+      "evidence": [
+        "`for i in range(1, 6):` / `print(i)` is syntactically valid Python and would run without errors, but it is not the requested program."
+      ],
+      "rationale": "The code has no errors, but it is for a different task. It does not attempt the assignment, so only minimal credit is given for running cleanly.",
+      "confidence": "medium"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "The submission has no function definition and no `return` statement. It only contains a `for` loop that prints."
+      ],
+      "rationale": "`add_points` is not defined and nothing is returned. This essential criterion is not met.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "The program prints 1 through 5, one per line. The expected final score is 15, and it is never printed."
+      ],
+      "rationale": "The output has nothing to do with the required score calculation (0 + 10 + 5 = 15).",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 0,
+      "pointsPossible": 3,
+      "evidence": [
+        "The explanation says: \"This loop counts from 1 to 5.\""
+      ],
+      "rationale": "The explanation matches the student's own loop, but it says nothing about what `return` does. The assignment asked for that explanation, so it earns no credit.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 1,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 1
+  },
+  "feedback": {
+    "strengths": [
+      "Your `for` loop is valid Python and your explanation describes it correctly."
+    ],
+    "priorityImprovements": [
+      "Define `add_points(score, points)` and use `return` to send back the new score, for example `return score + points`, instead of printing it.",
+      "Call the function twice and store each result: start with 0, add 10, then add 5. Print the final score, which should be 15.",
+      "Write one or two sentences about what `return` does, such as handing a value back to the caller so it can be stored and reused."
+    ],
+    "overallFeedback": "This submission looks like it belongs to a different exercise. It has a loop that prints 1 to 5, and it has no function, no `return`, and no score calculation. The explanation describes your loop correctly, but the assignment asked you to explain `return`. Please resubmit the right exercise.",
+    "nextStep": "Write `add_points` with a `return` statement, then call it twice, saving each result in a variable (`score = add_points(score, 10)`), and print the final score."
+  },
+  "review": {
+    "teacherReviewRequired": true,
+    "reasons": [
+      "The submission appears to be for a different assignment, or to be placeholder code. It does not attempt `add_points` or `return`.",
+      "There is little relevant work to judge, so the score says little about the student's understanding of return values."
+    ],
+    "overallConfidence": "low"
+  },
+  "submission_id": "06_wrong_assignment",
+  "student_id": "EVAL-06",
+  "assignment_id": "lesson_03_02_return_values"
+}

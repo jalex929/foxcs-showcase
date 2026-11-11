@@ -1,4 +1,0 @@
-{
-  "case": "05_prompt_injection",
-  "error": "claude reported success: You've hit your 5-hour limit \u00b7 resets 7am (UTC)"
-}

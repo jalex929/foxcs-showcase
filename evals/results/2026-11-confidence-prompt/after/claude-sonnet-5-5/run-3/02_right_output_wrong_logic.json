@@ -1,0 +1,78 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`def add_points(score, points):` with `print(score + points)` is valid Python",
+        "`add_points(0, 10)` and `add_points(10, 5)` call the function with the right number of arguments"
+      ],
+      "rationale": "By reading the code, it has no syntax or runtime errors. No program_runs record was provided, so this is based on reading the code.",
+      "confidence": "medium"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "`print(score + points)` is the only line in the function body",
+        "There is no `return` statement anywhere in the submission"
+      ],
+      "rationale": "The function prints the new score and returns nothing. This is the exact thing the criterion says should not happen. Calling it gives `None`.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 2,
+      "pointsPossible": 4,
+      "evidence": [
+        "`add_points(0, 10)` and `add_points(10, 5)` would print 10, then 15",
+        "The results are not stored, and there is no separate final `print` of the score"
+      ],
+      "rationale": "The last line printed is 15, which is the right total. But it comes from printing inside the function, not from a stored result. The 10 is also printed along the way, and the second call's starting value of 10 is typed in by hand. Partial credit.",
+      "confidence": "medium"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 0,
+      "pointsPossible": 3,
+      "evidence": [
+        "\"The function returns the score by printing it.\""
+      ],
+      "rationale": "The explanation mixes up returning and printing. `return` hands a value back to the caller so it can be stored or reused. Printing only displays it. The sentence also doesn't describe what return does in this program. The code doesn't use `return` at all.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 6,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 6
+  },
+  "feedback": {
+    "strengths": [
+      "Your function has a clear name and takes the two parameters `score` and `points`, as the prompt asks.",
+      "You called the function twice with the right values (0 plus 10, then 10 plus 5), and the last number printed is 15."
+    ],
+    "priorityImprovements": [
+      "Replace `print(score + points)` with `return score + points`. This is the main point of the exercise: `return` sends the value back to the caller, while `print` only shows it on screen.",
+      "Store each result in a variable. For example, `score = add_points(0, 10)`, then `score = add_points(score, 5)`. This way you don't type 10 in by hand for the second call.",
+      "After both calls, use `print(score)` once to show the final score.",
+      "Rewrite your explanation. `return` and `print` do different jobs, so \"returns the score by printing it\" isn't accurate."
+    ],
+    "overallFeedback": "Your program adds the numbers correctly, but the function prints the result instead of returning it. That is the key idea in this lesson. Your explanation repeats the same mix-up. Once the function returns the value and you store it, most of the other points will follow.",
+    "nextStep": "Change the function to `return score + points`, store each result in `score`, print `score` once at the end, and then rewrite your explanation to say what `return` does."
+  },
+  "review": {
+    "teacherReviewRequired": true,
+    "reasons": [
+      "The explanation says the function \"returns the score by printing it\", which conflicts with how return works and shows a misunderstanding of the key concept.",
+      "No program_runs record was provided, so the \"runs without errors\" and output scores come from reading the code."
+    ],
+    "overallConfidence": "high"
+  },
+  "submission_id": "02_right_output_wrong_logic",
+  "student_id": "EVAL-02",
+  "assignment_id": "lesson_03_02_return_values"
+}

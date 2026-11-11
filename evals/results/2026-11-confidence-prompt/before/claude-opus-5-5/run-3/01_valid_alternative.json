@@ -1,0 +1,81 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`def add_points(score, points):`",
+        "`for amount in (10, 5):`",
+        "`print(score)`"
+      ],
+      "rationale": "No program run record was provided, so this is based on reading the code. The syntax is valid, `score` is assigned before it is used, and `sum` receives a list of two numbers, so the program should run without errors.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`return sum([score, points])`",
+        "`score = add_points(score, amount)`"
+      ],
+      "rationale": "The function returns the new score and does not print inside the function. The caller stores the returned value. Using `sum` on a list is an unusual way to add two numbers, but it is correct.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`score = 0`",
+        "`for amount in (10, 5):`",
+        "`score = add_points(score, amount)`",
+        "`print(score)`"
+      ],
+      "rationale": "Tracing the code, score goes from 0 to 10 to 15, and the program prints 15 once at the end. The loop makes the two required calls, in the required order, and stores the result each time. This comes from a trace because no run record was provided.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 3,
+      "pointsPossible": 3,
+      "evidence": [
+        "Explanation: \"return hands the new total back to the line that called add_points, so I can save it in score and use it again in the loop.\"",
+        "`score = add_points(score, amount)`"
+      ],
+      "rationale": "The explanation correctly says that the value goes back to the calling line, is saved in `score`, and is reused on the next loop pass. This matches the code.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 15,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 15
+  },
+  "feedback": {
+    "strengths": [
+      "`add_points` sends its result back with `return` instead of printing it, which is the main skill in this exercise.",
+      "`score = add_points(score, amount)` stores each result, so the second call builds on the first.",
+      "Your explanation connects `return` to what happens in your own program: the value goes back to the calling line and gets reused in the loop."
+    ],
+    "priorityImprovements": [
+      "Simplify `return sum([score, points])` to direct addition with the `+` operator. Your version works, but it builds a list just to add two numbers, so `+` would be easier to read."
+    ],
+    "overallFeedback": "Your program meets every part of the exercise: the function returns the new score, the result is stored after each of the two calls, and the final score comes out to 15. Using a loop for the two calls is a tidy choice, and your explanation describes accurately why `return` makes it work. The one thing to refine is making the addition inside the function more direct.",
+    "nextStep": "Rewrite the body of `add_points` using `+`, then run the program again to confirm it still prints 15."
+  },
+  "review": {
+    "teacherReviewRequired": true,
+    "reasons": [
+      "Valid but unexpected approach: the student makes the two required calls through a single call site in a `for` loop rather than writing two separate calls. It executes twice and stores each result, so it was credited; please confirm this satisfies \"call it twice\".",
+      "The function uses `sum([score, points])` instead of `+`, which is unusual but correct.",
+      "No program run record was provided, so the runs-without-errors and correct-output scores are based on reading and tracing the code."
+    ],
+    "overallConfidence": "high"
+  },
+  "submission_id": "01_valid_alternative",
+  "student_id": "EVAL-01",
+  "assignment_id": "lesson_03_02_return_values"
+}

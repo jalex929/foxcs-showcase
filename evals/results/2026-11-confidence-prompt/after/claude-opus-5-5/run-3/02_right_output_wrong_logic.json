@@ -1,0 +1,81 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`def add_points(score, points):` is a valid function definition with a correctly indented body.",
+        "`add_points(0, 10)` and `add_points(10, 5)` each pass the two required arguments."
+      ],
+      "rationale": "No program run record was provided. From reading the code, the syntax is valid, the function is defined before it is called, and nothing should raise an error.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "The whole function body is `print(score + points)`, and the function contains no return statement."
+      ],
+      "rationale": "The function displays the new score but does not return it, so it gives back None. This is the behavior the criterion specifically rules out.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 3,
+      "pointsPossible": 4,
+      "evidence": [
+        "`add_points(0, 10)` would print 10.",
+        "`add_points(10, 5)` would print 15, which is the correct final score."
+      ],
+      "rationale": "By reading the code, the last value printed would be the correct 15. One point is withheld because the output also includes the intermediate 10, and the 15 depends on a hand-typed 10 rather than a result carried over from the first call.",
+      "confidence": "medium"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 0,
+      "pointsPossible": 3,
+      "evidence": [
+        "The explanation states: \"The function returns the score by printing it.\"",
+        "The function uses `print(score + points)` and has no return statement."
+      ],
+      "rationale": "The explanation treats printing and returning as the same action. The program does not use return, so the statement does not accurately describe it.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 7,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 7
+  },
+  "feedback": {
+    "strengths": [
+      "The function has the requested name and parameters: `def add_points(score, points):`.",
+      "The calculation `score + points` correctly adds the points to the score.",
+      "The calls use the right amounts, and the last value displayed would be the correct total of 15."
+    ],
+    "priorityImprovements": [
+      "Make the function return the new score instead of printing it. Printing only shows a value on the screen, while returning hands it back to the code that called the function.",
+      "Store the result of each call in a variable, then pass that variable into the second call instead of typing `10` by hand.",
+      "Print only once, after both calls, so the output is just the final score.",
+      "Rewrite the explanation to describe what return does in your program once the function uses it."
+    ],
+    "overallFeedback": "You have the addition and the function setup working, and your program reaches the right total. The main thing to fix is the difference between printing and returning, because they do different jobs. Right now, `add_points` shows the result but gives nothing back, so you had to carry the 10 over to `add_points(10, 5)` yourself. Once the function returns its result, your program can carry the score from one call to the next.",
+    "nextStep": "Replace the print line inside `add_points` with a return statement, save the first call's result in a variable starting from 0, pass that variable into the second call, and print the final variable once. Then write one or two sentences explaining where the returned value goes."
+  },
+  "review": {
+    "teacherReviewRequired": true,
+    "reasons": [
+      "The explanation conflicts with the code: it says the function returns the score, but the function only prints it and has no return statement.",
+      "The essential-for-mastery criterion uses_return earned 0 points, even though the submission totals 7 of 15.",
+      "No program run record was provided, so the runs_without_errors and correct_output scores are based on reading the code.",
+      "The correct_output score is a judgment call: the final printed value would be 15, but the program also prints 10 and reaches 15 through a hard-coded value rather than a stored result."
+    ],
+    "overallConfidence": "medium"
+  },
+  "submission_id": "02_right_output_wrong_logic",
+  "student_id": "EVAL-02",
+  "assignment_id": "lesson_03_02_return_values"
+}

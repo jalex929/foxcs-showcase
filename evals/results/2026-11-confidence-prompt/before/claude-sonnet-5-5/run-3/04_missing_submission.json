@@ -1,0 +1,73 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "The file contains only the comment `# TODO`; there is no executable code."
+      ],
+      "rationale": "The file technically runs without raising an error, but it contains no program. Nothing was attempted, so no credit is given for this criterion.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "No `add_points` function is defined in exercise.py."
+      ],
+      "rationale": "There is no function and no `return` statement, so this essential criterion is not met.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "The file has no `print` call and produces no output. The expected final score of 15 is never printed."
+      ],
+      "rationale": "No score is calculated or printed.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 0,
+      "pointsPossible": 3,
+      "evidence": [
+        "The explanation section is empty."
+      ],
+      "rationale": "No explanation was submitted, so there is nothing to compare with the code.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 0,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 0
+  },
+  "feedback": {
+    "strengths": [
+      "You created exercise.py and kept the file ready to work in."
+    ],
+    "priorityImprovements": [
+      "Write the function `add_points(score, points)`. It should use `return` to send back the new score. Don't just print the score inside the function.",
+      "Call the function twice, starting from 0. Add 10 first, then add 5. Store the result each time, then print the final score, which should be 15.",
+      "Write one or two sentences explaining what `return` does in your program."
+    ],
+    "overallFeedback": "The submission has only a `# TODO` comment and an empty explanation, so none of the rubric criteria could be scored. The exercise isn't attempted yet, which is why the score is 0/15. The task is short and you can finish it in a few lines.",
+    "nextStep": "Start with the function. Write `def add_points(score, points):` and have it `return score + points`. Then add the two calls and the print."
+  },
+  "review": {
+    "teacherReviewRequired": true,
+    "reasons": [
+      "The submission is effectively blank: only a `# TODO` comment and an empty explanation.",
+      "The student may have submitted the wrong file or an unfinished draft, so the teacher may want to confirm."
+    ],
+    "overallConfidence": "high"
+  },
+  "submission_id": "04_missing_submission",
+  "student_id": "EVAL-04",
+  "assignment_id": "lesson_03_02_return_values"
+}

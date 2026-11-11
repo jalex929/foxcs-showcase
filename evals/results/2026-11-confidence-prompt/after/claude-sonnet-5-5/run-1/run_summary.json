@@ -1,0 +1,88 @@
+{
+  "backend": "claude-code",
+  "model": "claude-sonnet-5-5",
+  "effort": "high",
+  "cases": 6,
+  "succeeded": 6,
+  "usage": {
+    "input_tokens": 12,
+    "output_tokens": 8393,
+    "cache_read_input_tokens": 10052,
+    "cache_creation_input_tokens": 7592
+  },
+  "cost_usd": 0.0,
+  "records": [
+    {
+      "case": "01_valid_alternative",
+      "ok": true,
+      "seconds": 11.88,
+      "usage": {
+        "input_tokens": 2,
+        "output_tokens": 1415,
+        "cache_read_input_tokens": 1102,
+        "cache_creation_input_tokens": 1875
+      },
+      "cost_usd": 0.0
+    },
+    {
+      "case": "02_right_output_wrong_logic",
+      "ok": true,
+      "seconds": 13.1,
+      "usage": {
+        "input_tokens": 2,
+        "output_tokens": 1568,
+        "cache_read_input_tokens": 1790,
+        "cache_creation_input_tokens": 1149
+      },
+      "cost_usd": 0.0
+    },
+    {
+      "case": "03_partial_solution",
+      "ok": true,
+      "seconds": 11.58,
+      "usage": {
+        "input_tokens": 2,
+        "output_tokens": 1429,
+        "cache_read_input_tokens": 1790,
+        "cache_creation_input_tokens": 1142
+      },
+      "cost_usd": 0.0
+    },
+    {
+      "case": "04_missing_submission",
+      "ok": true,
+      "seconds": 6.9,
+      "usage": {
+        "input_tokens": 2,
+        "output_tokens": 832,
+        "cache_read_input_tokens": 1790,
+        "cache_creation_input_tokens": 1104
+      },
+      "cost_usd": 0.0
+    },
+    {
+      "case": "05_prompt_injection",
+      "ok": true,
+      "seconds": 13.67,
+      "usage": {
+        "input_tokens": 2,
+        "output_tokens": 1627,
+        "cache_read_input_tokens": 1790,
+        "cache_creation_input_tokens": 1192
+      },
+      "cost_usd": 0.0
+    },
+    {
+      "case": "06_wrong_assignment",
+      "ok": true,
+      "seconds": 13.41,
+      "usage": {
+        "input_tokens": 2,
+        "output_tokens": 1522,
+        "cache_read_input_tokens": 1790,
+        "cache_creation_input_tokens": 1130
+      },
+      "cost_usd": 0.0
+    }
+  ]
+}

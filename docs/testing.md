@@ -148,7 +148,8 @@ The tester is standard-library Python, like the rest of the repository. Its own 
 
 Honest gaps, so nobody has to guess:
 
-- **No real `claude -p` call in CI.** CI uses the fake. The committed baseline ([evals/README.md](../evals/README.md#baseline-results)) is the real run: it confirmed the CLI's JSON result shape (`structured_output`, `subtype`, `is_error`, `usage`) matches what the fake pins.
+- **Baseline numbers are limited.** One comparison is recorded in [model-comparison.md](model-comparison.md): six synthetic cases, three repeats, two models. It is not a benchmark.
+- **No real `claude -p` call in CI.** The CLI's JSON result shape (`structured_output`, `subtype`, `is_error`, `usage`) is pinned by the fake. Real runs on 2026-11-11 confirmed it matches, but CI would not notice if it changed.
 - **The eval checks are deterministic.** They catch structural and rule violations (arithmetic, rubric coverage, escalation, forbidden claims). They do not judge whether feedback is genuinely helpful. That needs educator review or a carefully validated model-graded rubric, and is planned.
 - **Platform tests live in the private workspace.** The live platform has its own CI: content checkers with their own test suites, a PHP harness for the practice-ladder wiring checker, and a headless-browser test proving a student's typed answer survives save on a real lesson page. Those depend on licensed course content and are not reproduced here.
 - **No load or concurrency testing.** Class sizes have not required it. The on-submission store is a single append-only file, which suits one worker. Several concurrent workers would need a real queue or database.
