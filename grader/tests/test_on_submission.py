@@ -29,7 +29,9 @@ FIXTURES = Path(__file__).resolve().parent / "on_submission_fixtures"
 EXERCISES_DIR = GRADER_DIR / "exercises"
 ASSIGNMENT = "lesson_02_06_coins_to_points"
 SPEC = osub.load_exercises(EXERCISES_DIR)[ASSIGNMENT]
-FAST_SPEC = dataclasses.replace(SPEC, timeout_seconds=1.5)
+# Honest programs run under the real 5-second limit, so a slow or busy machine never times
+# them out. Only the infinite loop, which is meant to hit the limit, gets a short one to keep the tests quick.
+LOOP_SPEC = dataclasses.replace(SPEC, timeout_seconds=1.5)
 
 
 def event_for(path, submission_id="sub-1", assignment=ASSIGNMENT, name=None):
@@ -51,7 +53,7 @@ class TempCase(unittest.TestCase):
     def tearDown(self):
         self._tmp.cleanup()
 
-    def submit(self, fixture, spec=FAST_SPEC, **kw):
+    def submit(self, fixture, spec=SPEC, **kw):
         return osub.handle_submission(
             event_for(FIXTURES / fixture, **kw), {ASSIGNMENT: spec}, FIXTURES, self.store
         )
@@ -131,7 +133,7 @@ class TestSafety(TempCase):
     def test_every_result_is_a_draft_pending_approval(self):
         for fixture in ("flawless.py", "syntax_error.py", "infinite_loop.py"):
             with self.subTest(fixture=fixture):
-                r = self.submit(fixture, submission_id=fixture)
+                r = self.submit(fixture, spec=LOOP_SPEC if fixture == "infinite_loop.py" else SPEC, submission_id=fixture)
                 self.assertEqual(r["release"], "pending_teacher_approval")
 
     def test_prompt_injection_in_code_changes_nothing(self):
@@ -141,7 +143,7 @@ class TestSafety(TempCase):
         self.assertEqual(injected["score"], plain["score"])
 
     def test_infinite_loop_times_out_and_is_held_unscored(self):
-        r = self.submit("infinite_loop.py")
+        r = self.submit("infinite_loop.py", spec=LOOP_SPEC)
         self.assertIsNone(r["band"])
         self.assertIsNone(r["score"])
         self.assertTrue(r["review"]["teacherReviewRequired"])
@@ -151,19 +153,19 @@ class TestSafety(TempCase):
 
     @unittest.skipUnless(sys.platform != "win32", "resource limits are POSIX only")
     def test_memory_limit_stops_runaway_allocation(self):
-        r = self.submit("memory_hog.py")
+        r = self.submit("memory_hog.py")  # must stop on the memory limit, so it gets the real time limit
         self.assertEqual(r["band"], "does_not_run")
         self.assertIn("MemoryError", r["feedback"]["overallFeedback"])
 
     def test_child_runs_isolated_with_minimal_environment(self):
-        run = osub.run_program(FIXTURES / "reads_grader_files.py", "2\n", FAST_SPEC)
+        run = osub.run_program(FIXTURES / "reads_grader_files.py", "2\n", SPEC)
         self.assertEqual(run.exit_code, 0, run.stderr)
         self.assertIn("ISOLATED=1", run.stdout)
         self.assertIn("ENV=\n", run.stdout)
 
     def test_path_outside_submissions_root_is_refused(self):
         outside = self.write("sneaky.py", 'print("You have 30 points.")\n')
-        r = osub.handle_submission(event_for(outside), {ASSIGNMENT: FAST_SPEC}, FIXTURES, self.store)
+        r = osub.handle_submission(event_for(outside), {ASSIGNMENT: SPEC}, FIXTURES, self.store)
         self.assertIsNone(r["score"])
         self.assertIn("outside the submissions folder", r["review"]["reasons"][0])
 
@@ -171,7 +173,7 @@ class TestSafety(TempCase):
         def broken_runner(path, stdin, spec):
             raise RuntimeError("runner exploded")
         r = osub.handle_submission(
-            event_for(FIXTURES / "flawless.py"), {ASSIGNMENT: FAST_SPEC}, FIXTURES, self.store, runner=broken_runner
+            event_for(FIXTURES / "flawless.py"), {ASSIGNMENT: SPEC}, FIXTURES, self.store, runner=broken_runner
         )
         self.assertIsNone(r["score"])
         self.assertIn("RuntimeError: runner exploded", r["review"]["reasons"][0])
@@ -207,7 +209,7 @@ class TestIdempotency(TempCase):
             calls.append(stdin)
             return osub.run_program(path, stdin, spec)
 
-        args = (event_for(FIXTURES / "flawless.py"), {ASSIGNMENT: FAST_SPEC}, FIXTURES, self.store)
+        args = (event_for(FIXTURES / "flawless.py"), {ASSIGNMENT: SPEC}, FIXTURES, self.store)
         first = osub.handle_submission(*args, runner=counting_runner)
         second = osub.handle_submission(*args, runner=counting_runner)
         self.assertEqual(len(calls), 3)  # one run per test, first delivery only
@@ -217,7 +219,7 @@ class TestIdempotency(TempCase):
 
     def test_resubmission_with_new_contents_is_regraded(self):
         f = self.write("exercise.py", (FIXTURES / "string_repetition.py").read_text())
-        spec = {ASSIGNMENT: FAST_SPEC}
+        spec = {ASSIGNMENT: SPEC}
         first = osub.handle_submission(event_for(f), spec, self.tmp, self.store)
         f.write_text((FIXTURES / "flawless.py").read_text())
         second = osub.handle_submission(event_for(f), spec, self.tmp, self.store)
@@ -231,7 +233,7 @@ class TestIdempotency(TempCase):
 
 class TestHeldForReview(TempCase):
     def handle(self, event):
-        return osub.handle_submission(event, {ASSIGNMENT: FAST_SPEC}, self.tmp, self.store)
+        return osub.handle_submission(event, {ASSIGNMENT: SPEC}, self.tmp, self.store)
 
     def assertHeld(self, result, reason_fragment):
         self.assertIsNone(result["score"])
@@ -265,13 +267,13 @@ class TestHeldForReview(TempCase):
 
     def test_file_exactly_at_size_limit_is_accepted(self):
         body = 'print("You have 30 points.")\n'
-        path = self.write("edge.py", body + "#" * (FAST_SPEC.max_bytes - len(body) - 1) + "\n")
-        self.assertEqual(path.stat().st_size, FAST_SPEC.max_bytes)
+        path = self.write("edge.py", body + "#" * (SPEC.max_bytes - len(body) - 1) + "\n")
+        self.assertEqual(path.stat().st_size, SPEC.max_bytes)
         r = self.handle(event_for(path))
         self.assertIsNotNone(r["band"])
 
     def test_oversized_file(self):
-        big = self.write("big.py", "# " + "x" * (FAST_SPEC.max_bytes + 10) + "\n")
+        big = self.write("big.py", "# " + "x" * (SPEC.max_bytes + 10) + "\n")
         self.assertHeld(self.handle(event_for(big)), "over the")
 
     def test_not_utf8(self):
