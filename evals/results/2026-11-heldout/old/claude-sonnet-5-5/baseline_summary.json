@@ -1,0 +1,49 @@
+{
+  "backend": "claude-code",
+  "model": "claude-sonnet-5-5",
+  "effort": "high",
+  "repeats": 3,
+  "total_cost_usd": 0.0,
+  "consistency": {
+    "h1_stub_only": {
+      "scores": [
+        1,
+        2,
+        1
+      ],
+      "spread": 1
+    },
+    "h2_explanation_only": {
+      "scores": [
+        2,
+        2,
+        2
+      ],
+      "spread": 0
+    },
+    "h3_unreadable": {
+      "scores": [
+        0,
+        0,
+        0
+      ],
+      "spread": 0
+    },
+    "h4_complete_standard": {
+      "scores": [
+        15,
+        15,
+        15
+      ],
+      "spread": 0
+    },
+    "h5_short_but_complete": {
+      "scores": [
+        15,
+        15,
+        15
+      ],
+      "spread": 0
+    }
+  }
+}

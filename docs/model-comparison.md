@@ -2,7 +2,7 @@
 
 A record of one evaluation cycle: real model runs exposed a repeatable failure, one sentence of the grading prompt changed, and the same runs were repeated to measure the effect.
 
-**Scope.** Six synthetic cases, three repeats, two models, run on 2026-11-11. This demonstrates the evaluation method. It is not a benchmark or an accuracy figure, and it does not show which model is better in general.
+**Scope.** Six synthetic cases, then five held-out cases, three repeats, two models, run on 2026-11-11. This demonstrates the evaluation method. It is not a benchmark or an accuracy figure, and it does not show which model is better in general.
 
 ## Setup
 
@@ -62,9 +62,33 @@ The check was correct against the feedback specification, so it stayed as it was
 
 **Side effects differ by model.** Opus dropped to low confidence on prompt injection, while Sonnet stayed high. Sonnet's confidence rose on several cases where it had been medium. A one-sentence change moved behavior beyond its target, which is why results are compared across every case.
 
+## Held-out test
+
+The case that exposed the failure was also used to verify the fix, so a second test used 5 new cases. Their expected results were written before any model ran them. Both prompts ran on both models, three times each, on the same assignment. The cases and raw outputs are in [`evals/results/2026-11-heldout/`](../evals/results/2026-11-heldout/).
+
+| Case | What was submitted | Expected |
+|---|---|---|
+| Stub only | A function header with `pass`, and "I ran out of time" | 0 to 4 points, low confidence |
+| Explanation only | An empty file and an accurate explanation of `return` | 0 to 3 points, teacher review, low confidence |
+| Unreadable | Corrupted characters | 0 to 2 points, teacher review, low confidence |
+| Complete, standard | A correct, conventional solution | 13 to 15 points |
+| Short but complete | A correct two-line solution | 12 to 15 points |
+
+The last two are controls. "Little or no relevant work" in the new wording could have been read as "short", so a very short correct answer tests for that.
+
+| | Opus 5.5 old | Opus 5.5 new | Sonnet 5.5 old | Sonnet 5.5 new |
+|---|---|---|---|---|
+| Case runs passed | 9 of 15 | 15 of 15 | 6 of 15 | 15 of 15 |
+| Confidence check on low-evidence cases | 3 of 9 | 9 of 9 | 0 of 9 | 9 of 9 |
+| Control runs with full marks and high confidence | 6 of 6 | 6 of 6 | 4 of 6 | 6 of 6 |
+
+The old prompt's failure was broader than the original case showed. A stub and an explanation without code drew medium or high confidence on both models, and Sonnet was also highly confident about unreadable text. With the new prompt, every low-evidence run reported low confidence, and every control run kept full marks.
+
+These cases were written with the fix already known, so they test whether it holds across kinds of low-evidence work, not whether it holds across subjects or real student work. Now that they are public, they are no longer held out: the next prompt change needs new unseen cases.
+
 ## Limits
 
-- The case that revealed the failure is the same case used to verify the fix. A held-out case would be stronger evidence that the change generalizes.
+- All eleven cases so far use one assignment.
 - Three repeats measure consistency only roughly.
 - Only one prompt change and two models were tested.
 - These checks are deterministic. They do not measure whether the feedback is useful to a student.

@@ -1,0 +1,76 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "The whole program is the stub `def add_points(score, points):` with a body of `pass`.",
+        "No <program_runs> record was provided, so the program's execution was not observed."
+      ],
+      "rationale": "The stub looks syntactically valid and would likely execute without an exception, but it only defines an empty function and never calls it or prints anything. There is no working program to credit here, so no points are awarded. The literal wording of this criterion leaves room for a different reading, which is flagged for the teacher.",
+      "confidence": "low"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "The function body is only `pass`; it contains no return statement."
+      ],
+      "rationale": "The function does not compute or return a new score.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "The submission has no calls to `add_points` and no print statement."
+      ],
+      "rationale": "The program prints nothing, so the final score of 15 is never produced.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 0,
+      "pointsPossible": 3,
+      "evidence": [
+        "The full explanation reads: \"I ran out of time.\""
+      ],
+      "rationale": "The explanation does not address what return does in the program.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 0,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 0
+  },
+  "feedback": {
+    "strengths": [
+      "The function header `def add_points(score, points):` uses the requested name and both parameters, so the starting structure is in place."
+    ],
+    "priorityImprovements": [
+      "Replace `pass` with a line that returns the sum of `score` and `points`. This is the main skill in the exercise.",
+      "Call the function twice, starting from 0, adding 10 and then 5. Store the result in a variable each time.",
+      "Print the final score, then check that it shows 15.",
+      "Write one or two sentences explaining what return does in your program, such as where the returned value goes after each call."
+    ],
+    "overallFeedback": "This submission is an unfinished starting point, and you noted that you ran out of time. The function header is correct, but the function has no body yet, and the calls, printed result, and explanation are still to do, so there is not yet work that can earn rubric points. The remaining program is short, and finishing it will give you practice passing a returned value from one call into the next.",
+    "nextStep": "Replace `pass` with a return statement that gives back the new score, then test it by printing the result of one call that adds 10 to 0."
+  },
+  "review": {
+    "teacherReviewRequired": true,
+    "reasons": [
+      "The work is essentially missing: the submission is an empty function stub, and the student states, \"I ran out of time.\"",
+      "Teacher judgment is needed on runs_without_errors: the stub appears syntactically valid and would likely run without an exception, but it performs none of the task. It was scored 0 of 4, and no program run record was provided.",
+      "The student's time constraint may merit a decision about an extension or resubmission."
+    ],
+    "overallConfidence": "low"
+  },
+  "submission_id": "h1_stub_only",
+  "student_id": "EVAL-h1",
+  "assignment_id": "lesson_03_02_return_values"
+}

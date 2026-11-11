@@ -1,0 +1,65 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [],
+      "rationale": "The contents of exercise.py are unreadable, non-Python characters, so there is no recognizable program to evaluate. No program run record was provided to show that it executes.",
+      "confidence": "medium"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [],
+      "rationale": "No readable add_points function or return statement appears in the submitted file.",
+      "confidence": "medium"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [],
+      "rationale": "No readable calls, stored results, or print statement appear in the submission, and no program run record shows a final score.",
+      "confidence": "medium"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 0,
+      "pointsPossible": 3,
+      "evidence": [],
+      "rationale": "The explanation section is empty, so there is no description of what return does.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 0,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 0
+  },
+  "feedback": {
+    "strengths": [],
+    "priorityImprovements": [
+      "Resubmit exercise.py as a plain-text Python file. The uploaded file came through as unreadable characters, so your code could not be assessed.",
+      "Make sure the program defines add_points(score, points), returns the new score, calls the function twice starting from 0 (adding 10, then 5), stores each result, and prints the final score.",
+      "Add one or two sentences explaining what return does in your program. The explanation was blank in this submission."
+    ],
+    "overallFeedback": "This score reflects what could be read, not your understanding of functions. The file arrived as unreadable characters, which can happen with a file encoding problem or if the wrong file is uploaded, and the explanation was empty. Your teacher will review this submission.",
+    "nextStep": "Open exercise.py in your code editor, confirm that you can see your Python code and that it runs, save it with UTF-8 encoding, then upload it again with your written explanation."
+  },
+  "review": {
+    "teacherReviewRequired": true,
+    "reasons": [
+      "The exercise.py content is unreadable and contains no recognizable Python code. It may be an encoding problem, a corrupted upload, or a non-text or wrong file.",
+      "The explanation is empty.",
+      "No program run record was provided, so execution could not be confirmed.",
+      "The zero score reflects the unreadable submission. Consider checking the original file or asking the student to resubmit before releasing this grade."
+    ],
+    "overallConfidence": "low"
+  },
+  "submission_id": "h3_unreadable",
+  "student_id": "EVAL-h3",
+  "assignment_id": "lesson_03_02_return_values"
+}

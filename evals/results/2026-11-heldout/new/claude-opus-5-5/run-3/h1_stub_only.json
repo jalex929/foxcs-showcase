@@ -1,0 +1,76 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "The whole program is `def add_points(score, points):` with a body of `pass`, and the function is never called.",
+        "No program run record was provided."
+      ],
+      "rationale": "The stub appears syntactically valid, but it contains no working program to assess: it has no function logic, calls, or output. Not raising an error is not enough to show that the assigned program runs, so no points are awarded. The teacher may choose to give partial credit for valid syntax.",
+      "confidence": "medium"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "The function body is only `pass`; it has no return statement."
+      ],
+      "rationale": "The function does not calculate or return a new score. Without an explicit return, it would give back None.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "The submission has no calls to `add_points` and no print statement."
+      ],
+      "rationale": "The program does not make the two required calls, store results, or print a final score, so the expected final score of 15 is never produced.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 0,
+      "pointsPossible": 3,
+      "evidence": [
+        "The full explanation is: \"I ran out of time.\""
+      ],
+      "rationale": "The explanation does not address what return does in the program. It is an honest statement that the work is unfinished, but it does not meet this criterion.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 0,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 0
+  },
+  "feedback": {
+    "strengths": [
+      "The function header `def add_points(score, points):` uses the requested name and both requested parameters, so the setup is ready to build on.",
+      "You stated clearly that the work was unfinished, which makes it easier to see where to pick it back up."
+    ],
+    "priorityImprovements": [
+      "Replace `pass` with a line that returns the sum of `score` and `points`. This is the main skill in the exercise.",
+      "Below the function, start from 0, call `add_points` twice (adding 10, then 5), store the result each time, and print the final score. It should be 15.",
+      "Add one or two sentences explaining what return does in your program, such as where the returned value goes and how the next call uses it."
+    ],
+    "overallFeedback": "This submission is a starting point: the function header is in place, but the function does not do anything yet, and the calls, printed score, and explanation are still missing. That means the score of 0 reflects unfinished work and does not show what you can do with return values yet. The remaining program is short, so finishing it is very manageable.",
+    "nextStep": "Write the one-line return statement inside `add_points`, then test it by printing the result of calling it with 0 and 10. You should see 10 before you move on to the second call."
+  },
+  "review": {
+    "teacherReviewRequired": true,
+    "reasons": [
+      "The submission is essentially missing: it contains only a function header with `pass`, and the explanation says the student ran out of time.",
+      "No program run record was provided. The stub appears syntactically valid, so please decide whether that merits partial credit under runs_without_errors; it was scored 0 because there is no working program to assess.",
+      "The student may need an opportunity to complete or resubmit the work, since this submission gives little evidence of their understanding."
+    ],
+    "overallConfidence": "low"
+  },
+  "submission_id": "h1_stub_only",
+  "student_id": "EVAL-h1",
+  "assignment_id": "lesson_03_02_return_values"
+}

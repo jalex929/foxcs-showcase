@@ -1,0 +1,20 @@
+{
+  "id": "h5_short_but_complete",
+  "category": "Control",
+  "intent": "Very little code that fully solves the task is not thin evidence.",
+  "submission": {
+    "files": {
+      "exercise.py": "def add_points(s, p): return s + p\na = add_points(0, 10)\nb = add_points(a, 5)\nprint(b)\n"
+    },
+    "explanation": "return hands the new score back so I can save it in a and b."
+  },
+  "expect": {
+    "scoreRange": [
+      12,
+      15
+    ],
+    "feedbackMustMention": [],
+    "feedbackMustNotContain": []
+  },
+  "assignmentId": "lesson_03_02_return_values"
+}

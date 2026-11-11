@@ -1,0 +1,80 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`def add_points(s, p): return s + p` is a valid one-line function definition",
+        "`a = add_points(0, 10)` and `b = add_points(a, 5)` only use names that are already defined",
+        "`print(b)` prints a defined variable"
+      ],
+      "rationale": "By reading the code, the syntax is valid and every name is defined before use. I found no runtime errors. No run record was provided, so this comes from reading the code, not from a run.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`def add_points(s, p): return s + p`",
+        "The function has no print. The results are captured with `a = add_points(0, 10)` and `b = add_points(a, 5)`."
+      ],
+      "rationale": "The function returns the new score and does not print it. The caller stores each returned value and passes `a` into the second call.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`a = add_points(0, 10)` gives 10",
+        "`b = add_points(a, 5)` gives 15",
+        "`print(b)` prints the final score"
+      ],
+      "rationale": "Starting from 0, adding 10 and then 5 gives 15. The program prints that final value.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 3,
+      "pointsPossible": 3,
+      "evidence": [
+        "\"return hands the new score back so I can save it in a and b.\""
+      ],
+      "rationale": "The explanation is accurate and matches the code. `return` sends the computed score back to the caller, and the code saves it in `a` and `b`. It is brief but meets the one-or-two-sentence requirement.",
+      "confidence": "medium"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 15,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 15
+  },
+  "feedback": {
+    "strengths": [
+      "Your function returns the new score, and you store each result in `a` and `b`. You also feed `a` into the second call, which is the key idea of this lesson.",
+      "The program prints the correct final score, 15.",
+      "Your explanation correctly says that `return` hands the value back so you can save it."
+    ],
+    "priorityImprovements": [
+      "Use descriptive parameter names such as `score` and `points`, as the prompt asks, instead of `s` and `p`. Clear names make code easier to read.",
+      "Put the function body on its own indented line instead of `def ...: return ...` on one line. This is the usual style, and it will help when your functions get longer.",
+      "Add a little more detail to your explanation. For example, say that without `return`, `a` would be `None` and the second call couldn't build on the first score."
+    ],
+    "overallFeedback": "This submission meets every requirement in the rubric. The function returns the score, you chain the two calls correctly, and the final output is 15. The remaining points are about style: clearer parameter names and a slightly fuller explanation.",
+    "nextStep": "Rewrite the function with the parameters `score` and `points` on separate lines. Then add one sentence to your explanation about what would happen if `return` were replaced by `print`."
+  },
+  "review": {
+    "teacherReviewRequired": false,
+    "reasons": [
+      "No program_runs record was provided, so correctness was judged by reading the short, simple code.",
+      "Parameters are named `s` and `p` instead of `score` and `points`. This is a style difference only and was not penalized."
+    ],
+    "overallConfidence": "high"
+  },
+  "submission_id": "h5_short_but_complete",
+  "student_id": "EVAL-h5",
+  "assignment_id": "lesson_03_02_return_values"
+}

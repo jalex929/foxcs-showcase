@@ -1,0 +1,66 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [],
+      "rationale": "The contents of exercise.py are unreadable garbled characters, with no recognizable Python. No program run record was provided, so there is no evidence of a working program.",
+      "confidence": "medium"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [],
+      "rationale": "No readable add_points function or return statement appears in the submitted file.",
+      "confidence": "medium"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [],
+      "rationale": "No readable calls, stored results, or print statement appear in the file, and no program run record shows a final score.",
+      "confidence": "medium"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 0,
+      "pointsPossible": 3,
+      "evidence": [],
+      "rationale": "The explanation section is empty, so there is no description of what return does.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 0,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 0
+  },
+  "feedback": {
+    "strengths": [
+      "A file named exercise.py was submitted, but its contents could not be read, so the code itself can't be assessed yet."
+    ],
+    "priorityImprovements": [
+      "Resubmit exercise.py as a plain-text Python file. The uploaded file shows only garbled characters, which may mean it was corrupted, saved in an unexpected format, or is not the intended file.",
+      "Make sure the code defines add_points(score, points) so that it returns the new score, calls it twice starting from 0 (add 10, then add 5), stores each result, and prints the final score.",
+      "Add one or two sentences explaining what return does in your program. The explanation was blank."
+    ],
+    "overallFeedback": "This score reflects a file that could not be read and a blank explanation, not a judgment of your understanding of return values. Nothing in the file could be recognized as Python, so no rubric points could be awarded from it. Your teacher will review the file, and a readable version can be assessed against the full rubric.",
+    "nextStep": "Open exercise.py in your code editor and confirm that you can see your Python code and that it runs. Then save it as plain text (UTF-8), resubmit it, and include your explanation of return."
+  },
+  "review": {
+    "teacherReviewRequired": true,
+    "reasons": [
+      "The submitted exercise.py is unreadable: it contains garbled non-Python characters, possibly from an encoding problem, file corruption, or a binary file uploaded by mistake.",
+      "The explanation is empty.",
+      "No program run record was provided, so execution could not be confirmed. Please check the original file or ask the student to resubmit before treating the score of 0 as final."
+    ],
+    "overallConfidence": "low"
+  },
+  "submission_id": "h3_unreadable",
+  "student_id": "EVAL-h3",
+  "assignment_id": "lesson_03_02_return_values"
+}

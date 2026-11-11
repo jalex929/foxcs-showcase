@@ -1,0 +1,76 @@
+{
+  "review": {
+    "teacherReviewRequired": true,
+    "reasons": [
+      "The submitted exercise.py is unreadable. It contains garbled binary characters, and the leading `PK` suggests a zip archive or other binary file was uploaded instead of Python source.",
+      "The explanation field is empty.",
+      "No <program_runs> record was provided, so there is no evidence the program ran.",
+      "The student may have uploaded the wrong file or a corrupted one. The teacher should ask for a resubmission or check the original file before the score is final."
+    ],
+    "overallConfidence": "low"
+  },
+  "score": {
+    "standardPointsEarned": 0,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 0
+  },
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "The file content is garbled binary text with no readable Python code."
+      ],
+      "rationale": "The file is not valid, readable Python, so it cannot run. No run record shows otherwise.",
+      "confidence": "medium"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "No `def add_points(score, points)` or `return` statement appears in the readable content."
+      ],
+      "rationale": "There is no function definition to evaluate, so I cannot credit a return value.",
+      "confidence": "medium"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "No print statement or output is visible. No program run was recorded."
+      ],
+      "rationale": "The final score (15) is never produced or shown in anything I can read.",
+      "confidence": "medium"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 0,
+      "pointsPossible": 3,
+      "evidence": [
+        "The explanation section is empty."
+      ],
+      "rationale": "No explanation of what `return` does was submitted.",
+      "confidence": "high"
+    }
+  ],
+  "feedback": {
+    "strengths": [
+      "I could not find any readable work to point to as a strength, because the file did not upload correctly."
+    ],
+    "priorityImprovements": [
+      "Resubmit `exercise.py` as a plain-text Python file. The file I received was garbled binary (it began with `PK`), so I could not read any code.",
+      "Define `add_points(score, points)` so that it uses `return` to give back the new score.",
+      "Call the function twice, starting at 0 (add 10, then add 5). Store the result each time and print the final score, which should be 15.",
+      "Write one or two sentences explaining what `return` does, for example that it sends the new score back to the caller so it can be stored in a variable."
+    ],
+    "overallFeedback": "I couldn't grade your work because the uploaded file wasn't readable Python code and the explanation was blank. This score reflects the upload problem, not necessarily what you can do. Please resubmit so your code and explanation can be assessed.",
+    "nextStep": "Open `exercise.py` in a text editor, check that it shows readable Python code, save it as plain text, and resubmit it with your written explanation."
+  },
+  "submission_id": "h3_unreadable",
+  "student_id": "EVAL-h3",
+  "assignment_id": "lesson_03_02_return_values"
+}

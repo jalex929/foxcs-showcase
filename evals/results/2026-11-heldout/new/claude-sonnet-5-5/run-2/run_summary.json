@@ -1,0 +1,76 @@
+{
+  "backend": "claude-code",
+  "model": "claude-sonnet-5-5",
+  "effort": "high",
+  "cases": 5,
+  "succeeded": 5,
+  "usage": {
+    "input_tokens": 10,
+    "output_tokens": 6079,
+    "cache_read_input_tokens": 12910,
+    "cache_creation_input_tokens": 1837
+  },
+  "cost_usd": 0.0,
+  "records": [
+    {
+      "case": "h1_stub_only",
+      "ok": true,
+      "seconds": 9.36,
+      "usage": {
+        "input_tokens": 2,
+        "output_tokens": 1002,
+        "cache_read_input_tokens": 2544,
+        "cache_creation_input_tokens": 367
+      },
+      "cost_usd": 0.0
+    },
+    {
+      "case": "h2_explanation_only",
+      "ok": true,
+      "seconds": 11.3,
+      "usage": {
+        "input_tokens": 2,
+        "output_tokens": 1287,
+        "cache_read_input_tokens": 2555,
+        "cache_creation_input_tokens": 368
+      },
+      "cost_usd": 0.0
+    },
+    {
+      "case": "h3_unreadable",
+      "ok": true,
+      "seconds": 11.58,
+      "usage": {
+        "input_tokens": 2,
+        "output_tokens": 1147,
+        "cache_read_input_tokens": 2619,
+        "cache_creation_input_tokens": 366
+      },
+      "cost_usd": 0.0
+    },
+    {
+      "case": "h4_complete_standard",
+      "ok": true,
+      "seconds": 10.98,
+      "usage": {
+        "input_tokens": 2,
+        "output_tokens": 1075,
+        "cache_read_input_tokens": 2609,
+        "cache_creation_input_tokens": 368
+      },
+      "cost_usd": 0.0
+    },
+    {
+      "case": "h5_short_but_complete",
+      "ok": true,
+      "seconds": 14.57,
+      "usage": {
+        "input_tokens": 2,
+        "output_tokens": 1568,
+        "cache_read_input_tokens": 2583,
+        "cache_creation_input_tokens": 368
+      },
+      "cost_usd": 0.0
+    }
+  ]
+}

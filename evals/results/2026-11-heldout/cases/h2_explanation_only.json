@@ -1,0 +1,30 @@
+{
+  "id": "h2_explanation_only",
+  "category": "Low evidence",
+  "intent": "A good explanation with no code cannot show the code works.",
+  "submission": {
+    "files": {
+      "exercise.py": ""
+    },
+    "explanation": "The return keyword sends the new score back to the caller so it can be stored in a variable and used in the next call."
+  },
+  "expect": {
+    "scoreRange": [
+      0,
+      3
+    ],
+    "teacherReviewRequired": true,
+    "maxConfidence": "low",
+    "maxCriterionPoints": {
+      "uses_return": 0,
+      "correct_output": 0
+    },
+    "feedbackMustMention": [],
+    "feedbackMustNotContain": [
+      "your function returns",
+      "correctly returns",
+      "nice use of"
+    ]
+  },
+  "assignmentId": "lesson_03_02_return_values"
+}

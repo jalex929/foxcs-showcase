@@ -1,0 +1,80 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`def add_points(s, p): return s + p` is a valid one-line function definition.",
+        "`a = add_points(0, 10)`, `b = add_points(a, 5)`, and `print(b)` use only names that are defined before they are used."
+      ],
+      "rationale": "No program run record was provided, so this is based on reading the code. The syntax is valid, and nothing in the code would raise an error.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`def add_points(s, p): return s + p`",
+        "`a = add_points(0, 10)`"
+      ],
+      "rationale": "The function returns the sum and does not print inside the function. The returned value is stored by the caller. The parameters are named `s` and `p` rather than the requested `score` and `points`, but this does not affect whether the function returns the new score.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`a = add_points(0, 10)` gives 10.",
+        "`b = add_points(a, 5)` passes that result forward and gives 15.",
+        "`print(b)` prints the final score."
+      ],
+      "rationale": "Tracing the code shows that it starts from 0, adds 10, then adds 5, and prints 15, which is the correct final score. This was traced by hand because no run record was provided.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 3,
+      "pointsPossible": 3,
+      "evidence": [
+        "Explanation: \"return hands the new score back so I can save it in a and b.\"",
+        "`a = add_points(0, 10)`",
+        "`b = add_points(a, 5)`"
+      ],
+      "rationale": "The explanation correctly says that return sends the new score back to the caller, and it names the two variables that store the result in this program.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 15,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 15
+  },
+  "feedback": {
+    "strengths": [
+      "`add_points` returns the new score instead of printing it, so the result can be used by the rest of the program.",
+      "`b = add_points(a, 5)` passes the first result into the second call, which correctly carries the score forward to 15.",
+      "The explanation is short and tied to this program, naming `a` and `b` as the places where the returned score is saved."
+    ],
+    "priorityImprovements": [
+      "Use the parameter names from the assignment, `score` and `points`, instead of `s` and `p`. The code works either way, but descriptive names make it clearer what each value means.",
+      "Put the function body on its own indented line. This is the usual Python style and leaves room for functions that grow longer."
+    ],
+    "overallFeedback": "This submission meets every rubric criterion: the function returns the new score, each result is stored, and the final value printed is 15. Your explanation accurately describes the role of return here. The most useful fix is readability, starting with the parameter names the assignment asked for.",
+    "nextStep": "Rewrite the function header as `def add_points(score, points):`, move the return statement to an indented line below it using the new names, and run the program to confirm it still prints 15."
+  },
+  "review": {
+    "teacherReviewRequired": false,
+    "reasons": [
+      "No program run record was provided, so the runs-without-errors and output criteria were scored by reading and tracing the code.",
+      "The student used parameter names `s` and `p` instead of the `score` and `points` named in the prompt. The rubric does not assess naming, so no points were deducted."
+    ],
+    "overallConfidence": "high"
+  },
+  "submission_id": "h5_short_but_complete",
+  "student_id": "EVAL-h5",
+  "assignment_id": "lesson_03_02_return_values"
+}

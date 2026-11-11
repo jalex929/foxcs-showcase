@@ -1,0 +1,20 @@
+{
+  "id": "h4_complete_standard",
+  "category": "Control",
+  "intent": "A complete, conventional solution should not be marked down or lose confidence.",
+  "submission": {
+    "files": {
+      "exercise.py": "def add_points(score, points):\n    new_score = score + points\n    return new_score\n\n\nscore = 0\nscore = add_points(score, 10)\nscore = add_points(score, 5)\nprint(score)\n"
+    },
+    "explanation": "return sends the new score back from add_points, so I can store it in score and use it in the next call."
+  },
+  "expect": {
+    "scoreRange": [
+      13,
+      15
+    ],
+    "feedbackMustMention": [],
+    "feedbackMustNotContain": []
+  },
+  "assignmentId": "lesson_03_02_return_values"
+}
