@@ -126,6 +126,7 @@ FoxCS was used daily by real students in fall 2026. Students are off the platfor
 - [On-submission grading](docs/on-submission-grading.md)
 - [Release check before a bulk grade push](docs/release-check.md)
 - [Assessment access: a daily class code](docs/assessment-access-design.md)
+- [Content quality: rubrics, question checks, fair marking](docs/content-quality.md)
 - [Testing and validation](docs/testing.md)
 - [Model comparison: fixing a confidence failure](docs/model-comparison.md)
 - [AI reliability and boundaries](docs/ai-reliability-and-boundaries.md)
