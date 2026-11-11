@@ -1,0 +1,65 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [],
+      "rationale": "The only content in exercise.py is the comment `# TODO`. There is no program code to run, so this criterion cannot be met.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [],
+      "rationale": "No add_points function is defined, and no return statement appears anywhere in the file.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [],
+      "rationale": "The file has no function calls and no print statement, so no final score is produced.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 0,
+      "pointsPossible": 3,
+      "evidence": [],
+      "rationale": "The explanation section is empty, and there is no code for an explanation to describe.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 0,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 0
+  },
+  "feedback": {
+    "strengths": [
+      "The file is set up and named exercise.py, so you have a place to start writing your code."
+    ],
+    "priorityImprovements": [
+      "Write the add_points(score, points) function so that it uses `return` to send back score + points instead of printing it.",
+      "Call the function twice starting from 0 (first adding 10, then adding 5), store each result in a variable, and print the final score.",
+      "Add one or two sentences explaining how `return` passes the new score back to the line that called the function."
+    ],
+    "overallFeedback": "This submission has a `# TODO` placeholder and an empty explanation, so there is no work yet to assess. Start with the function: define add_points so it returns the sum of its two inputs. Once that works, the calls, the print, and the explanation follow from it.",
+    "nextStep": "Define add_points(score, points) with a single line inside it that returns score + points. Then test it with score = add_points(0, 10)."
+  },
+  "review": {
+    "teacherReviewRequired": true,
+    "reasons": [
+      "The submission is effectively empty: the code file contains only `# TODO` and the explanation is blank.",
+      "With no relevant work submitted, the score cannot reflect what the student actually understands about return values. Please check whether the wrong file was submitted or the work was unfinished."
+    ],
+    "overallConfidence": "low"
+  },
+  "submission_id": "04_missing_submission",
+  "student_id": "EVAL-04",
+  "assignment_id": "lesson_03_02_return_values"
+}

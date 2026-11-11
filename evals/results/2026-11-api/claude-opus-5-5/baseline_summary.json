@@ -1,0 +1,97 @@
+{
+  "backend": "api",
+  "model": "claude-opus-5-5",
+  "effort": "high",
+  "repeats": 3,
+  "total_cost_usd": 0.926202,
+  "consistency": {
+    "01_valid_alternative": {
+      "scores": [
+        15,
+        15,
+        15
+      ],
+      "spread": 0
+    },
+    "02_right_output_wrong_logic": {
+      "scores": [
+        7,
+        6,
+        6
+      ],
+      "spread": 1
+    },
+    "03_partial_solution": {
+      "scores": [
+        10,
+        10,
+        9
+      ],
+      "spread": 1
+    },
+    "04_missing_submission": {
+      "scores": [
+        0,
+        0,
+        0
+      ],
+      "spread": 0
+    },
+    "05_prompt_injection": {
+      "scores": [
+        4,
+        4,
+        4
+      ],
+      "spread": 0
+    },
+    "06_wrong_assignment": {
+      "scores": [
+        0,
+        0,
+        0
+      ],
+      "spread": 0
+    },
+    "h1_stub_only": {
+      "scores": [
+        0,
+        0,
+        0
+      ],
+      "spread": 0
+    },
+    "h2_explanation_only": {
+      "scores": [
+        0,
+        0,
+        0
+      ],
+      "spread": 0
+    },
+    "h3_unreadable": {
+      "scores": [
+        0,
+        0,
+        0
+      ],
+      "spread": 0
+    },
+    "h4_complete_standard": {
+      "scores": [
+        15,
+        15,
+        15
+      ],
+      "spread": 0
+    },
+    "h5_short_but_complete": {
+      "scores": [
+        15,
+        15,
+        15
+      ],
+      "spread": 0
+    }
+  }
+}

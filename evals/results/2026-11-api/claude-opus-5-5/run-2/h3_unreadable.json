@@ -1,0 +1,75 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "exercise.py contains only unreadable binary/garbled characters (starting with a byte-order-mark-like sequence `\u00ff\u00fe`), not Python source code.",
+        "No <program_runs> record was provided."
+      ],
+      "rationale": "The file has no recognizable Python code, so it cannot run as a solution to this exercise.",
+      "confidence": "medium"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "No `add_points` function or `return` statement can be found in the file contents."
+      ],
+      "rationale": "No readable function definition exists, so there is no evidence that the function returns the new score.",
+      "confidence": "medium"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "No readable calls or print statements are present, and no run record exists."
+      ],
+      "rationale": "Nothing in the submission produces a final score of 15.",
+      "confidence": "medium"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 0,
+      "pointsPossible": 3,
+      "evidence": [
+        "The explanation section is empty."
+      ],
+      "rationale": "No explanation of what return does was provided.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 0,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 0
+  },
+  "feedback": {
+    "strengths": [
+      "A file named exercise.py was submitted, so the upload step worked."
+    ],
+    "priorityImprovements": [
+      "The file arrived as unreadable characters rather than Python code. This often happens when a file is saved in the wrong format or encoding, or when the wrong file is uploaded. Please re-save it as plain text (UTF-8) and upload it again.",
+      "Make sure the code defines `add_points(score, points)` with a `return` statement, calls it twice starting from 0 (adding 10, then 5), stores each result, and prints the final score.",
+      "Add one or two sentences explaining what return does in your program. The explanation box was empty."
+    ],
+    "overallFeedback": "Your submission could not be graded as written because the code file is unreadable and the explanation is blank. This looks like a file or encoding problem, not necessarily a gap in what you know. Once a readable version is submitted, your work can be assessed properly.",
+    "nextStep": "Open exercise.py in your code editor and confirm you can see your Python code. Run it to check that it prints 15, save it as plain UTF-8 text, then resubmit it along with your explanation of return."
+  },
+  "review": {
+    "teacherReviewRequired": true,
+    "reasons": [
+      "The submitted file is unreadable: it contains garbled or binary characters (possibly an encoding issue such as UTF-16, or a wrong or corrupted file) instead of Python code.",
+      "The explanation is empty.",
+      "No program run record is available, so it is impossible to know what the student can actually do. The student should be asked to resubmit before this score is treated as final."
+    ],
+    "overallConfidence": "low"
+  },
+  "submission_id": "h3_unreadable",
+  "student_id": "EVAL-h3",
+  "assignment_id": "lesson_03_02_return_values"
+}

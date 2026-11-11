@@ -1,0 +1,74 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`def add_points(score, points):` is defined correctly before it is called",
+        "`score = add_points(0, 10)` and `print(score)` use valid syntax and defined names"
+      ],
+      "rationale": "On reading, the code has no syntax or name errors and should run cleanly. No run record was provided, so this rests on reading the code.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`return score + points`",
+        "The result is stored with `score = add_points(0, 10)`"
+      ],
+      "rationale": "The function returns the new score rather than printing it, and the caller uses the returned value.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "Only one call is made: `score = add_points(0, 10)`",
+        "`print(score)` would print 10, not the expected 15"
+      ],
+      "rationale": "The assignment asks for two calls (add 10, then add 5) and a final score of 15. The second call is missing, so the final printed score is wrong.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 2,
+      "pointsPossible": 3,
+      "evidence": [
+        "\"return gives back the answer.\""
+      ],
+      "rationale": "The statement is accurate but very brief. It does not connect to this program, for example that the function hands back the new score so it can be stored in `score` and used again.",
+      "confidence": "medium"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 10,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 10
+  },
+  "feedback": {
+    "strengths": [
+      "Your `add_points` function correctly uses `return score + points` instead of printing inside the function.",
+      "You stored the returned value in a variable, `score = add_points(0, 10)`, which is the key idea of this lesson.",
+      "Your explanation is accurate."
+    ],
+    "priorityImprovements": [
+      "Add the second call that adds 5 to the current score, so the final printed score is 15.",
+      "Expand your explanation to say what return does in this program, such as how the returned value is stored in `score` and passed into the next call."
+    ],
+    "overallFeedback": "Your function is written correctly and shows you understand return. The program stops after the first call, so it prints 10 instead of 15. Your explanation is correct but too general to show how return works in your code.",
+    "nextStep": "After `score = add_points(0, 10)`, add `score = add_points(score, 5)` and then print `score`. Then rewrite your explanation in one or two sentences that mention how the returned value is reused."
+  },
+  "review": {
+    "teacherReviewRequired": false,
+    "reasons": [],
+    "overallConfidence": "high"
+  },
+  "submission_id": "03_partial_solution",
+  "student_id": "EVAL-03",
+  "assignment_id": "lesson_03_02_return_values"
+}

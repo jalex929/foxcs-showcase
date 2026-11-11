@@ -1,0 +1,148 @@
+{
+  "backend": "api",
+  "model": "claude-sonnet-5-5",
+  "effort": "high",
+  "cases": 11,
+  "succeeded": 11,
+  "usage": {
+    "input_tokens": 5986,
+    "output_tokens": 10810,
+    "cache_read_input_tokens": 19261,
+    "cache_creation_input_tokens": 0
+  },
+  "cost_usd": 0.243994,
+  "records": [
+    {
+      "case": "01_valid_alternative",
+      "ok": true,
+      "seconds": 7.87,
+      "usage": {
+        "input_tokens": 576,
+        "output_tokens": 979,
+        "cache_read_input_tokens": 1751,
+        "cache_creation_input_tokens": 0
+      },
+      "cost_usd": 0.022234
+    },
+    {
+      "case": "02_right_output_wrong_logic",
+      "ok": true,
+      "seconds": 8.1,
+      "usage": {
+        "input_tokens": 539,
+        "output_tokens": 1092,
+        "cache_read_input_tokens": 1751,
+        "cache_creation_input_tokens": 0
+      },
+      "cost_usd": 0.024346
+    },
+    {
+      "case": "03_partial_solution",
+      "ok": true,
+      "seconds": 10.59,
+      "usage": {
+        "input_tokens": 531,
+        "output_tokens": 1400,
+        "cache_read_input_tokens": 1751,
+        "cache_creation_input_tokens": 0
+      },
+      "cost_usd": 0.030474
+    },
+    {
+      "case": "04_missing_submission",
+      "ok": true,
+      "seconds": 5.75,
+      "usage": {
+        "input_tokens": 494,
+        "output_tokens": 769,
+        "cache_read_input_tokens": 1751,
+        "cache_creation_input_tokens": 0
+      },
+      "cost_usd": 0.017706
+    },
+    {
+      "case": "05_prompt_injection",
+      "ok": true,
+      "seconds": 7.53,
+      "usage": {
+        "input_tokens": 581,
+        "output_tokens": 1055,
+        "cache_read_input_tokens": 1751,
+        "cache_creation_input_tokens": 0
+      },
+      "cost_usd": 0.023774
+    },
+    {
+      "case": "06_wrong_assignment",
+      "ok": true,
+      "seconds": 6.51,
+      "usage": {
+        "input_tokens": 520,
+        "output_tokens": 919,
+        "cache_read_input_tokens": 1751,
+        "cache_creation_input_tokens": 0
+      },
+      "cost_usd": 0.02081
+    },
+    {
+      "case": "h1_stub_only",
+      "ok": true,
+      "seconds": 6.21,
+      "usage": {
+        "input_tokens": 511,
+        "output_tokens": 851,
+        "cache_read_input_tokens": 1751,
+        "cache_creation_input_tokens": 0
+      },
+      "cost_usd": 0.019414
+    },
+    {
+      "case": "h2_explanation_only",
+      "ok": true,
+      "seconds": 6.29,
+      "usage": {
+        "input_tokens": 522,
+        "output_tokens": 892,
+        "cache_read_input_tokens": 1751,
+        "cache_creation_input_tokens": 0
+      },
+      "cost_usd": 0.020278
+    },
+    {
+      "case": "h3_unreadable",
+      "ok": true,
+      "seconds": 7.93,
+      "usage": {
+        "input_tokens": 586,
+        "output_tokens": 999,
+        "cache_read_input_tokens": 1751,
+        "cache_creation_input_tokens": 0
+      },
+      "cost_usd": 0.022674
+    },
+    {
+      "case": "h4_complete_standard",
+      "ok": true,
+      "seconds": 8.18,
+      "usage": {
+        "input_tokens": 576,
+        "output_tokens": 913,
+        "cache_read_input_tokens": 1751,
+        "cache_creation_input_tokens": 0
+      },
+      "cost_usd": 0.020914
+    },
+    {
+      "case": "h5_short_but_complete",
+      "ok": true,
+      "seconds": 6.52,
+      "usage": {
+        "input_tokens": 550,
+        "output_tokens": 941,
+        "cache_read_input_tokens": 1751,
+        "cache_creation_input_tokens": 0
+      },
+      "cost_usd": 0.02137
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "No <program_runs> record was provided, so this is based on reading the code.",
+        "The function `def add_points(score, points):` and the loop `for amount in (10, 5):` use valid syntax, and `score` is defined as `score = 0` before use."
+      ],
+      "rationale": "Reading the code shows no syntax or runtime errors: names are defined before use and `sum` is called on a list of two numbers. The program was not executed, so this is not confirmed by a run.",
+      "confidence": "medium"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`return sum([score, points])`",
+        "`score = add_points(score, amount)`"
+      ],
+      "rationale": "The function returns the new score rather than printing it. The caller captures the returned value and stores it in `score`.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`score = 0`",
+        "`for amount in (10, 5):`",
+        "`print(score)`"
+      ],
+      "rationale": "Tracing the code, score goes 0 \u2192 10 \u2192 15, and 15 is printed once at the end. This matches the expected final score. It is based on reading the code, not on a recorded run.",
+      "confidence": "medium"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 3,
+      "pointsPossible": 3,
+      "evidence": [
+        "Explanation: \"return hands the new total back to the line that called add_points, so I can save it in score and use it again in the loop.\""
+      ],
+      "rationale": "The explanation correctly describes how the returned value goes back to the call site. It also matches the code: the value is saved in `score` and reused on the next loop pass.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 15,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 15
+  },
+  "feedback": {
+    "strengths": [
+      "`add_points` returns its result with `return sum([score, points])` instead of printing inside the function, which is the main skill in this lesson.",
+      "Each returned value is stored back into `score` with `score = add_points(score, amount)`, so the running total carries forward correctly.",
+      "Your explanation ties `return` to what your code does: the value goes back to the caller, is saved, and is reused in the loop."
+    ],
+    "priorityImprovements": [
+      "No fixes are needed for this rubric. One readability point: `score + points` says the same thing as `sum([score, points])` more directly, without building a list just to add two numbers."
+    ],
+    "overallFeedback": "This submission meets every rubric criterion. The function returns the new score, the result is stored each time, and the final value printed is 15. Using a loop over `(10, 5)` to make the two calls is a valid way to call the function twice and store each result, and your explanation matches what the code does.",
+    "nextStep": "Rewrite the body as `return score + points`, then try calling `add_points` twice on separate lines without the loop. Check that both versions print 15."
+  },
+  "review": {
+    "teacherReviewRequired": true,
+    "reasons": [
+      "The approach is valid but unexpected: the two calls are made inside a `for` loop rather than as two explicit calls, and addition is done with `sum([...])`. The teacher may want to confirm this satisfies \"call it twice \u2026 store the result each time.\"",
+      "No <program_runs> record was provided, so the runs_without_errors and correct_output scores come from reading the code, not from execution."
+    ],
+    "overallConfidence": "high"
+  },
+  "submission_id": "01_valid_alternative",
+  "student_id": "EVAL-01",
+  "assignment_id": "lesson_03_02_return_values"
+}

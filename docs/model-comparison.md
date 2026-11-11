@@ -2,12 +2,12 @@
 
 A record of one evaluation cycle: real model runs exposed a repeatable failure, one sentence of the grading prompt changed, and the same runs were repeated to measure the effect.
 
-**Scope.** Six synthetic cases, then five held-out cases, three repeats, two models, run on 2026-11-11. This demonstrates the evaluation method. It is not a benchmark or an accuracy figure, and it does not show which model is better in general.
+**Scope.** Six synthetic cases, then five held-out cases, then all eleven through the API, three repeats, two models, run on 2026-11-11. This demonstrates the evaluation method. It is not a benchmark or an accuracy figure, and it does not show which model is better in general.
 
 ## Setup
 
 - **Models:** Claude Opus 5.5 and Claude Sonnet 5.5, at high effort.
-- **Path:** Claude Code in non-interactive mode on a subscription. The API backend was not used.
+- **Path:** Claude Code in non-interactive mode on a subscription. The API backend was tested afterward, in [its own section](#the-api-path).
 - **Cases:** the six adversarial cases in [`evals/cases/`](../evals/cases/).
 - **Scoring:** 11 deterministic checks per case, by [`evals/run_evals.py`](../evals/run_evals.py).
 - **Raw outputs:** [`evals/results/2026-11-confidence-prompt/`](../evals/results/2026-11-confidence-prompt/).
@@ -86,6 +86,53 @@ The old prompt's failure was broader than the original case showed. A stub and a
 
 These cases were written with the fix already known, so they test whether it holds across kinds of low-evidence work, not whether it holds across subjects or real student work. Now that they are public, they are no longer held out: the next prompt change needs new unseen cases.
 
+## The API path
+
+Every run above went through Claude Code on a subscription. Grading on submission runs unattended on a server, so it needs the API. The new prompt was then run through the API backend: all 11 cases, three repeats, on both models, at high effort. The raw outputs are in [`evals/results/2026-11-api/`](../evals/results/2026-11-api/).
+
+| | Opus 5.5 | Sonnet 5.5 |
+|---|---|---|
+| Case runs passed | 33 of 33 | 33 of 33 |
+| Errors (refusals, cut-off responses, invalid output, API errors) | 0 | 0 |
+| Cost per graded submission | $0.028 | $0.011 |
+| Median response time | 14.6 s | 7.6 s |
+| Slowest response | 22.7 s | 10.6 s |
+| Saved by prompt caching | 19% | 22% |
+| Share of cost from output tokens | 91% | 88% |
+
+A first 6-case check on Opus also passed 6 of 6. The 72 paid calls cost $1.50 in total. Costs use published rates per million tokens as of 2026-11: Opus 5.5 at $4 input and $20 output, Sonnet 5.5 at $2 and $10.
+
+### Score consistency across the three runs
+
+Cases not listed scored the same on every run.
+
+| Case | Opus 5.5 | Sonnet 5.5 |
+|---|---|---|
+| Right output, wrong logic | 7, 6, 6 | 5, 5, 6 |
+| Partial solution | 10, 10, 9 | 9, 10, 10 |
+| Short but complete | 15, 15, 15 | 15, 14, 15 |
+
+### What to take from it
+
+**Both paths agree.** On the same prompt and the original six cases, the subscription runs passed 18 of 18 on Opus and 17 of 18 on Sonnet, and the API runs passed every case on both. The one subscription miss was a single Sonnet run on the wrong-logic case, which did not recur here. Variance between runs, not the path, is the likeliest explanation.
+
+**Cost depends on output, not input.** Caching the system prompt works, but output tokens are about 90% of the cost. The levers that matter are the model and the effort level, not prompt length.
+
+**Sonnet is the cost case, not yet the routing decision.** It costs about 40% as much as Opus and answers about twice as fast, with equal pass rates here. Eleven cases on one assignment are too few to route real grading by. [Rubric-first grading](rubric-first-grading.md) sets out how a question type moves to a cheaper model: per type, against thresholds set in advance.
+
+**The fallback path was not exercised.** Refusal fallback is on, but no call was refused, so no fallback ran. The runner records which model answered every call, and the queue worker sends any result answered by a fallback model to the teacher. That handling is covered by tests, not by a real run.
+
+### Rough cost at class scale
+
+**These are assumptions, not measurements:** about 120 students answering 5 open-ended questions a week, every answer going to the model, at the measured cost per submission.
+
+| | Per week | Per 36-week school year |
+|---|---|---|
+| Sonnet 5.5 | about $7 | about $240 |
+| Opus 5.5 | about $17 | about $610 |
+
+Deterministic checks per rubric criterion, as planned in [rubric-first-grading.md](rubric-first-grading.md), would lower both by keeping part of the grading away from the model.
+
 ## Limits
 
 - All eleven cases so far use one assignment.
@@ -98,6 +145,9 @@ These cases were written with the fix already known, so they test whether it hol
 ```bash
 python evals/run_model.py --model claude-opus-5-5 --out out/opus --repeats 3
 python evals/run_evals.py --outputs out/opus/run-1
+
+# Through the API, billed per token. Needs ANTHROPIC_API_KEY and: pip install anthropic
+python evals/run_model.py --backend api --model claude-sonnet-5-5 --out out/sonnet-api --repeats 3
 ```
 
 Model output varies between runs, so exact scores will differ.

@@ -1,0 +1,73 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "The only content in exercise.py is the comment `# TODO`; there is no program code."
+      ],
+      "rationale": "No executable code was submitted, so there is no program to evaluate for running without errors. A file containing only a comment produces no errors, but it also does nothing the assignment asks for. No points can be awarded.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "No function `add_points` is defined; the file contains only `# TODO`."
+      ],
+      "rationale": "There is no function and no return statement, so this essential criterion is not met.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "No print statement or function calls are present."
+      ],
+      "rationale": "Nothing is printed, so the expected final score of 15 is not produced.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 0,
+      "pointsPossible": 3,
+      "evidence": [
+        "The explanation section is empty."
+      ],
+      "rationale": "No explanation of what return does was provided.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 0,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 0
+  },
+  "feedback": {
+    "strengths": [
+      "The file is set up with a `# TODO` placeholder, so you have a starting point to build from."
+    ],
+    "priorityImprovements": [
+      "Define the function `add_points(score, points)` so that it uses `return score + points` instead of printing.",
+      "Start a variable at 0, call the function twice (adding 10, then 5), store each result back in the variable, and print the final score. It should be 15.",
+      "Write one or two sentences explaining how return sends the new score back so it can be stored in your variable."
+    ],
+    "overallFeedback": "This submission doesn't contain any code or explanation yet, only a `# TODO` comment. There's no work to assess, so no points could be awarded. Once you write the function and the calls, you'll be able to check that your program prints 15.",
+    "nextStep": "Replace `# TODO` with a definition of `add_points(score, points)` that returns `score + points`, then test it by calling it from 0 with 10 and then 5 and printing the result."
+  },
+  "review": {
+    "teacherReviewRequired": true,
+    "reasons": [
+      "The submission is effectively missing: the code file contains only `# TODO` and the explanation is blank.",
+      "There is no relevant work, so the score cannot reflect what the student can actually do. The student may have submitted by mistake or may need support."
+    ],
+    "overallConfidence": "low"
+  },
+  "submission_id": "04_missing_submission",
+  "student_id": "EVAL-04",
+  "assignment_id": "lesson_03_02_return_values"
+}

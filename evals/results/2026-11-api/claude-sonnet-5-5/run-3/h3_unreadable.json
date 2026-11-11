@@ -1,0 +1,74 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "exercise.py contains only garbled, non-text characters such as `\u00ff\u00feP K\u00a7\u00a4\u00ef\u00bb\u00bf\u00d0\u00ac\u00c3\u00b1\u00fe\u00b6\u00a9\u00ff\u00a5\u00de\u00c2\u00bf` and no readable Python code"
+      ],
+      "rationale": "The file is unreadable and has no valid Python, so it cannot run. No program_runs record was provided to show otherwise.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "No `def add_points` or `return` statement appears in the readable content of exercise.py"
+      ],
+      "rationale": "There is no function definition to evaluate, so nothing shows a returned value.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "No print statement or output is visible; the file contains only corrupted characters"
+      ],
+      "rationale": "No final score is computed or printed in anything that can be read. The expected value of 15 cannot be confirmed.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 0,
+      "pointsPossible": 3,
+      "evidence": [
+        "The explanation section is empty"
+      ],
+      "rationale": "No explanation was submitted, so there is nothing to compare with the code or assess for accuracy.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 0,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 0
+  },
+  "feedback": {
+    "strengths": [
+      "A file named exercise.py was submitted, so the submission process itself worked."
+    ],
+    "priorityImprovements": [
+      "The file content is corrupted (likely saved or uploaded in the wrong encoding, or it is a binary file), so none of your code could be read. Re-save it as plain UTF-8 text and resubmit.",
+      "Include `def add_points(score, points):` with a `return` statement, call it twice (add 10, then add 5) storing each result, and print the final score.",
+      "Write the one or two sentence explanation of what `return` does; that section was empty."
+    ],
+    "overallFeedback": "I could not read any code in your submission. The file contains only garbled characters, and the explanation was blank. That means I could not check whether your function works, so this attempt scores 0. This looks like a file or encoding problem rather than a judgment of your understanding, so please resubmit.",
+    "nextStep": "Open a new plain-text Python file, retype or paste your add_points solution, confirm it runs and prints 15, add your explanation, and resubmit."
+  },
+  "review": {
+    "teacherReviewRequired": true,
+    "reasons": [
+      "The submitted file is corrupted or unreadable, likely an encoding or upload problem, so the rubric cannot be applied to the student's actual work.",
+      "The explanation field is empty.",
+      "The student may have written working code that was lost in upload; a resubmission or manual check is advisable."
+    ],
+    "overallConfidence": "low"
+  },
+  "submission_id": "h3_unreadable",
+  "student_id": "EVAL-h3",
+  "assignment_id": "lesson_03_02_return_values"
+}

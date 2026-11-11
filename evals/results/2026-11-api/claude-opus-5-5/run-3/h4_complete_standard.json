@@ -1,0 +1,77 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`def add_points(score, points):` is followed by a correctly indented body.",
+        "The calls `score = add_points(score, 10)` and `score = add_points(score, 5)` match the function's two parameters.",
+        "`print(score)` is valid syntax."
+      ],
+      "rationale": "No run record was provided. Reading the code, there are no syntax errors, no undefined names, and the arguments match the parameters, so the program should run without errors.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`new_score = score + points`",
+        "`return new_score`"
+      ],
+      "rationale": "The function computes the new score and returns it. It does not print inside the function, and the caller stores the returned value.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`score = 0`",
+        "`score = add_points(score, 10)`",
+        "`score = add_points(score, 5)`",
+        "`print(score)`"
+      ],
+      "rationale": "The program starts at 0, adds 10 to get 10, then adds 5 to get 15, and prints 15. This matches the required final score. It is determined by reading the code, since no run record was supplied.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 3,
+      "pointsPossible": 3,
+      "evidence": [
+        "Explanation: \"return sends the new score back from add_points, so I can store it in score and use it in the next call.\"",
+        "Code: `score = add_points(score, 10)` followed by `score = add_points(score, 5)`"
+      ],
+      "rationale": "The explanation correctly says that return passes the value back to the caller. It also connects that to this program: the value is stored in `score` and reused in the second call.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 15,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 15
+  },
+  "feedback": {
+    "strengths": [
+      "`return new_score` hands the result back to the caller instead of printing inside the function, which is the core skill of this lesson.",
+      "Storing each result with `score = add_points(score, ...)` chains the two calls correctly, so the final printed score is 15.",
+      "Your explanation ties return to your own code: the returned value is stored in `score` and reused in the next call."
+    ],
+    "priorityImprovements": [
+      "There is nothing to fix for this exercise. To go further, notice that `new_score = score + points` followed by `return new_score` could be written as `return score + points`. Both are correct, and the extra variable can help readability."
+    ],
+    "overallFeedback": "Your function returns the new score, your calls store and reuse that value, and the program prints the correct final score of 15. Your explanation accurately describes how return moves the value out of `add_points` so the next call can use it. This submission earns full marks on every criterion.",
+    "nextStep": "Try temporarily replacing `return new_score` with `print(new_score)` and run the program. Watch what `score` becomes after the first call (it will be `None`), then use that to explain in one sentence why return was necessary here."
+  },
+  "review": {
+    "teacherReviewRequired": false,
+    "reasons": [],
+    "overallConfidence": "high"
+  },
+  "submission_id": "h4_complete_standard",
+  "student_id": "EVAL-h4",
+  "assignment_id": "lesson_03_02_return_values"
+}

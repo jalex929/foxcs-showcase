@@ -1,0 +1,76 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`def add_points(s, p): return s + p`",
+        "`a = add_points(0, 10)`",
+        "`b = add_points(a, 5)`",
+        "`print(b)`"
+      ],
+      "rationale": "The code is syntactically valid and every name used is defined before use. No program_runs section was provided, so this is judged by reading the code, but nothing suggests an error.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`def add_points(s, p): return s + p`"
+      ],
+      "rationale": "The function returns s + p and does not print it. The result is captured in variables by the caller. Parameter names differ from the prompt (s, p versus score, points), but the behavior is what the criterion measures.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`a = add_points(0, 10)`",
+        "`b = add_points(a, 5)`",
+        "`print(b)`"
+      ],
+      "rationale": "Starting from 0, adding 10 gives a = 10, and adding 5 gives b = 15. The program prints 15, which is correct. This is traced by hand, since no run record was provided.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 2,
+      "pointsPossible": 3,
+      "evidence": [
+        "return hands the new score back so I can save it in a and b."
+      ],
+      "rationale": "The explanation is accurate and matches the code: return gives the value back to the caller, which stores it in a and b. It is brief and does not contrast return with print or explain that the value is then used in the next call. It is also slightly imprecise, because the values are saved in a and b by the assignments, not by return itself.",
+      "confidence": "medium"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 14,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 14
+  },
+  "feedback": {
+    "strengths": [
+      "Your function returns the sum instead of printing it, which is the key skill in this lesson.",
+      "You chained the calls well: `b = add_points(a, 5)` uses the stored result of the first call.",
+      "The final output of 15 is correct."
+    ],
+    "priorityImprovements": [
+      "Expand your explanation a little: say that return sends the value back to where the function was called, so it can be stored and reused (for example, a feeds into the second call). Saying how this differs from print would make it stronger.",
+      "Use descriptive names like `score` and `points` as in the prompt, and put the function body on its own indented line to make the code easier to read."
+    ],
+    "overallFeedback": "This is a correct, working solution that uses return as intended. The explanation is accurate but short; adding a sentence about how the returned value is reused would make it complete. The one-line function style works but is harder to read than a standard layout.",
+    "nextStep": "Rewrite your explanation in two sentences, mentioning that `a` is passed into the second call and how return differs from print."
+  },
+  "review": {
+    "teacherReviewRequired": false,
+    "reasons": [],
+    "overallConfidence": "high"
+  },
+  "submission_id": "h5_short_but_complete",
+  "student_id": "EVAL-h5",
+  "assignment_id": "lesson_03_02_return_values"
+}

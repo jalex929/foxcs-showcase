@@ -1,0 +1,78 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`def add_points(score, points):` is defined with valid syntax.",
+        "`add_points(0, 10)` and `add_points(10, 5)` are valid calls to the defined function."
+      ],
+      "rationale": "No program run record was provided. From reading the code, it is syntactically valid and should run without errors, printing 10 and then 15.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "The function body is only `print(score + points)`. It has no `return` statement."
+      ],
+      "rationale": "The function prints the sum instead of returning it, so it returns None. This is the exact behavior the criterion excludes, and it is the essential mastery criterion.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 3,
+      "pointsPossible": 4,
+      "evidence": [
+        "`add_points(10, 5)` would print 15, which is the correct final score.",
+        "`add_points(0, 10)` also prints 10 first.",
+        "The second call hardcodes `10` instead of passing a stored result."
+      ],
+      "rationale": "The last value printed, 15, is correct. However, it comes from a hardcoded starting value rather than a stored result. The program also prints an intermediate value instead of printing only the final score. These are minor gaps for this criterion.",
+      "confidence": "medium"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 0,
+      "pointsPossible": 3,
+      "evidence": [
+        "Explanation: \"The function returns the score by printing it.\""
+      ],
+      "rationale": "The explanation treats printing as returning. The code never returns a value, so the explanation does not accurately describe what return does. It reflects a misconception about the difference between print and return.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 7,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 7
+  },
+  "feedback": {
+    "strengths": [
+      "The function is defined correctly with two parameters, and the program should run without errors.",
+      "The addition `score + points` computes the right value, and 15 is the last number printed."
+    ],
+    "priorityImprovements": [
+      "Replace `print(score + points)` with `return score + points`. Printing shows a value on screen, but returning hands the value back to the code that called the function so it can be stored and reused.",
+      "Store each result in a variable and chain the calls. For example: `score = add_points(0, 10)` then `score = add_points(score, 5)`, then `print(score)` once at the end. This avoids hardcoding 10 in the second call.",
+      "Revise your explanation. print and return are different. Describe how return sends the new score back so it can be saved in a variable."
+    ],
+    "overallFeedback": "Your function does the right math, but it prints the result instead of returning it, and returning is the main skill this lesson practices. Because nothing is returned, the program can't store the score between calls, so the second call relies on typing 10 by hand. Your explanation says the function returns by printing, but these are two separate actions. Once you switch to return and store the results, the rest of the exercise will fit together.",
+    "nextStep": "Change the function body to `return score + points`, then write `score = add_points(0, 10)`, `score = add_points(score, 5)`, and `print(score)`, and check that only 15 is printed."
+  },
+  "review": {
+    "teacherReviewRequired": true,
+    "reasons": [
+      "The explanation conflicts with the code: it claims the function returns the score, but the code only prints and has no return statement. This suggests a print-versus-return misconception.",
+      "The essential mastery criterion (uses_return) earned 0 points.",
+      "No program run record was provided; runs_without_errors and correct_output were judged by reading the code."
+    ],
+    "overallConfidence": "medium"
+  },
+  "submission_id": "02_right_output_wrong_logic",
+  "student_id": "EVAL-02",
+  "assignment_id": "lesson_03_02_return_values"
+}

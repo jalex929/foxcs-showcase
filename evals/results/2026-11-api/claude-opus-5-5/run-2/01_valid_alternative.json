@@ -1,0 +1,76 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`def add_points(score, points):` and `return sum([score, points])` are valid Python.",
+        "`for amount in (10, 5):` followed by `score = add_points(score, amount)` and `print(score)` has correct syntax and indentation."
+      ],
+      "rationale": "No program_runs record was provided. Reading the code, every name is defined before use. `sum` on a two-element list of ints is valid, and the syntax is correct. It should run without errors.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`return sum([score, points])`",
+        "`score = add_points(score, amount)`"
+      ],
+      "rationale": "The function returns the new score rather than printing it. The caller stores the returned value each time.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`score = 0`",
+        "`for amount in (10, 5):`",
+        "`print(score)`"
+      ],
+      "rationale": "Tracing the code: the score starts at 0, becomes 10 after the first call, then 15 after the second. Then `print(score)` outputs 15, which is the correct final score. This is based on reading the code, since no run record was supplied.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 3,
+      "pointsPossible": 3,
+      "evidence": [
+        "Explanation: \"return hands the new total back to the line that called add_points, so I can save it in score and use it again in the loop.\""
+      ],
+      "rationale": "The explanation accurately describes the return value going back to the call site. It also matches the code's actual use of that value: assigning it to `score` and reusing it in the next loop iteration.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 15,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 15
+  },
+  "feedback": {
+    "strengths": [
+      "`add_points` returns its result, and the caller stores it with `score = add_points(score, amount)`, which is exactly what the lesson targets.",
+      "Your explanation connects `return` to how the value is saved and reused in the loop. It describes your own program, not a generic definition."
+    ],
+    "priorityImprovements": [
+      "`return sum([score, points])` works, but `return score + points` is simpler and clearer for adding two numbers. Building a list just to add two values adds an unnecessary step."
+    ],
+    "overallFeedback": "Your program meets every requirement. The function returns the new score, it is called twice starting from 0 with 10 and then 5, each result is stored, and the final score of 15 is printed. Using a loop to make the two calls is a tidy choice, and your explanation matches how the code uses the returned value. Full marks.",
+    "nextStep": "Rewrite the return line as `return score + points` and confirm the program still prints 15. Then try adding a third amount to the tuple and predict the output before running it."
+  },
+  "review": {
+    "teacherReviewRequired": true,
+    "reasons": [
+      "Valid but slightly unexpected approach: the prompt asks to call the function twice, and the student does this with a `for` loop over `(10, 5)` rather than two separate call statements. The function also uses `sum([score, points])` instead of `+`. Both satisfy the requirements, but the teacher may want to confirm that the loop counts as calling it twice.",
+      "No program_runs record was provided. Correctness and error-free execution were judged by tracing the code."
+    ],
+    "overallConfidence": "high"
+  },
+  "submission_id": "01_valid_alternative",
+  "student_id": "EVAL-01",
+  "assignment_id": "lesson_03_02_return_values"
+}

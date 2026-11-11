@@ -1,0 +1,72 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 1,
+      "pointsPossible": 4,
+      "evidence": [
+        "`def add_points(score, points):` followed by `pass`"
+      ],
+      "rationale": "The file is syntactically valid and would run without raising an error, but it does nothing: there are no calls and no print. Only minimal credit is appropriate because the program does not carry out the task.",
+      "confidence": "medium"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "`pass` is the only statement in the function body"
+      ],
+      "rationale": "The function has no return statement and does not compute the new score, so the essential criterion is not met.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "No calls to `add_points` and no print statement in the submission"
+      ],
+      "rationale": "Nothing is printed, so there is no final score of 15 to evaluate.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 0,
+      "pointsPossible": 3,
+      "evidence": [
+        "`I ran out of time.`"
+      ],
+      "rationale": "The explanation does not describe what return does, so there is nothing to compare with the code.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 1,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 1
+  },
+  "feedback": {
+    "strengths": [
+      "You defined `add_points(score, points)` with the correct name and parameters, which is the right starting structure."
+    ],
+    "priorityImprovements": [
+      "Replace `pass` with a `return` statement that gives back the new score, for example by returning the sum of `score` and `points`.",
+      "Call the function twice starting from 0 (add 10, then add 5), storing the result each time, and print the final score.",
+      "Write one or two sentences explaining what `return` does in your program."
+    ],
+    "overallFeedback": "The submission is an unfinished skeleton: the function signature is correct, but the body is only `pass`, so nothing is returned, calculated, or printed, and the explanation is missing. Finishing the function body is the most important fix because it is the core of this lesson.",
+    "nextStep": "Change the function body so it returns the new score, then call it with 0 and 10, call it again with that result and 5, and print the final value, which should be 15."
+  },
+  "review": {
+    "teacherReviewRequired": true,
+    "reasons": [
+      "The submission is an incomplete skeleton and the student states they ran out of time, so a teacher may want to consider extra time or support."
+    ],
+    "overallConfidence": "low"
+  },
+  "submission_id": "h1_stub_only",
+  "student_id": "EVAL-h1",
+  "assignment_id": "lesson_03_02_return_values"
+}

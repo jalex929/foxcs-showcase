@@ -1,0 +1,79 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`def add_points(score, points):` and `print(score + points)` are valid Python.",
+        "The calls `add_points(0, 10)` and `add_points(10, 5)` supply both required arguments."
+      ],
+      "rationale": "No program_runs record was provided. Reading the code, there are no syntax errors, and both calls match the function's two parameters. The program should run and print two numbers.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "The function body is only `print(score + points)`, and there is no `return` statement."
+      ],
+      "rationale": "The function prints the new score instead of returning it, so it returns None. This is the exact behavior the criterion rules out. It is an essential-for-mastery criterion and is not met.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 2,
+      "pointsPossible": 4,
+      "evidence": [
+        "`add_points(10, 5)` prints 15 as the last line of output.",
+        "The second call hardcodes `10` instead of using a stored result, and no final score variable is printed."
+      ],
+      "rationale": "The last number printed would be 15, which is the correct value. However, it comes from hardcoding the intermediate value rather than storing and reusing the result. The program also prints the intermediate 10, so there is no single final score printed from the program's state. Partial credit.",
+      "confidence": "medium"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 0,
+      "pointsPossible": 3,
+      "evidence": [
+        "Explanation: \"The function returns the score by printing it.\""
+      ],
+      "rationale": "The explanation treats printing and returning as the same thing. Printing only displays a value. Returning sends the value back to the caller so it can be stored. The explanation does not accurately describe what return does, and the code contains no return.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 6,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 6
+  },
+  "feedback": {
+    "strengths": [
+      "The function definition and its two parameters are set up correctly, and the program should run without errors.",
+      "You worked out that adding 10 and then 5 gives 15."
+    ],
+    "priorityImprovements": [
+      "Replace `print(score + points)` with `return score + points`. Printing shows a value on screen, but returning hands the value back to the line that called the function so you can save it.",
+      "Store each result in a variable, for example `score = add_points(0, 10)` and then `score = add_points(score, 5)`, instead of typing `10` by hand in the second call.",
+      "Print only the final score once, after both calls, using something like `print(score)`.",
+      "Revise your explanation: return does not print anything. It sends the computed value back to where the function was called."
+    ],
+    "overallFeedback": "Your program runs, and the last number it shows is 15. However, the function prints instead of returning, which is the main skill this exercise practices. Because nothing is returned, the second call has to hardcode `10` instead of reusing the stored result. Your explanation also mixes up printing and returning. Once you switch to `return` and store the result each time, the rest of the program will follow naturally.",
+    "nextStep": "Change `print(score + points)` to `return score + points`. Then write `score = add_points(0, 10)`, `score = add_points(score, 5)`, and `print(score)`, and run the program to confirm it prints 15."
+  },
+  "review": {
+    "teacherReviewRequired": true,
+    "reasons": [
+      "The essential-for-mastery criterion 'uses_return' is not met: the function prints and never returns.",
+      "The explanation conflicts with the code: it claims the function 'returns the score by printing it', which shows a print-versus-return misconception worth addressing directly.",
+      "No program_runs record was provided, so the runs_without_errors and correct_output scores are based on reading the code.",
+      "Partial credit on correct_output is a judgment call, since 15 is printed only because the intermediate value was hardcoded."
+    ],
+    "overallConfidence": "medium"
+  },
+  "submission_id": "02_right_output_wrong_logic",
+  "student_id": "EVAL-02",
+  "assignment_id": "lesson_03_02_return_values"
+}

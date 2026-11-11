@@ -1,0 +1,72 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "exercise.py contains only `# TODO`"
+      ],
+      "rationale": "The file has only a comment, so there is no working program. It would run without a syntax error, but it does nothing relevant to the assignment, so no credit is earned.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "No function `add_points` is defined in exercise.py"
+      ],
+      "rationale": "There is no function and no return statement.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "exercise.py has no print statement; it contains only `# TODO`"
+      ],
+      "rationale": "Nothing is printed, so the expected final score of 15 is not produced.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 0,
+      "pointsPossible": 3,
+      "evidence": [
+        "The explanation section is empty"
+      ],
+      "rationale": "No explanation was submitted, so there is nothing to compare with the code.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 0,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 0
+  },
+  "feedback": {
+    "strengths": [
+      "You created exercise.py and left a `# TODO` marker, so the file is ready for your work."
+    ],
+    "priorityImprovements": [
+      "Define `add_points(score, points)` so that it uses `return` to send back the new score instead of printing it.",
+      "Call the function twice, starting from 0 (add 10, then add 5), store the result each time, and print the final score, which should be 15.",
+      "Write one or two sentences explaining what `return` does in your program."
+    ],
+    "overallFeedback": "The submission has no code and no explanation yet, so there is nothing to score. The work is not complete, but the assignment is short and you can finish it in a few lines.",
+    "nextStep": "Start by writing `def add_points(score, points):` with a `return` line that gives back `score + points`, then call it twice and print the result."
+  },
+  "review": {
+    "teacherReviewRequired": true,
+    "reasons": [
+      "The submission is an empty placeholder (`# TODO` and a blank explanation). The teacher may want to check whether the wrong file was uploaded or the student ran out of time."
+    ],
+    "overallConfidence": "low"
+  },
+  "submission_id": "04_missing_submission",
+  "student_id": "EVAL-04",
+  "assignment_id": "lesson_03_02_return_values"
+}

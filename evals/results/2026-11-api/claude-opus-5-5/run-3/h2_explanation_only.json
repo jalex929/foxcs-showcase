@@ -1,0 +1,73 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "The file `exercise.py` in the submission is empty. It contains no code."
+      ],
+      "rationale": "An empty file produces no errors, but it contains no program for this exercise, so this criterion cannot be credited.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "No `add_points` function or `return` statement appears in the submission."
+      ],
+      "rationale": "There is no function, so there is no evidence that it returns the new score.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "There is no code, so nothing is printed."
+      ],
+      "rationale": "No final score is printed, so the expected output of 15 is not produced.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 0,
+      "pointsPossible": 3,
+      "evidence": [
+        "The explanation says return \"sends the new score back to the caller so it can be stored in a variable and used in the next call\", but there is no code for it to describe."
+      ],
+      "rationale": "The explanation is conceptually accurate in general terms. The criterion asks how well it describes what return does in this program, and there is no program, so it cannot be matched to code.",
+      "confidence": "medium"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 0,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 0
+  },
+  "feedback": {
+    "strengths": [
+      "Your explanation of return is accurate: it describes sending the new score back to the caller so it can be stored and reused in the next call."
+    ],
+    "priorityImprovements": [
+      "Your `exercise.py` file was submitted empty, so none of the code criteria could be scored. Please resubmit with your code saved in the file.",
+      "Make sure the code defines `add_points(score, points)` and that it uses `return score + points` rather than printing inside the function.",
+      "Call the function twice starting from 0, storing the result each time, then print the final score. It should be 15."
+    ],
+    "overallFeedback": "No code was received in `exercise.py`, so this submission scores 0 for now. Your explanation shows you understand the idea behind return. The next step is to write the code that puts that idea into practice. If you wrote code that didn't save or upload, check the file before resubmitting.",
+    "nextStep": "Write and save `add_points(score, points)` with a `return` statement in `exercise.py`. Call it from 0 to add 10, then 5, storing each result, print the final score, and resubmit."
+  },
+  "review": {
+    "teacherReviewRequired": true,
+    "reasons": [
+      "The code file is empty, so the core work is missing. This may be an upload or save error, and the student may need a chance to resubmit.",
+      "The explanation is conceptually correct but has no code to match, so the explanation criterion was scored 0. The teacher may wish to confirm this interpretation."
+    ],
+    "overallConfidence": "low"
+  },
+  "submission_id": "h2_explanation_only",
+  "student_id": "EVAL-h2",
+  "assignment_id": "lesson_03_02_return_values"
+}

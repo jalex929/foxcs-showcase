@@ -1,0 +1,74 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "The code defines `def add_points(score, points):` and then calls it with valid arguments, with no syntax problems or undefined names visible."
+      ],
+      "rationale": "Reading the code, I found no syntax or name errors, and each call matches the function's two parameters. No <program_runs> record was provided, so this judgment comes from reading the code and not from a run.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`new_score = score + points`",
+        "`return new_score`"
+      ],
+      "rationale": "The function computes the new score and returns it. It does not print inside the function, and the returned value is used by the caller.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`score = 0`",
+        "`score = add_points(score, 10)`",
+        "`score = add_points(score, 5)`",
+        "`print(score)`"
+      ],
+      "rationale": "Starting at 0, adding 10 and then 5 gives 15, and the stored result is printed once at the end, so the final printed score is 15. This was traced by hand because no run record was provided.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 3,
+      "pointsPossible": 3,
+      "evidence": [
+        "\"return sends the new score back from add_points, so I can store it in score and use it in the next call.\""
+      ],
+      "rationale": "The explanation accurately describes what return does in this program. The value goes back to the caller, is stored in `score`, and feeds the second call. This matches the code.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 15,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 15
+  },
+  "feedback": {
+    "strengths": [
+      "`add_points` uses `return new_score` instead of printing, so the caller gets the value back.",
+      "You stored each result with `score = add_points(score, ...)`, so the second call builds on the first.",
+      "Your explanation ties `return` directly to how your program works, including reusing the result in the next call."
+    ],
+    "priorityImprovements": [
+      "No required fixes. As an optional habit, you could add a short comment above the function saying what it returns."
+    ],
+    "overallFeedback": "This submission meets every rubric criterion. The function returns the new score, the two calls chain correctly from 0 to 15, and your explanation accurately describes what happens in your code.",
+    "nextStep": "Try writing a second function that returns a value, such as one that subtracts points but never lets the score go below 0, and use its result the same way."
+  },
+  "review": {
+    "teacherReviewRequired": false,
+    "reasons": [],
+    "overallConfidence": "high"
+  },
+  "submission_id": "h4_complete_standard",
+  "student_id": "EVAL-h4",
+  "assignment_id": "lesson_03_02_return_values"
+}

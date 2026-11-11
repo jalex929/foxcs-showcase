@@ -1,0 +1,76 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`def add_points(s, p): return s + p`",
+        "`a = add_points(0, 10)`",
+        "`b = add_points(a, 5)`",
+        "`print(b)`"
+      ],
+      "rationale": "The code is syntactically valid, and every name used (`add_points`, `a`, `b`) is defined before use. No program_runs record was provided, so this is based on reading the code. I expect it to run without errors.",
+      "confidence": "medium"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`def add_points(s, p): return s + p`"
+      ],
+      "rationale": "The function returns the sum and does not print it. The caller stores the returned values. The names `s` and `p` differ from the prompt's `score` and `points`, but the function signature still works as specified positionally.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`a = add_points(0, 10)`",
+        "`b = add_points(a, 5)`",
+        "`print(b)`"
+      ],
+      "rationale": "Tracing the code, a = 10 and b = 15, so it prints 15, which is the correct final score. This comes from tracing the code, not from a recorded run.",
+      "confidence": "medium"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 3,
+      "pointsPossible": 3,
+      "evidence": [
+        "\"return hands the new score back so I can save it in a and b.\""
+      ],
+      "rationale": "The explanation accurately describes what return does in this program: it passes the computed value back to the caller, which stores it in `a` and `b`. It is brief, but one or two sentences were requested.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 15,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 15
+  },
+  "feedback": {
+    "strengths": [
+      "The function uses `return s + p` rather than printing, which is the key idea of this lesson.",
+      "You chained the calls correctly by passing `a` into the second call, so the score builds from 0 to 10 to 15.",
+      "Your explanation ties return to your own variables `a` and `b`."
+    ],
+    "priorityImprovements": [
+      "Use descriptive parameter names like `score` and `points` instead of `s` and `p`, matching the prompt and making the code easier to read.",
+      "Put the function body on its own indented line; this is the usual style and is easier to read as functions grow."
+    ],
+    "overallFeedback": "This submission meets all the requirements. The function returns the new score, the two calls are stored and chained correctly, and the final print should show 15. The explanation is accurate. The remaining improvements are about readability and style, not correctness.",
+    "nextStep": "Rewrite the function as `def add_points(score, points):` with `return score + points` on its own indented line, and check that it still prints 15."
+  },
+  "review": {
+    "teacherReviewRequired": false,
+    "reasons": [],
+    "overallConfidence": "high"
+  },
+  "submission_id": "h5_short_but_complete",
+  "student_id": "EVAL-h5",
+  "assignment_id": "lesson_03_02_return_values"
+}

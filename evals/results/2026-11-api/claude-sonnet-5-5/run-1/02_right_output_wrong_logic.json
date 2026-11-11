@@ -1,0 +1,71 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`def add_points(score, points):` followed by `print(score + points)` and two valid calls `add_points(0, 10)` and `add_points(10, 5)` form syntactically valid Python with no apparent runtime errors."
+      ],
+      "rationale": "The code is syntactically valid and should run without exceptions. No program_runs record was provided, so this is judged from reading the code.",
+      "confidence": "medium"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "`print(score + points)` is the only action in the function body; there is no `return` statement."
+      ],
+      "rationale": "The function only prints the new score and does not return it. The assignment explicitly requires the function to return the value, not just print it.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 1,
+      "pointsPossible": 4,
+      "evidence": [
+        "`add_points(0, 10)` prints 10 and `add_points(10, 5)` prints 15, but there is no final `print` of a stored result."
+      ],
+      "rationale": "The value 15 does appear in the output, but only because the function prints it. The student did not store results from each call or print a final score. The program also prints an extra line (10). Partial credit is given for the correct arithmetic.",
+      "confidence": "medium"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 0,
+      "pointsPossible": 3,
+      "evidence": [
+        "\"The function returns the score by printing it.\""
+      ],
+      "rationale": "The explanation conflates returning with printing. Printing displays a value, while return hands the value back to the caller so it can be stored and reused. The explanation matches the student's code, but it does not accurately describe what return does.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 5,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 5
+  },
+  "feedback": {
+    "strengths": [
+      "Your function has the right name and parameters, and `score + points` computes the correct sum.",
+      "The program is valid Python and the two calls use the right values (0 + 10, then 10 + 5)."
+    ],
+    "priorityImprovements": [
+      "Replace `print(score + points)` with `return score + points`. This is the key idea of the lesson: return gives the value back to the caller instead of just showing it on screen.",
+      "Store the result of each call, for example `score = add_points(0, 10)`, then `score = add_points(score, 5)`, and print `score` once at the end.",
+      "Revise your explanation. Printing shows a value to the user, while return sends the value back to the code that called the function so it can be saved and used again."
+    ],
+    "overallFeedback": "Your arithmetic is right and the program runs, but the function prints its result instead of returning it, which is exactly what this exercise is meant to teach. Because nothing is returned, you could not store the results or print a final score. Your explanation treats printing and returning as the same thing, so it shows the misunderstanding to fix.",
+    "nextStep": "Change the function to `return score + points`, then rewrite the calls as `score = add_points(0, 10)` and `score = add_points(score, 5)`, followed by `print(score)`."
+  },
+  "review": {
+    "teacherReviewRequired": false,
+    "reasons": [],
+    "overallConfidence": "high"
+  },
+  "submission_id": "02_right_output_wrong_logic",
+  "student_id": "EVAL-02",
+  "assignment_id": "lesson_03_02_return_values"
+}

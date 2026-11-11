@@ -1,0 +1,72 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 1,
+      "pointsPossible": 4,
+      "evidence": [
+        "`def add_points(score, points):` followed by `pass`"
+      ],
+      "rationale": "The file is syntactically valid and would run without raising an error, but it does nothing: there are no calls and no printed output. Only minimal credit is appropriate, since the program does not carry out any part of the task.",
+      "confidence": "medium"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "`pass`"
+      ],
+      "rationale": "The function body is only `pass`. It has no return statement and computes nothing, so it does not return the new score.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "The file contains no calls to `add_points` and no print statement."
+      ],
+      "rationale": "Nothing is printed, so there is no final score to be correct. The expected value of 15 never appears.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 0,
+      "pointsPossible": 3,
+      "evidence": [
+        "`I ran out of time.`"
+      ],
+      "rationale": "The explanation does not describe what return does, so it cannot match the code.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 1,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 1
+  },
+  "feedback": {
+    "strengths": [
+      "You defined `add_points(score, points)` with the correct name and parameters."
+    ],
+    "priorityImprovements": [
+      "Replace `pass` with `return score + points`. This is the key requirement of the exercise, because the function must hand the new score back to the caller.",
+      "Call the function twice and store each result, e.g. `total = add_points(0, 10)` then `total = add_points(total, 5)`, and print `total` so the output is 15.",
+      "Write one or two sentences explaining that return sends a value back to the code that called the function, so you can store it and use it later."
+    ],
+    "overallFeedback": "This submission is an unfinished starting point. The function signature is right, but the body is only `pass`, nothing is called or printed, and the explanation is missing. The central skill of this lesson, returning a value, has not been demonstrated yet.",
+    "nextStep": "Change the body of `add_points` to `return score + points`, then add the two calls and a `print` of the final result."
+  },
+  "review": {
+    "teacherReviewRequired": true,
+    "reasons": [
+      "The submission is largely incomplete (a stub function and no explanation), so there is little work to judge. The teacher may want to follow up with the student about running out of time."
+    ],
+    "overallConfidence": "low"
+  },
+  "submission_id": "h1_stub_only",
+  "student_id": "EVAL-h1",
+  "assignment_id": "lesson_03_02_return_values"
+}

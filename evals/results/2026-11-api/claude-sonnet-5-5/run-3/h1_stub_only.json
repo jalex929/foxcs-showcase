@@ -1,0 +1,73 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 1,
+      "pointsPossible": 4,
+      "evidence": [
+        "`def add_points(score, points):` followed by `pass`"
+      ],
+      "rationale": "The file is syntactically valid and would run without raising an error, but it does nothing: there are no calls and no printed output. Only minimal credit is appropriate since there is almost no program to run.",
+      "confidence": "medium"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "`pass`"
+      ],
+      "rationale": "The function body is only `pass`. It contains no return statement and computes nothing, so the essential criterion is not met.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "No function calls and no print statement in exercise.py"
+      ],
+      "rationale": "The program never calls add_points twice and never prints a final score, so there is no output to be correct.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 0,
+      "pointsPossible": 3,
+      "evidence": [
+        "`I ran out of time.`"
+      ],
+      "rationale": "The explanation does not address what return does, so it earns no credit.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 1,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 1
+  },
+  "feedback": {
+    "strengths": [
+      "You defined the function with the correct name and parameters: `def add_points(score, points):`."
+    ],
+    "priorityImprovements": [
+      "Replace `pass` with `return score + points` so the function hands back the new score. This is the key requirement of the exercise.",
+      "Call the function twice, storing the result each time, for example `score = add_points(0, 10)` then `score = add_points(score, 5)`.",
+      "Print the final score, which should be 15.",
+      "Write one or two sentences explaining that return sends a value back to the caller so it can be stored and used."
+    ],
+    "overallFeedback": "You've set up the function signature correctly, but the body is just a placeholder, so the program doesn't yet add, return, or print anything. The most important fix is to give the function a return statement; the remaining steps follow from that. Running out of time happens, so finish this when you can.",
+    "nextStep": "Change the function body to `return score + points`, then add the two calls and a print of the final score."
+  },
+  "review": {
+    "teacherReviewRequired": true,
+    "reasons": [
+      "Submission is an incomplete stub with no meaningful work to assess; the student said they ran out of time."
+    ],
+    "overallConfidence": "low"
+  },
+  "submission_id": "h1_stub_only",
+  "student_id": "EVAL-h1",
+  "assignment_id": "lesson_03_02_return_values"
+}
