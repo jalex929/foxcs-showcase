@@ -33,10 +33,12 @@ RULES = [
     ("district-email", re.compile(r"@cps\.edu\b", re.I),
      "School-district email addresses are never published."),
     ("district-name", re.compile(r"chicago public schools|\bCPS\b"),
-     "Keep the employer/district unnamed in the public showcase."),
+     "Keep the school district unnamed in the public showcase."),
     ("live-domain", re.compile(r"foxcs\.online", re.I),
      "Live student-facing infrastructure is not linked from the public showcase."),
-    ("ipv4", re.compile(r"\b(?!127\.0\.0\.1\b)(?!0\.0\.0\.0\b)(?:\d{1,3}\.){3}\d{1,3}\b"),
+    # Localhost, 0.0.0.0, and the RFC 5737 documentation ranges (reserved, never a real host) are allowed.
+    ("ipv4", re.compile(r"\b(?!127\.0\.0\.1\b)(?!0\.0\.0\.0\b)(?!(?:192\.0\.2|198\.51\.100|203\.0\.113)\.\d{1,3}\b)"
+                        r"(?:\d{1,3}\.){3}\d{1,3}\b"),
      "No server IP addresses."),
     ("hardcoded-password", re.compile(r"""(?:password|passwd|pwd)\w*\s*[:=]\s*['"][^'"]{4,}['"]""", re.I),
      "No credentials or quiz passwords, even old ones."),
@@ -46,7 +48,7 @@ RULES = [
 
 TEXT_SUFFIXES = {".py", ".md", ".json", ".html", ".csv", ".txt", ".yml", ".yaml", ".sh", ".toml", ".cfg", ".js", ".mjs"}
 TEXT_NAMES = {".gitignore", ".gitattributes", "LICENSE"}
-SKIP_DIRS = {".git", "__pycache__", "node_modules", ".venv", "htmlcov"}
+SKIP_DIRS = {".git", "__pycache__", "node_modules", ".venv", "htmlcov", ".ruff_cache"}
 SKIP_FILES = {".coverage"}  # local test artifacts, gitignored
 
 

@@ -49,7 +49,7 @@ An AI tool receives a pseudonymous ID, the submission files, the rubric, and pse
 
 - **Invalid or incomplete score configuration**: never sent. Held for review.
 - **Reviewer output fails validation**: blocked by the release check, and the batch can't be pushed until it's fixed. Results that are consistent but questionable are flagged for individual review.
-- **AI tooling unavailable**: nothing degrades for students. The deterministic tier and Moodle's own quiz scoring keep running, and the review queue waits.
+- **AI tooling unavailable, or a usage limit reached**: nothing degrades for students. The deterministic tier and Moodle's own quiz scoring keep running. The queue worker records each failed review in a `failed/` folder with its reason, and it stops outright rather than switch to a billed API account if Claude Code is ever signed out of the subscription.
 
 There are no automatic retries. A blocked or doubtful output is re-run deliberately or graded by hand, rather than retried until it passes.
 
@@ -59,4 +59,4 @@ I approve grades as a batch, after reading rationale and trends, not by re-readi
 
 ## What the eval harness adds
 
-The rules above are only as good as the evidence that they hold. `evals/` turns the mechanically checkable subset into code that can score any grading output, so a prompt change or a model change can be compared on the same adversarial cases before it touches real student work. See [`evals/README.md`](../evals/README.md).
+The rules above are only as good as the evidence that they hold. `evals/run_model.py` grades the eval cases with Claude, through the same subscription-backed Claude Code call the queue worker makes, using the same rules, a strict output schema, and the submission marked as untrusted input. Its prompt is pinned by snapshot tests. `evals/` turns the mechanically checkable subset into code that can score any grading output, so a prompt change or a model change can be compared on the same adversarial cases before it touches real student work. See [`evals/README.md`](../evals/README.md).

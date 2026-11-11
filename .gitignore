@@ -4,3 +4,4 @@ out/
 .venv/
 .coverage
 htmlcov/
+.ruff_cache/

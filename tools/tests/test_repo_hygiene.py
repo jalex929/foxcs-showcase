@@ -61,7 +61,7 @@ class TestScannerCli(unittest.TestCase):
 
     def test_skips_git_and_pycache(self):
         with tempfile.TemporaryDirectory() as tmp:
-            for d in (".git", "__pycache__", "htmlcov"):
+            for d in (".git", "__pycache__", "htmlcov", ".ruff_cache"):
                 Path(tmp, d).mkdir()
                 Path(tmp, d, "blob.bin").write_bytes(b"\x00\x01")
             Path(tmp, ".coverage").write_bytes(b"\x00sqlite")
@@ -90,6 +90,26 @@ class TestFixturesAreReproducible(unittest.TestCase):
                         f"{rel} differs from generator output. Regenerate with: "
                         "python tools/make_fixtures.py grader/sample-submissions",
                     )
+
+
+class TestReleaseCheckDemoIsCurrent(unittest.TestCase):
+    """examples/release-check/ is what reviewers read. It must match what
+    the code produces today."""
+
+    def test_regenerated_demo_matches_committed_files(self):
+        sys.path.insert(0, str(TOOLS))
+        import make_release_example as demo
+        committed = REPO_ROOT / "examples" / "release-check"
+        with tempfile.TemporaryDirectory() as tmp:
+            fresh = Path(tmp) / "release-check"
+            demo.build(fresh)
+            fresh_files = sorted(p.relative_to(fresh) for p in fresh.rglob("*") if p.is_file())
+            committed_files = sorted(p.relative_to(committed) for p in committed.rglob("*") if p.is_file())
+            self.assertEqual(fresh_files, committed_files)
+            for rel in fresh_files:
+                with self.subTest(file=str(rel)):
+                    self.assertTrue(filecmp.cmp(fresh / rel, committed / rel, shallow=False),
+                                    f"{rel} is stale. Regenerate with: python tools/make_release_example.py")
 
 
 class TestDocLinks(unittest.TestCase):

@@ -397,7 +397,8 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     results, outputs = check_batch(args.outputs, args.rubrics, args.submissions, args.drafts)
     summary = summarize(results, outputs)
-    sample = spot_check_sample(results, args.sample, args.seed or batch_seed(results))
+    seed = args.seed if args.seed is not None else batch_seed(results)
+    sample = spot_check_sample(results, args.sample, seed)
     manifest, report = write_reports(args.out_dir, results, summary, sample)
     st = summary["status"]
     print(f"{summary['count']} results: {st[READY]} ready, {st[REVIEW]} need review, {st[BLOCKED]} blocked.")

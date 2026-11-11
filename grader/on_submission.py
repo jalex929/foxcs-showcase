@@ -30,24 +30,30 @@ It is idempotent: the same submission delivered twice returns the stored
 result without re-running anything, while a resubmission (same ID, new
 file contents) is graded again.
 
-Not a security sandbox. Time, memory, and output limits stop runaway
-programs, not hostile ones. Production use belongs inside a container with
-no network access. See docs/on-submission-grading.md.
+Time, memory, and output limits stop runaway programs, not hostile ones.
+For untrusted code, --sandbox bwrap also runs each program in a bubblewrap
+sandbox (sandbox.py): no network, no view of other files or processes. It
+self-tests before grading anything. See docs/on-submission-grading.md.
 
 Usage:
-    python grader/on_submission.py EVENT_JSON --exercises DIR --submissions-root DIR --store FILE
+    python grader/on_submission.py EVENT_JSON --exercises DIR --submissions-root DIR --store FILE [--sandbox bwrap]
 """
 
 from __future__ import annotations
 
 import argparse
+import functools
 import hashlib
 import json
+import os
 import subprocess
 import sys
+import tempfile
+from collections.abc import Callable
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
-from typing import Callable
+
+import sandbox as sbx
 
 RUBRIC_RUNS = "runs_without_errors"
 RUBRIC_CORRECT = "correct_output"
@@ -243,25 +249,60 @@ def _clip(text: str | bytes | None) -> str:
     return text
 
 
-def run_program(path: Path, stdin: str, spec: ExerciseSpec) -> RunResult:
-    """Runs one student file in a separate, isolated Python process."""
+def run_program(path: Path, stdin: str, spec: ExerciseSpec, sandbox: sbx.Bwrap | None = None) -> RunResult:
+    """Runs one student file in a separate, isolated Python process,
+    inside the sandbox when one is given."""
+    if sandbox is None:
+        wrapper, target, cwd = [], str(path), str(path.parent)
+    else:
+        wrapper, target, cwd = sandbox.prefix(path), sandbox.inside(path), None
     try:
         proc = subprocess.run(
-            [sys.executable, "-I", "-c", CHILD_BOOTSTRAP, str(path), str(spec.memory_limit_mb)],
+            [*wrapper, sys.executable, "-I", "-c", CHILD_BOOTSTRAP, target, str(spec.memory_limit_mb)],
             input=stdin,
             capture_output=True,
             encoding="utf-8",  # implies text mode
             errors="replace",
             timeout=spec.timeout_seconds,
-            cwd=str(path.parent),
-            env={"PYTHONIOENCODING": "utf-8", "PYTHONHASHSEED": "0"},
+            cwd=cwd,
+            env=dict(sbx.CHILD_ENV),
         )
     except subprocess.TimeoutExpired as exc:
         return RunResult(None, _clip(exc.stdout), _clip(exc.stderr), timed_out=True)
     return RunResult(proc.returncode, _clip(proc.stdout), _clip(proc.stderr), timed_out=False)
 
 
+def make_runner(sandbox: sbx.Bwrap | None) -> Runner:
+    return run_program if sandbox is None else functools.partial(run_program, sandbox=sandbox)
+
+
+def sandbox_self_test(sandbox: sbx.Bwrap) -> list[str]:
+    """Runs a probe program in the sandbox. Returns every isolation property
+    that does not hold; an empty list means it is safe to grade with."""
+    with tempfile.TemporaryDirectory(prefix="foxcs-probe-") as tmp:
+        neighbor = Path(tmp) / "another_students_file.py"
+        neighbor.write_text("print('private')\n", encoding="utf-8")
+        probe = Path(tmp) / "probe.py"
+        allowed = tuple(x for x in getattr(sandbox, "prefixes", ()) if not sbx._under_usr(x))
+        probe.write_text(sbx.probe_source(neighbor, os.getpid(), allowed), encoding="utf-8")
+        spec = ExerciseSpec("sandbox-self-test", 0, (), timeout_seconds=15)
+        run = run_program(probe, "", spec, sandbox)
+    return sbx.check_probe(run.exit_code, run.stdout, run.stderr)
+
+
+def build_sandbox(choice: str) -> tuple[sbx.Bwrap | None, list[str]]:
+    """The sandbox for a --sandbox choice, and any reason not to grade with it."""
+    if choice == "none":
+        return None, []
+    try:
+        sandbox = sbx.Bwrap()
+    except sbx.SandboxUnavailable as exc:
+        return None, [str(exc)]
+    return sandbox, sandbox_self_test(sandbox)
+
+
 # ---------------------------------------------------------------- grading
+
 
 def _error_summary(stderr: str) -> str:
     lines = [ln for ln in stderr.strip().splitlines() if ln.strip()]
@@ -357,7 +398,9 @@ def grade_file(event: SubmissionEvent, spec: ExerciseSpec, path: Path, runner: R
     else:
         band, runs_pts = "runs_with_issues", half
         correct_pts = round(half * passed_count / total, 2)
-        first_problem = [r for r in results if not r["passed"]][0]
+        # A list, not next(...): a failing test always exists on this path, so
+        # next()'s "ran out" branch could never run and would hold coverage below 100%.
+        first_problem = [r for r in results if not r["passed"]][0]  # noqa: RUF015
         feedback = {
             "overallFeedback": f"Your program runs without errors, but {total - passed_count} of {total} test inputs did not produce the expected output.",
             "nextStep": f"Check the '{first_problem['name']}' case: {first_problem['problems'][0]}.",
@@ -461,13 +504,20 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--exercises", type=Path, required=True, help="Folder of exercise spec JSON files")
     parser.add_argument("--submissions-root", type=Path, required=True, help="Only files inside this folder are graded")
     parser.add_argument("--store", type=Path, required=True, help="JSON Lines file of grading drafts")
+    parser.add_argument("--sandbox", choices=["none", "bwrap"], default="none",
+                        help="bwrap runs each program in a bubblewrap sandbox; use it for any untrusted code")
     args = parser.parse_args(argv)
+    sandbox, problems = build_sandbox(args.sandbox)
+    if problems:
+        print(json.dumps({"accepted": False, "error": "sandbox check failed: " + "; ".join(problems)}))
+        return 3
     try:
         event_data = json.loads(args.event.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
         print(json.dumps({"accepted": False, "error": f"could not read event: {exc}"}))
         return 2
-    result = handle_submission(event_data, load_exercises(args.exercises), args.submissions_root, ResultStore(args.store))
+    result = handle_submission(event_data, load_exercises(args.exercises), args.submissions_root, ResultStore(args.store),
+                               make_runner(sandbox))
     print(json.dumps(result, indent=2, sort_keys=True))
     return 0 if result.get("accepted", True) else 2
 

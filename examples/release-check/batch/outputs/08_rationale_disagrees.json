@@ -1,0 +1,71 @@
+{
+  "_note": "Hand-authored reference judgment for the eval harness. Not a model output.",
+  "assignment": {
+    "id": "lesson_03_02_return_values",
+    "standardPointsPossible": 15
+  },
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "The program runs and prints 15."
+      ],
+      "rationale": "No errors.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "add_points ends with `return sum([score, points])`."
+      ],
+      "rationale": "The function is missing a return statement.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "Final printed value is 15."
+      ],
+      "rationale": "Matches the expected output.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 3,
+      "pointsPossible": 3,
+      "evidence": [
+        "Explanation says return hands the total back to the caller so it can be saved in score."
+      ],
+      "rationale": "Accurate and specific to this program.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 15,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 15
+  },
+  "feedback": {
+    "strengths": [
+      "The function returns its result, and the loop reuses that returned value each time."
+    ],
+    "priorityImprovements": [],
+    "overallFeedback": "Your solution meets every requirement. Building the total with sum() and a loop is a valid approach that reaches the same result as score + points.",
+    "nextStep": "Try adding a third call that subtracts points, and check that add_points still works with a negative number."
+  },
+  "review": {
+    "teacherReviewRequired": false,
+    "reasons": [],
+    "overallConfidence": "high"
+  },
+  "submission_id": "08_rationale_disagrees",
+  "student_id": "STUDENT-08",
+  "assignment_id": "lesson_03_02_return_values"
+}

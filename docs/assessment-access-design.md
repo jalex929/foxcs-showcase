@@ -88,6 +88,7 @@ The setup script is built for a live system with real students in it:
 - **Refuses any prerequisite with completion tracking turned off,** because that condition could never be met and would lock every student out.
 - **Keeps every access condition a teacher already set by hand.**
 - **Re-running is a no-op.**
+- **Sample course:** a working copy of the course uses one fixed, published code (`123456`), shown on every Mastery Check with a note that the real course changes it daily, so anyone can try the flow. The tooling refuses to put a fixed code on a live course, and the daily rotation skips sample courses.
 - **Test mode:** the allowed network is a parameter, so I can add my home address in a sandbox course. That lets me test both the allowed and the blocked case from home before touching the live course.
 
 ## Testing

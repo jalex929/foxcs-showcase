@@ -1,0 +1,73 @@
+{
+  "_note": "Hand-authored reference judgment for the eval harness. Not a model output.",
+  "assignment": {
+    "id": "lesson_03_02_return_values",
+    "standardPointsPossible": 15
+  },
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "The program runs without errors."
+      ],
+      "rationale": "No errors.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "add_points calls print(score + points) and has no return statement."
+      ],
+      "rationale": "The function displays the value but does not give it back, so the caller cannot store or reuse it.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 2,
+      "pointsPossible": 4,
+      "evidence": [
+        "10 and 15 appear on screen, but the score is never stored, and the second call hard-codes 10 instead of using a returned value."
+      ],
+      "rationale": "The screen output looks right, but it is produced by printing inside the function rather than by storing a returned score.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 0,
+      "pointsPossible": 3,
+      "evidence": [
+        "Explanation says the function 'returns the score by printing it'."
+      ],
+      "rationale": "print() and return do different things, so the explanation does not describe this code accurately.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 6,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 6
+  },
+  "feedback": {
+    "strengths": [
+      "The program runs, and the addition inside add_points is correct."
+    ],
+    "priorityImprovements": [
+      "Replace print(score + points) with return score + points, then store the result: score = add_points(score, 10)."
+    ],
+    "overallFeedback": "Your output looks right, but the function prints the new score instead of using return. That means the value disappears after it is shown, and the second call only works because 10 was typed in by hand.",
+    "nextStep": "Change the function to use return, store each result in score, and print score once at the end. Then rewrite your explanation to describe what return gives back."
+  },
+  "review": {
+    "teacherReviewRequired": false,
+    "reasons": [],
+    "overallConfidence": "high"
+  },
+  "submission_id": "02_right_output_wrong_logic",
+  "student_id": "STUDENT-02",
+  "assignment_id": "lesson_03_02_return_values"
+}

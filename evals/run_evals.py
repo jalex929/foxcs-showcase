@@ -21,7 +21,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from score_output import score_case  # noqa: E402
+from score_output import score_case
 
 EVALS_DIR = Path(__file__).resolve().parent
 
