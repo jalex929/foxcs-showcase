@@ -40,24 +40,39 @@ def ns(**kw):
     return types.SimpleNamespace(**kw)
 
 
-def response(text=None, stop_reason="end_turn", usage=None, blocks=None, stop_details=None):
+def response(text=None, stop_reason="end_turn", usage=None, blocks=None, stop_details=None, **extra):
+    """A Messages API response. `extra` sets fields the SDK may carry, such as model and _request_id."""
     content = blocks if blocks is not None else ([ns(type="thinking", thinking=""), ns(type="text", text=text)] if text is not None else [])
     return ns(content=content, stop_reason=stop_reason, stop_details=stop_details,
-              usage=usage or ns(input_tokens=1000, output_tokens=500, cache_read_input_tokens=800, cache_creation_input_tokens=0))
+              usage=usage or ns(input_tokens=1000, output_tokens=500, cache_read_input_tokens=800, cache_creation_input_tokens=0),
+              **extra)
 
 
 class FakeAPIError(Exception):
-    pass
+    """An SDK error. status_code None stands for a connection error, as in the SDK."""
+
+    def __init__(self, message, status_code=None):
+        super().__init__(message)
+        if status_code is not None:
+            self.status_code = status_code
 
 
 class FakeClient:
     """Answers each case with its hand-authored reference judgment, or a
     scripted response, and records every request it receives."""
 
-    def __init__(self, script=None):
-        self.requests = []
+    def __init__(self, script=None, models_error=None):
+        self.requests, self.lookups = [], []
         self.script = script or {}
+        self.models_error = models_error
         self.beta = ns(messages=ns(create=self.create))
+        self.models = ns(retrieve=self.retrieve)
+
+    def retrieve(self, model):
+        self.lookups.append(model)
+        if self.models_error:
+            raise self.models_error
+        return ns(id=model)
 
     def create(self, **request):
         self.requests.append(request)
@@ -68,7 +83,8 @@ class FakeClient:
             raise scripted
         if scripted is not None:
             return scripted
-        return response(json.dumps(load(EVALS_DIR / "reference-outputs" / f"{case_id}.json")))
+        return response(json.dumps(load(EVALS_DIR / "reference-outputs" / f"{case_id}.json")),
+                        model=request["model"], _request_id=f"req_{case_id[:2]}")
 
 
 def api_backend(script=None):
@@ -237,6 +253,7 @@ class TestParseResponse(unittest.TestCase):
             "truncated": response('{"a"', stop_reason="max_tokens"),
             "no text block": response(blocks=[ns(type="thinking", thinking="")]),
             "not valid JSON": response("Here is my grade: 10/15"),
+            "unexpected stop reason: pause_turn": response("{}", stop_reason="pause_turn"),
         }
         for fragment, resp in cases.items():
             with self.subTest(fragment), self.assertRaisesRegex(rm.GradingFailed, fragment.replace("(", r"\(").replace(")", r"\)")):
@@ -262,6 +279,35 @@ class TestCost(unittest.TestCase):
         self.assertEqual(rm.cost_usd({"input_tokens": 0, "output_tokens": 1_000_000, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0}), 20.0)
         self.assertEqual(rm.cost_usd({"input_tokens": 0, "output_tokens": 0, "cache_read_input_tokens": 1_000_000, "cache_creation_input_tokens": 0}), 0.2)
         self.assertEqual(rm.cost_usd({"input_tokens": 0, "output_tokens": 0, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 1_000_000}), 5.0)
+
+    def test_each_model_has_its_own_prices(self):
+        def one_million(field):
+            usage = dict.fromkeys(("input_tokens", "output_tokens", "cache_read_input_tokens", "cache_creation_input_tokens"), 0)
+            usage[field] = 1_000_000
+            return usage
+        expected = {"claude-opus-5-5": (4.0, 20.0, 0.2, 5.0), "claude-sonnet-5-5": (2.0, 10.0, 0.1, 2.5)}
+        fields = ("input_tokens", "output_tokens", "cache_read_input_tokens", "cache_creation_input_tokens")
+        for model, dollars in expected.items():
+            with self.subTest(model):
+                self.assertEqual(tuple(rm.cost_usd(one_million(f), model) for f in fields), dollars)
+
+    def test_a_model_without_prices_has_no_estimate_rather_than_a_wrong_one(self):
+        usage = dict.fromkeys(("input_tokens", "output_tokens", "cache_read_input_tokens", "cache_creation_input_tokens"), 10)
+        self.assertIsNone(rm.cost_usd(usage, "claude-opus-5"))
+
+    def test_main_says_when_part_of_the_cost_is_unknown(self):
+        with tempfile.TemporaryDirectory() as tmp, redirect_stdout(io.StringIO()) as out:
+            rm.main(["--out", tmp, "--model", "claude-haiku-5-5"], backend=api_backend())
+        self.assertIn(f"Estimated cost: $0.0000, not counting {len(CASES)} graded case(s) on a model with no prices in PRICES_PER_MTOK",
+                      out.getvalue())
+
+    def test_sonnet_runs_are_priced_at_sonnet_rates(self):
+        with tempfile.TemporaryDirectory() as tmp, redirect_stdout(io.StringIO()) as out:
+            rm.main(["--out", tmp, "--model", "claude-sonnet-5-5"], backend=api_backend())
+            report = load(Path(tmp) / "baseline_summary.json")
+        n = len(CASES)
+        self.assertEqual(report["total_cost_usd"], round(n * (1000 * 2 + 500 * 10 + 800 * 0.1) / 1e6, 6))
+        self.assertNotIn("not counting", out.getvalue())
 
 
 class TestRunOnce(unittest.TestCase):
@@ -306,7 +352,8 @@ class TestRunOnce(unittest.TestCase):
         })
         summary, out = self.run_with(client)
         self.assertEqual(summary["succeeded"], len(CASES) - 2)
-        for cid, fragment in (("02_right_output_wrong_logic", "refused"), ("04_missing_submission", "API error: FakeAPIError: overloaded")):
+        for cid, fragment in (("02_right_output_wrong_logic", "refused"),
+                              ("04_missing_submission", "API error (transient, safe to requeue): FakeAPIError: overloaded")):
             self.assertFalse((out / f"{cid}.json").exists())
             self.assertIn(fragment, load(out / f"{cid}.error.json")["error"])
         failed = [r for r in summary["records"] if not r["ok"]]
@@ -369,7 +416,7 @@ class TestMain(unittest.TestCase):
         class ConnectionError_(Exception):
             pass
 
-        fake_sdk.Anthropic = lambda: "client"
+        fake_sdk.Anthropic = lambda **config: ("client", config)
         fake_sdk.APIStatusError, fake_sdk.APIConnectionError = StatusError, ConnectionError_
         saved = sys.modules.get("anthropic")
         sys.modules["anthropic"] = fake_sdk
@@ -380,7 +427,7 @@ class TestMain(unittest.TestCase):
                 del sys.modules["anthropic"]
             else:
                 sys.modules["anthropic"] = saved
-        self.assertEqual((client, errors), ("client", (StatusError, ConnectionError_)))
+        self.assertEqual((client, errors), (("client", {"timeout": 300, "max_retries": 3}), (StatusError, ConnectionError_)))
 
     def test_api_backend_uses_the_real_client(self):
         calls = []
@@ -490,7 +537,8 @@ class TestClaudeCodeBackend(unittest.TestCase):
         self.assertEqual(env.get("PATH"), os.environ.get("PATH"))
 
     def test_result_usage_and_zero_bill(self):
-        _, (result, usage, billed) = self.grade(FakeClaude())
+        _, (result, usage, billed, call) = self.grade(FakeClaude())
+        self.assertEqual(call, {"model": "claude-opus-5-5", "fallback": False, "requestId": None})
         self.assertEqual(result, load(EVALS_DIR / "reference-outputs" / f"{CASE['id']}.json"))
         self.assertEqual(usage, {"input_tokens": 900, "output_tokens": 400,
                                  "cache_read_input_tokens": 300, "cache_creation_input_tokens": 50})
@@ -500,7 +548,7 @@ class TestClaudeCodeBackend(unittest.TestCase):
         ok = {"subtype": "success", "is_error": False, "structured_output": {"a": 1}}
         for extra in ({}, {"usage": None}, {"usage": {"input_tokens": 3}}):
             with self.subTest(extra=extra):
-                _, (_, usage, _) = self.grade(FakeClaude(script={CASE["id"]: {**ok, **extra}}))
+                _, (_, usage, _, _) = self.grade(FakeClaude(script={CASE["id"]: {**ok, **extra}}))
                 self.assertEqual(usage["output_tokens"], 0)
                 self.assertEqual(usage["input_tokens"], extra.get("usage", {}).get("input_tokens", 0) if extra.get("usage") else 0)
 
@@ -591,8 +639,137 @@ class TestSubscriptionPreflight(unittest.TestCase):
         with self.assertRaisesRegex(rm.SubscriptionRequired, "auth status`: out$"):
             rm.ClaudeCodeBackend(run=lambda a, **k: subprocess.CompletedProcess(a, 1, " out ", "")).preflight()
 
-    def test_api_backend_has_no_preflight(self):
-        self.assertIsNone(api_backend().preflight())
+    def test_subscription_is_a_backend_unusable_error(self):
+        self.assertTrue(issubclass(rm.SubscriptionRequired, rm.BackendUnusable))
+
+
+class TestApiPreflight(unittest.TestCase):
+    """Before the first paid call, a models lookup (no tokens) confirms the key and the model ID."""
+
+    def test_a_working_key_and_model_pass_with_one_lookup(self):
+        client = FakeClient()
+        self.assertIsNone(rm.ApiBackend(client, (FakeAPIError,)).preflight("claude-sonnet-5-5"))
+        self.assertEqual((client.lookups, client.requests), (["claude-sonnet-5-5"], []))
+        self.assertEqual(FakeClient().models.retrieve("m").id, "m")
+
+    def test_default_model_is_checked(self):
+        client = FakeClient()
+        rm.ApiBackend(client, (FakeAPIError,)).preflight()
+        self.assertEqual(client.lookups, ["claude-opus-5-5"])
+
+    def test_rejected_key_or_unknown_model_stops_before_any_grading(self):
+        for status in (401, 403, 404):
+            backend = rm.ApiBackend(FakeClient(models_error=FakeAPIError("nope", status)), (FakeAPIError,))
+            with self.subTest(status), self.assertRaisesRegex(
+                    rm.BackendUnusable, rf"^the Claude API rejected the request \({status}\): FakeAPIError: nope\. Check the API key and the model ID\.$"):
+                backend.preflight()
+
+    def test_an_unreachable_or_failing_api_also_stops(self):
+        for status in (None, 429, 500, 400):
+            backend = rm.ApiBackend(FakeClient(models_error=FakeAPIError("down", status)), (FakeAPIError,))
+            with self.subTest(status), self.assertRaisesRegex(rm.BackendUnusable, r"^could not reach the Claude API: FakeAPIError: down$"):
+                backend.preflight()
+
+    def test_main_reports_a_rejected_key_and_grades_nothing(self):
+        client = FakeClient(models_error=FakeAPIError("invalid x-api-key", 401))
+        with tempfile.TemporaryDirectory() as tmp, redirect_stdout(io.StringIO()), \
+                contextlib.redirect_stderr(io.StringIO()) as err:
+            code = rm.main(["--out", tmp, "--backend", "api", "--model", "claude-sonnet-5-5"],
+                           backend=rm.ApiBackend(client, (FakeAPIError,)))
+            self.assertEqual(list(Path(tmp).iterdir()), [])
+        self.assertEqual((code, client.lookups, client.requests), (2, ["claude-sonnet-5-5"], []))
+        self.assertIn("Not running: the Claude API rejected the request (401)", err.getvalue())
+
+
+class TestApiErrors(unittest.TestCase):
+    def test_classification(self):
+        expected = {
+            None: (rm.GradingFailed, "API error (transient, safe to requeue): FakeAPIError: x"),
+            408: (rm.GradingFailed, "API error (transient, safe to requeue): FakeAPIError: x"),
+            409: (rm.GradingFailed, "API error (transient, safe to requeue): FakeAPIError: x"),
+            429: (rm.GradingFailed, "API error (transient, safe to requeue): FakeAPIError: x"),
+            500: (rm.GradingFailed, "API error (transient, safe to requeue): FakeAPIError: x"),
+            529: (rm.GradingFailed, "API error (transient, safe to requeue): FakeAPIError: x"),
+            400: (rm.GradingFailed, "API error (permanent, requeueing will not help): FakeAPIError: x"),
+            413: (rm.GradingFailed, "API error (permanent, requeueing will not help): FakeAPIError: x"),
+            499: (rm.GradingFailed, "API error (permanent, requeueing will not help): FakeAPIError: x"),
+            401: (rm.BackendUnusable, "the Claude API rejected the request (401): FakeAPIError: x. Check the API key and the model ID."),
+            403: (rm.BackendUnusable, "the Claude API rejected the request (403): FakeAPIError: x. Check the API key and the model ID."),
+            404: (rm.BackendUnusable, "the Claude API rejected the request (404): FakeAPIError: x. Check the API key and the model ID."),
+        }
+        for status, (kind, message) in expected.items():
+            with self.subTest(status):
+                error = rm.classify_api_error(FakeAPIError("x", status))
+                self.assertIs(type(error), kind)
+                self.assertEqual(str(error), message)
+
+    def test_a_key_rejected_mid_run_stops_the_run_instead_of_failing_each_case(self):
+        client = FakeClient({"02_right_output_wrong_logic": FakeAPIError("key revoked", 401)})
+        with tempfile.TemporaryDirectory() as tmp:
+            with self.assertRaises(rm.BackendUnusable):
+                rm.run_once(rm.ApiBackend(client, (FakeAPIError,)), CASES, ASSIGNMENTS, Path(tmp), log=lambda *_: None)
+            self.assertFalse((Path(tmp) / "02_right_output_wrong_logic.error.json").exists())
+        self.assertEqual(len(client.requests), 2)  # stopped at the rejection; no further calls
+
+    def test_main_stops_mid_run_with_exit_code_2(self):
+        backend = api_backend({"03_partial_solution": FakeAPIError("expired", 401)})
+        with tempfile.TemporaryDirectory() as tmp, redirect_stdout(io.StringIO()), \
+                contextlib.redirect_stderr(io.StringIO()) as err:
+            self.assertEqual(rm.main(["--out", tmp], backend=backend), 2)
+        self.assertIn("Not running: the Claude API rejected the request (401)", err.getvalue())
+
+    def test_a_failed_response_names_its_request_id(self):
+        backend = api_backend({CASE["id"]: response("{}", stop_reason="max_tokens", _request_id="req_abc")})
+        with self.assertRaisesRegex(rm.GradingFailed, r"^response truncated at max_tokens \(request req_abc\)$"):
+            backend.grade(CASE, ASSIGNMENT, "claude-opus-5-5", "high")
+
+
+class TestProvenance(unittest.TestCase):
+    """Which model answered: with refusal fallbacks on, it is not always the one requested."""
+
+    def test_requested_model_answered(self):
+        r = response("{}", model="claude-opus-5-5", _request_id="req_1")
+        self.assertEqual(rm.provenance(r, "claude-opus-5-5"), {"model": "claude-opus-5-5", "fallback": False, "requestId": "req_1"})
+
+    def test_a_different_served_model_is_a_fallback(self):
+        r = response("{}", model="claude-opus-5")
+        self.assertEqual(rm.provenance(r, "claude-opus-5-5"), {"model": "claude-opus-5", "fallback": True, "requestId": None})
+
+    def test_a_fallback_iteration_counts_even_on_the_same_model_name(self):
+        usage = ns(input_tokens=1, output_tokens=1, iterations=[ns(type="message"), ns(type="fallback_message")])
+        self.assertTrue(rm.provenance(response("{}", usage=usage, model="claude-opus-5-5"), "claude-opus-5-5")["fallback"])
+        usage = ns(input_tokens=1, output_tokens=1, iterations=[ns(type="message")])
+        self.assertFalse(rm.provenance(response("{}", usage=usage, model="claude-opus-5-5"), "claude-opus-5-5")["fallback"])
+        usage = ns(input_tokens=1, output_tokens=1, iterations=None)
+        self.assertFalse(rm.provenance(response("{}", usage=usage, model="claude-opus-5-5"), "claude-opus-5-5")["fallback"])
+
+    def test_missing_model_field_means_the_requested_model(self):
+        self.assertEqual(rm.provenance(response("{}"), "claude-sonnet-5-5")["model"], "claude-sonnet-5-5")
+        self.assertEqual(rm.provenance(response("{}", model=None), "claude-sonnet-5-5")["model"], "claude-sonnet-5-5")
+
+    def test_grade_returns_provenance_and_prices_the_served_model(self):
+        usage = ns(input_tokens=1_000_000, output_tokens=0, cache_read_input_tokens=0, cache_creation_input_tokens=0)
+        ref = json.dumps(load(EVALS_DIR / "reference-outputs" / f"{CASE['id']}.json"))
+        backend = api_backend({CASE["id"]: response(ref, usage=usage, model="claude-sonnet-5-5", _request_id="req_9")})
+        _, _, cost, call = backend.grade(CASE, ASSIGNMENT, "claude-opus-5-5", "high")
+        self.assertEqual(call, {"model": "claude-sonnet-5-5", "fallback": True, "requestId": "req_9"})
+        self.assertEqual(cost, 2.0)  # Sonnet's input rate, not Opus's
+
+    def test_run_once_records_provenance_and_counts_fallbacks(self):
+        ref = json.dumps(load(EVALS_DIR / "reference-outputs" / f"{CASE['id']}.json"))
+        client = FakeClient({CASE["id"]: response(ref, model="claude-opus-5", _request_id="req_fb"),
+                             "01_valid_alternative": FakeAPIError("overloaded", 529)})
+        with tempfile.TemporaryDirectory() as tmp:
+            summary = rm.run_once(rm.ApiBackend(client, (FakeAPIError,)), CASES, ASSIGNMENTS, Path(tmp), log=lambda *_: None)
+        self.assertEqual(summary["fallbacks"], 1)
+        records = {r["case"]: r for r in summary["records"]}
+        self.assertEqual(records[CASE["id"]]["call"], {"model": "claude-opus-5", "fallback": True, "requestId": "req_fb"})
+        self.assertEqual(records["03_partial_solution"]["call"], {"model": "claude-opus-5-5", "fallback": False, "requestId": "req_03"})
+        self.assertNotIn("call", records["01_valid_alternative"])
+        self.assertEqual(summary["unpriced_cases"], 1)  # Claude Opus 5 has no prices in the table
+        self.assertIsNone(records[CASE["id"]]["cost_usd"])
+        priced = sum(r["cost_usd"] for r in summary["records"] if r.get("cost_usd") is not None)
+        self.assertEqual(summary["cost_usd"], round(priced, 6))
 
 
 if __name__ == "__main__":

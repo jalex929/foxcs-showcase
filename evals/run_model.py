@@ -30,6 +30,12 @@ the same cases run several times to measure how consistent the grades are.
 Failures are recorded, never turned into grades: a refusal, a truncated
 response, unparseable output, an API error, or a CLI error writes <case>.error.json and
 leaves no output file, which run_evals.py reports as a missing output.
+
+Every graded result records how it was produced: the model that actually
+answered (a refused request can be answered by a fallback model), whether a
+fallback ran, and the API request ID. An API key or model ID the API rejects
+stops the run instead of failing case after case. The api backend checks both
+before the first case with a models lookup, which costs no tokens.
 """
 
 from __future__ import annotations
@@ -49,7 +55,16 @@ MODEL = "claude-opus-5-5"
 EFFORT = "high"  # grading is judgment work; this model's default effort is medium
 MAX_TOKENS = 16000
 FALLBACK_BETA = "server-side-fallback-2026-07-01"  # re-runs a refused request on a fallback model, server side
-PRICE_PER_MTOK = {"input": 4.00, "output": 20.00, "cache_read": 0.20, "cache_write": 5.00}
+# Published Claude API rates in dollars per million tokens, as of 2026-11. A model
+# missing here gets no cost estimate rather than a wrong one.
+PRICES_PER_MTOK = {
+    "claude-opus-5-5": {"input": 4.00, "output": 20.00, "cache_read": 0.20, "cache_write": 5.00},
+    "claude-sonnet-5-5": {"input": 2.00, "output": 10.00, "cache_read": 0.10, "cache_write": 2.50},
+}
+API_TIMEOUT_SECONDS = 300  # the slowest measured grading call took 23 s
+API_MAX_RETRIES = 3        # the SDK retries 408, 409, 429, 5xx and connection errors with backoff
+TRANSIENT_STATUS = (408, 409, 429)  # plus every 5xx: worth requeueing once the API recovers
+FATAL_STATUS = (401, 403, 404)      # bad key, no permission, unknown model: every later call would fail too
 CLAUDE_TIMEOUT_SECONDS = 900
 SUBSCRIPTION_AUTH = ("claude.ai", "oauth_token")  # `claude /login`, or a `claude setup-token` token
 API_KEY_ENV = ("ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN")  # either one makes the CLI bill an API account
@@ -144,6 +159,10 @@ class GradingFailed(Exception):
     """The model call finished but produced no usable grading result."""
 
 
+class BackendUnusable(Exception):
+    """No call can succeed until a person fixes the setup (sign-in, key, model ID). Stops the run."""
+
+
 def _xml_escape(text: str) -> str:
     return text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
@@ -200,6 +219,8 @@ def parse_response(response) -> tuple[dict, dict]:
         raise GradingFailed(f"model refused (category: {category})")
     if response.stop_reason == "max_tokens":
         raise GradingFailed("response truncated at max_tokens")
+    if response.stop_reason != "end_turn":
+        raise GradingFailed(f"unexpected stop reason: {response.stop_reason}")
     text = next((b.text for b in response.content if b.type == "text"), None)
     if text is None:
         raise GradingFailed("no text block in the response")
@@ -210,14 +231,38 @@ def parse_response(response) -> tuple[dict, dict]:
     return result, usage_from(response.usage)
 
 
-def cost_usd(usage: dict) -> float:
+def cost_usd(usage: dict, model: str = MODEL) -> float | None:
+    """Dollar cost of one call at the model's published rates, or None for a model with no prices here."""
+    price = PRICES_PER_MTOK.get(model)
+    if price is None:
+        return None
     return round(
-        usage["input_tokens"] * PRICE_PER_MTOK["input"] / 1e6
-        + usage["output_tokens"] * PRICE_PER_MTOK["output"] / 1e6
-        + usage["cache_read_input_tokens"] * PRICE_PER_MTOK["cache_read"] / 1e6
-        + usage["cache_creation_input_tokens"] * PRICE_PER_MTOK["cache_write"] / 1e6,
+        usage["input_tokens"] * price["input"] / 1e6
+        + usage["output_tokens"] * price["output"] / 1e6
+        + usage["cache_read_input_tokens"] * price["cache_read"] / 1e6
+        + usage["cache_creation_input_tokens"] * price["cache_write"] / 1e6,
         6,
     )
+
+
+def provenance(response, requested: str) -> dict:
+    """Which model answered, whether a refusal fallback ran, and the request ID to trace the call."""
+    served = getattr(response, "model", None) or requested
+    iterations = getattr(response.usage, "iterations", None) or []
+    fallback = served != requested or any(getattr(i, "type", None) == "fallback_message" for i in iterations)
+    return {"model": served, "fallback": fallback, "requestId": getattr(response, "_request_id", None)}
+
+
+def classify_api_error(exc: Exception) -> Exception:
+    """A rejected key or model ID stops the run. Anything else fails this one call,
+    labeled by whether a retry can help."""
+    status = getattr(exc, "status_code", None)
+    detail = f"{type(exc).__name__}: {exc}"
+    if status in FATAL_STATUS:
+        return BackendUnusable(f"the Claude API rejected the request ({status}): {detail}. Check the API key and the model ID.")
+    transient = status is None or status in TRANSIENT_STATUS or status >= 500
+    hint = "transient, safe to requeue" if transient else "permanent, requeueing will not help"
+    return GradingFailed(f"API error ({hint}): {detail}")
 
 
 def load_cases() -> list[dict]:
@@ -248,26 +293,39 @@ class ApiBackend:
     def __init__(self, client, api_errors: tuple = ()):
         self.client, self.api_errors = client, api_errors
 
-    def preflight(self) -> None:
-        """Nothing to check: a missing key fails on the first request."""
+    def preflight(self, model: str = MODEL) -> None:
+        """Confirms the key works and the model exists, with a models lookup that costs no tokens."""
+        try:
+            self.client.models.retrieve(model)
+        except self.api_errors as exc:
+            error = classify_api_error(exc)
+            if isinstance(error, BackendUnusable):
+                raise error from None
+            raise BackendUnusable(f"could not reach the Claude API: {type(exc).__name__}: {exc}") from None
 
-    def grade(self, case: dict, assignment: dict, model: str, effort: str) -> tuple[dict, dict, float]:
+    def grade(self, case: dict, assignment: dict, model: str, effort: str) -> tuple[dict, dict, float | None, dict]:
         request = build_request(case, assignment, model, effort)
         try:
             response = self.client.beta.messages.create(**request)
         except self.api_errors as exc:
-            raise GradingFailed(f"API error: {type(exc).__name__}: {exc}") from None
-        result, usage = parse_response(response)
-        return result, usage, cost_usd(usage)
+            raise classify_api_error(exc) from None
+        call = provenance(response, model)
+        try:
+            result, usage = parse_response(response)
+        except GradingFailed as exc:
+            raise GradingFailed(f"{exc} (request {call['requestId']})") from None
+        # A fallback is billed at the rates of the model that answered.
+        return result, usage, cost_usd(usage, call["model"]), call
 
 
 def default_client():
     """The real API client. Imported here so the rest of the repo needs no packages."""
     import anthropic
-    return anthropic.Anthropic(), (anthropic.APIStatusError, anthropic.APIConnectionError)
+    client = anthropic.Anthropic(timeout=API_TIMEOUT_SECONDS, max_retries=API_MAX_RETRIES)
+    return client, (anthropic.APIStatusError, anthropic.APIConnectionError)
 
 
-class SubscriptionRequired(Exception):
+class SubscriptionRequired(BackendUnusable):
     """The Claude CLI is not signed in to a subscription, so a run would be billed or would fail."""
 
 
@@ -303,7 +361,7 @@ class ClaudeCodeBackend:
         except FileNotFoundError:
             raise SubscriptionRequired(f"`{self.claude}` was not found. Install Claude Code and run `claude /login`.") from None
 
-    def preflight(self) -> None:
+    def preflight(self, model: str = MODEL) -> None:
         """Refuse to start unless the CLI is on a subscription. No model call."""
         proc = self._call([self.claude, "auth", "status", "--json"], "")
         try:
@@ -319,7 +377,7 @@ class ClaudeCodeBackend:
                 "or set CLAUDE_CODE_OAUTH_TOKEN from `claude setup-token` on a server."
             )
 
-    def grade(self, case: dict, assignment: dict, model: str, effort: str) -> tuple[dict, dict, float]:
+    def grade(self, case: dict, assignment: dict, model: str, effort: str) -> tuple[dict, dict, float, dict]:
         with tempfile.TemporaryDirectory(prefix="foxcs-grade-") as empty:
             try:
                 proc = self._call(self.command(model, effort), build_user_message(case, assignment), cwd=empty)
@@ -336,7 +394,8 @@ class ClaudeCodeBackend:
         if not isinstance(result, dict):
             raise GradingFailed("claude returned no structured output")
         # Billed $0: the subscription covers it. Token counts are kept so runs stay comparable.
-        return result, usage_from(out.get("usage") or {}), 0.0
+        # The CLI reports no request ID and has no refusal fallback, so the requested model answered.
+        return result, usage_from(out.get("usage") or {}), 0.0, {"model": model, "fallback": False, "requestId": None}
 
 
 def run_once(backend, cases: list[dict], assignments: dict, out_dir: Path,
@@ -344,11 +403,11 @@ def run_once(backend, cases: list[dict], assignments: dict, out_dir: Path,
     """One pass over every case. Writes outputs and a summary into out_dir."""
     out_dir.mkdir(parents=True, exist_ok=True)
     totals = dict.fromkeys(("input_tokens", "output_tokens", "cache_read_input_tokens", "cache_creation_input_tokens"), 0)
-    records, billed = [], 0.0
+    records, billed, unpriced = [], 0.0, 0
     for case in cases:
         start = time.monotonic()
         try:
-            result, usage, cost = backend.grade(case, assignments[case["assignmentId"]], model, effort)
+            result, usage, cost, call = backend.grade(case, assignments[case["assignmentId"]], model, effort)
         except GradingFailed as exc:
             error = str(exc)
         else:
@@ -363,13 +422,17 @@ def run_once(backend, cases: list[dict], assignments: dict, out_dir: Path,
         write_json(out_dir / f"{case['id']}.json", result)
         for k in totals:
             totals[k] += usage[k]
-        billed += cost
-        records.append({"case": case["id"], "ok": True, "seconds": seconds, "usage": usage, "cost_usd": cost})
+        if cost is None:
+            unpriced += 1
+        else:
+            billed += cost
+        records.append({"case": case["id"], "ok": True, "seconds": seconds, "usage": usage, "cost_usd": cost, "call": call})
         log(f"  {case['id']}: {result['score']['finalPointsEarned']}/{result['score']['standardPointsPossible']}")
     summary = {
         "backend": backend.name, "model": model, "effort": effort, "cases": len(cases),
         "succeeded": sum(r["ok"] for r in records),
-        "usage": totals, "cost_usd": round(billed, 6), "records": records,
+        "usage": totals, "cost_usd": round(billed, 6), "unpriced_cases": unpriced,
+        "fallbacks": sum(r["call"]["fallback"] for r in records if r["ok"]), "records": records,
     }
     write_json(out_dir / "run_summary.json", summary)
     return summary
@@ -399,23 +462,26 @@ def main(argv: list[str] | None = None, backend=None) -> int:
     args = parser.parse_args(argv)
     if backend is None:
         backend = ClaudeCodeBackend() if args.backend == "claude-code" else ApiBackend(*default_client())
+    cases, assignments = load_cases(), load_assignments()
+    run_dirs, spent, unpriced = [], 0.0, 0
     try:
-        backend.preflight()
-    except SubscriptionRequired as exc:
+        backend.preflight(args.model)
+        for i in range(1, max(1, args.repeats) + 1):
+            print(f"Run {i}:")
+            d = args.out / f"run-{i}"
+            summary = run_once(backend, cases, assignments, d, args.model, args.effort)
+            run_dirs.append(d)
+            spent += summary["cost_usd"]
+            unpriced += summary["unpriced_cases"]
+    except BackendUnusable as exc:
         print(f"Not running: {exc}", file=sys.stderr)
         return 2
-    cases, assignments = load_cases(), load_assignments()
-    run_dirs, spent = [], 0.0
-    for i in range(1, max(1, args.repeats) + 1):
-        print(f"Run {i}:")
-        d = args.out / f"run-{i}"
-        summary = run_once(backend, cases, assignments, d, args.model, args.effort)
-        run_dirs.append(d)
-        spent += summary["cost_usd"]
     report = {"backend": backend.name, "model": args.model, "effort": args.effort, "repeats": len(run_dirs),
               "total_cost_usd": round(spent, 6), "consistency": consistency(run_dirs, cases)}
     write_json(args.out / "baseline_summary.json", report)
     billing = "Billed: $0 (Claude subscription)" if backend.name == "claude-code" else f"Estimated cost: ${spent:.4f}"
+    if unpriced:
+        billing += f", not counting {unpriced} graded case(s) on a model with no prices in PRICES_PER_MTOK"
     print(f"\n{billing}. Score each run with: python evals/run_evals.py --outputs {run_dirs[0]}")
     return 0
 

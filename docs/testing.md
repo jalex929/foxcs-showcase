@@ -1,6 +1,6 @@
 # Testing and validation
 
-Every suite here runs with a standard Python install (3.10+), no Python packages. The real-sandbox tests also need bubblewrap (`apt install bubblewrap`) and skip without it, except in CI, where they are required. The model runner's tests use a fake API client and a fake `claude` CLI, so they need no API key, no subscription, and no `anthropic` package. CI runs everything on every push, plus a lint check and a separate mutation-testing job: [`.github/workflows/tests.yml`](../.github/workflows/tests.yml). 346 tests in total.
+Every suite here runs with a standard Python install (3.10+), no Python packages. The real-sandbox tests also need bubblewrap (`apt install bubblewrap`) and skip without it, except in CI, where they are required. The model runner's tests use a fake API client and a fake `claude` CLI, so they need no API key, no subscription, and no `anthropic` package. CI runs everything on every push, plus a lint check and a separate mutation-testing job: [`.github/workflows/tests.yml`](../.github/workflows/tests.yml). 372 tests in total.
 
 ## How to run
 
@@ -62,15 +62,18 @@ Batches are built from the eval suite's synthetic cases and reference judgments,
 | Second submission | Misnamed quiz found and penalized, empty practice attempt earns nothing, missing activities reported as not submitted |
 | Golden file | The committed `examples/demo-output/` must match a fresh run byte for byte, so the README never shows stale results |
 
-### Model runner: 48 tests, 100% line and branch coverage
+### Model runner: 67 tests, 100% line and branch coverage
 
 `evals/run_model.py` calls the model through one of two backends: Claude Code in non-interactive mode on a subscription (the default), or the API. Its tests run against a fake CLI and a fake client that record every call. They pin:
 
 - **What is sent:** the model, effort, structured-output schema (strict at every level), refusal fallback, and a cacheable system prompt.
 - **What is never sent:** for every case, none of its expected answers (score ranges, forbidden phrases, criterion bounds, intent) reach the model.
 - **Untrusted input stays contained:** a submission containing `</submission>` cannot break out of its tags.
-- **Failures are recorded, never graded:** a refusal, a truncated response, a response with no text, invalid JSON, or an API error writes an error record and no output. An unexpected exception is not swallowed.
-- **Cost and consistency:** cost per token type at scale, token totals across a run, total cost across repeated runs, and the score spread per case.
+- **Failures are recorded, never graded:** a refusal, a truncated response, an unexpected stop reason, a response with no text, invalid JSON, or an API error writes an error record and no output, naming the API request ID when there is one. An unexpected exception is not swallowed.
+- **API errors are sorted by what helps:** rate limits, overload, server and connection errors are marked safe to requeue; other request errors are marked permanent; a rejected key, missing permission, or unknown model (401, 403, 404) stops the run instead of failing every remaining case.
+- **The API path checks itself first:** a models lookup, which costs no tokens, runs before the first paid call, and any failure there stops the run with nothing graded.
+- **Which model answered:** the model that answered, whether a refusal fallback ran (a different model, or a fallback step in the usage record), and the request ID are recorded per call and counted per run.
+- **Cost and consistency:** cost per token type at scale, each model at its own published rates, a fallback priced at the rates of the model that answered, no estimate for a model without rates, token totals across a run, total cost across repeated runs, and the score spread per case.
 - **The subscription path stays free:** the run refuses to start, before any model call, unless `claude auth status` reports a subscription login with no API key in play. API-key variables never reach the `claude` process, and `--bare` (which needs an API key) is never used.
 - **The CLI call is isolated:** same system prompt and schema as the API path, tools off, safe mode, no session saved, a fresh empty folder per case, and the submission on stdin rather than the command line.
 - **CLI failures are recorded, never graded:** an error result, a missing structured output, non-JSON output (reporting the CLI's last error line, such as a usage limit), a timeout, or a missing `claude` binary.
@@ -88,14 +91,14 @@ Batches are built from the eval suite's synthetic cases and reference judgments,
 
 These run inside a real bubblewrap sandbox in CI. CI sets `FOXCS_REQUIRE_SANDBOX=1`, so a missing sandbox fails the build instead of skipping the tests.
 
-### Queue worker: 27 tests, 100% line and branch coverage
+### Queue worker: 30 tests, 100% line and branch coverage
 
 `grader/review_worker.py` runs the real deterministic grader on the fixture programs, with a fake AI backend. The tests pin:
 
 - **Routing:** only `runs_with_issues` drafts reach the model. Flawless, does-not-run, held, and no-rubric drafts never do.
 - **What the model gets:** the submitted code, the exercise rubric, and the run results, never the student ID.
 - **Duplicates and resubmissions:** the same file is reviewed once; new code is reviewed again and replaces the old review.
-- **Failures:** a failed review goes to `failed/` with its reason and no grade; requeuing it by hand gets it reviewed even though the draft store has already seen the file. Losing the subscription mid-run puts the event back and stops the worker. A crash leaves the event in `processing/`, and the next start recovers it.
+- **Failures:** a failed review goes to `failed/` with its reason and no grade; requeuing it by hand gets it reviewed even though the draft store has already seen the file. Losing the subscription mid-run, or the API rejecting the key, puts the event back and stops the worker, so an expired key never fails the whole queue. A result answered by a fallback model is marked for teacher review, with the reason, and records the requested model, the model that answered, and the request ID. A crash leaves the event in `processing/`, and the next start recovers it.
 - **Handoff to the release check:** a consistent review passes; a review that contradicts the program run, or quotes code the student didn't write, is blocked.
 - **The command line:** one pass by default, `--watch` keeps polling, and it refuses to start without a subscription. The sandbox is on by default and checked before anything else; running without it prints a warning.
 
