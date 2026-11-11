@@ -1,0 +1,75 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "The file defines `def add_points(score, points):` and calls it with `add_points(0, 10)` and `add_points(10, 5)`. I see no syntax or runtime errors."
+      ],
+      "rationale": "The code is valid Python and should run cleanly. No <program_runs> record was provided, so this comes from reading the code.",
+      "confidence": "medium"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "`print(score + points)` is the only statement in the function body. There is no `return` statement."
+      ],
+      "rationale": "The function only prints the new score and never returns it. The rubric says it must not just print. Because of this, the calls cannot store a result.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 2,
+      "pointsPossible": 4,
+      "evidence": [
+        "`add_points(0, 10)` prints 10 and `add_points(10, 5)` prints 15. The last line shown is 15, which is the right final score."
+      ],
+      "rationale": "The last value shown is 15, which is correct. But the program prints an extra intermediate 10, so it prints twice rather than once. It never stores results, and it hardcodes the second starting score (`10`) instead of using the stored first result. The final score is not printed from a stored variable as the prompt asked.",
+      "confidence": "medium"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 0,
+      "pointsPossible": 3,
+      "evidence": [
+        "The explanation says: \"The function returns the score by printing it.\""
+      ],
+      "rationale": "The explanation mixes up returning and printing. `return` sends a value back to the caller so it can be stored and reused. Printing only displays it. The sentence matches the student's code, which prints, but it does not describe what return does.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 6,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 6
+  },
+  "feedback": {
+    "strengths": [
+      "Your function is defined correctly with the two parameters `score` and `points`, and the addition logic is right.",
+      "Your program runs, and the last number it prints is the correct final score of 15."
+    ],
+    "priorityImprovements": [
+      "Change `print(score + points)` to `return score + points`. The assignment requires the function to return the value, not print it.",
+      "Store each result in a variable, for example `score = add_points(0, 10)` and then `score = add_points(score, 5)`. Right now the second call uses a hardcoded `10`.",
+      "Print only once at the end with `print(score)`, so the program shows just the final score of 15.",
+      "Revise your explanation. Printing shows a value on the screen. `return` hands the value back to the code that called the function so it can be saved and reused."
+    ],
+    "overallFeedback": "Your code does the arithmetic and ends on 15, but it prints inside the function instead of returning a value. That is the main idea of this lesson. Your explanation also treats printing and returning as the same thing. Once you switch to `return` and store the results, this will be close to correct.",
+    "nextStep": "Rewrite add_points so it ends with `return score + points`. Then call it twice, saving the result each time in `score`, and print `score` once at the end."
+  },
+  "review": {
+    "teacherReviewRequired": false,
+    "reasons": [
+      "No <program_runs> record was provided, so the run and output results come from reading the code. The code is simple and the result is clear.",
+      "The student's explanation reflects a print/return misconception, but it matches what the code does."
+    ],
+    "overallConfidence": "high"
+  },
+  "submission_id": "02_right_output_wrong_logic",
+  "student_id": "EVAL-02",
+  "assignment_id": "lesson_03_02_return_values"
+}

@@ -1,0 +1,63 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [],
+      "rationale": "The file contains only a placeholder comment and no program code. Nothing was written that could be assessed as a working program, so no points are earned.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [],
+      "rationale": "No add_points function is defined and no return statement is present.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [],
+      "rationale": "The submission has no print statement or function calls, so no final score is produced.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 0,
+      "pointsPossible": 3,
+      "evidence": [],
+      "rationale": "The explanation section is empty, so there is no description of what return does.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 0,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 0
+  },
+  "feedback": {
+    "strengths": [],
+    "priorityImprovements": [
+      "Define add_points(score, points) so that it uses return to send back the new score instead of printing it inside the function.",
+      "Call the function twice starting from 0, adding 10 and then 5, store the result each time, and print the final score.",
+      "Add one or two sentences explaining what return does in your program."
+    ],
+    "overallFeedback": "This submission has no work to assess yet: exercise.py contains only the placeholder `# TODO`, and the explanation is blank. The score reflects that nothing was submitted for each part, not how well you understand return values. If this was not the file you meant to turn in, check with your teacher about submitting the right one.",
+    "nextStep": "Replace the placeholder by writing the add_points function with a return line, then test it by calling it once with 0 and 10 and printing the stored result."
+  },
+  "review": {
+    "teacherReviewRequired": true,
+    "reasons": [
+      "The submission is effectively missing: exercise.py contains only the placeholder comment `# TODO` and the explanation is empty.",
+      "No program run record was provided, and there is no code to evaluate. The teacher may want to confirm whether the student uploaded the intended file."
+    ],
+    "overallConfidence": "low"
+  },
+  "submission_id": "04_missing_submission",
+  "student_id": "EVAL-04",
+  "assignment_id": "lesson_03_02_return_values"
+}

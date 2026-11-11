@@ -1,0 +1,75 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 3,
+      "pointsPossible": 4,
+      "evidence": [
+        "The file contains `for i in range(1, 6):` followed by `print(i)`, which is valid Python and would run without errors."
+      ],
+      "rationale": "The code is syntactically valid and runs, but it is not the requested program. No <program_runs> record was provided, so this is based on reading the code. I gave partial credit because running without errors does not show the assignment was attempted.",
+      "confidence": "medium"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "The submission has no `add_points` function and no `return` statement. It only has a `for` loop that prints numbers."
+      ],
+      "rationale": "The required function that returns the new score is missing. This is an essential criterion.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "The code prints 1 to 5 with `print(i)`. It never calls `add_points` and never prints a final score of 15."
+      ],
+      "rationale": "The output is the numbers 1 to 5, not the expected final score of 15.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 0,
+      "pointsPossible": 3,
+      "evidence": [
+        "The explanation says: \"This loop counts from 1 to 5.\""
+      ],
+      "rationale": "The explanation describes the loop accurately, but it does not explain what `return` does. The code has no `return`, so the explanation does not address the assignment.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 3,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 3
+  },
+  "feedback": {
+    "strengths": [
+      "Your code is valid Python and the loop prints 1 to 5 as you described.",
+      "Your explanation matches what your own code does."
+    ],
+    "priorityImprovements": [
+      "Write the function `add_points(score, points)`. It should end with `return score + points` so it gives the new score back to the caller instead of printing it.",
+      "Call the function twice and store each result. For example, `score = 0`, then `score = add_points(score, 10)`, then `score = add_points(score, 5)`. Then print `score`, which should show 15.",
+      "Write one or two sentences about what `return` does in this program. For example, it sends the new score back to the caller so you can store it and use it in the next call."
+    ],
+    "overallFeedback": "This submission looks like it is for a different exercise. It is a `for` loop that prints 1 to 5, and it has none of the required parts: no `add_points` function, no `return`, and no final score. The code you wrote is valid, but it doesn't meet the assignment. Please redo it following the prompt.",
+    "nextStep": "Start with just the function: write `def add_points(score, points):` with `return score + points` inside it. Test it by printing `add_points(0, 10)`, then build the two calls from there."
+  },
+  "review": {
+    "teacherReviewRequired": true,
+    "reasons": [
+      "The submission appears to be for a different assignment (a loop that prints 1 to 5), not the add_points exercise. The student may have uploaded the wrong file.",
+      "No <program_runs> record was provided, so the runs_without_errors score is based on reading the code.",
+      "The partial credit for runs_without_errors is a judgment call. The teacher may prefer 0 because the code does not attempt the task."
+    ],
+    "overallConfidence": "high"
+  },
+  "submission_id": "06_wrong_assignment",
+  "student_id": "EVAL-06",
+  "assignment_id": "lesson_03_02_return_values"
+}

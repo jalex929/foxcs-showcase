@@ -1,0 +1,73 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "The file contains only the comment `# TODO`; there is no executable code."
+      ],
+      "rationale": "A comment-only file technically doesn't error, but it contains no program, so there is no work to credit.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "No `add_points` function is defined in the submission."
+      ],
+      "rationale": "The function was not written, so nothing returns the new score.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "The submission has no `print` call and no calls to a function."
+      ],
+      "rationale": "Nothing is printed, so there is no final score (expected 15).",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 0,
+      "pointsPossible": 3,
+      "evidence": [
+        "The explanation section is empty."
+      ],
+      "rationale": "No explanation of `return` was provided.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 0,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 0
+  },
+  "feedback": {
+    "strengths": [
+      "You created the file and left a `# TODO` marker, so the starting point is in place."
+    ],
+    "priorityImprovements": [
+      "Define `add_points(score, points)` so it ends with `return score + points` instead of printing.",
+      "Call it twice, storing each result: start with `score = 0`, then `score = add_points(score, 10)` and `score = add_points(score, 5)`.",
+      "Add `print(score)` at the end. It should show 15.",
+      "Write one or two sentences in the explanation box saying what `return` does, for example that it sends the new value back to the caller so you can store it in a variable."
+    ],
+    "overallFeedback": "The submission has only a `# TODO` comment and an empty explanation, so none of the rubric criteria could be credited. The exercise itself is short, and the steps below should get you most of the way.",
+    "nextStep": "Write the `add_points` function with a `return` statement, then test it by running the two calls and checking that it prints 15."
+  },
+  "review": {
+    "teacherReviewRequired": true,
+    "reasons": [
+      "The submission is effectively blank (only `# TODO` and an empty explanation), so there is no work to assess. The teacher may want to confirm that the student submitted the correct file."
+    ],
+    "overallConfidence": "low"
+  },
+  "submission_id": "04_missing_submission",
+  "student_id": "EVAL-04",
+  "assignment_id": "lesson_03_02_return_values"
+}

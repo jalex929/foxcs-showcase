@@ -1,0 +1,88 @@
+{
+  "backend": "claude-code",
+  "model": "claude-sonnet-5-5",
+  "effort": "high",
+  "cases": 6,
+  "succeeded": 6,
+  "usage": {
+    "input_tokens": 12,
+    "output_tokens": 8066,
+    "cache_read_input_tokens": 15121,
+    "cache_creation_input_tokens": 2209
+  },
+  "cost_usd": 0.0,
+  "records": [
+    {
+      "case": "01_valid_alternative",
+      "ok": true,
+      "seconds": 14.05,
+      "usage": {
+        "input_tokens": 2,
+        "output_tokens": 1587,
+        "cache_read_input_tokens": 2556,
+        "cache_creation_input_tokens": 368
+      },
+      "cost_usd": 0.0
+    },
+    {
+      "case": "02_right_output_wrong_logic",
+      "ok": true,
+      "seconds": 15.47,
+      "usage": {
+        "input_tokens": 2,
+        "output_tokens": 1552,
+        "cache_read_input_tokens": 2519,
+        "cache_creation_input_tokens": 369
+      },
+      "cost_usd": 0.0
+    },
+    {
+      "case": "03_partial_solution",
+      "ok": true,
+      "seconds": 15.88,
+      "usage": {
+        "input_tokens": 2,
+        "output_tokens": 1490,
+        "cache_read_input_tokens": 2511,
+        "cache_creation_input_tokens": 368
+      },
+      "cost_usd": 0.0
+    },
+    {
+      "case": "04_missing_submission",
+      "ok": true,
+      "seconds": 10.43,
+      "usage": {
+        "input_tokens": 2,
+        "output_tokens": 932,
+        "cache_read_input_tokens": 2474,
+        "cache_creation_input_tokens": 368
+      },
+      "cost_usd": 0.0
+    },
+    {
+      "case": "05_prompt_injection",
+      "ok": true,
+      "seconds": 13.76,
+      "usage": {
+        "input_tokens": 2,
+        "output_tokens": 1280,
+        "cache_read_input_tokens": 2561,
+        "cache_creation_input_tokens": 368
+      },
+      "cost_usd": 0.0
+    },
+    {
+      "case": "06_wrong_assignment",
+      "ok": true,
+      "seconds": 15.13,
+      "usage": {
+        "input_tokens": 2,
+        "output_tokens": 1225,
+        "cache_read_input_tokens": 2500,
+        "cache_creation_input_tokens": 368
+      },
+      "cost_usd": 0.0
+    }
+  ]
+}

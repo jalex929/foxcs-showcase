@@ -1,0 +1,79 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`def add_points(score, points):`",
+        "`score = add_points(score, amount)`",
+        "`print(score)`"
+      ],
+      "rationale": "No program run record was provided, so this is based on reading the code. The syntax is valid, the function is defined before it is called, and every name is assigned before use. `sum` receives a list of two numbers, which is valid, so no error is expected.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`return sum([score, points])`",
+        "`score = add_points(score, amount)`"
+      ],
+      "rationale": "The function returns the new score and does not print inside the function. The caller stores the returned value each time through the loop.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`score = 0`",
+        "`for amount in (10, 5):`",
+        "`print(score)`"
+      ],
+      "rationale": "Tracing the code: score starts at 0, becomes 10 after the first call, and becomes 15 after the second. The final print outputs 15, which is correct. The loop makes exactly the two required calls, in the required order.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 3,
+      "pointsPossible": 3,
+      "evidence": [
+        "Explanation: \"return hands the new total back to the line that called add_points, so I can save it in score and use it again in the loop.\"",
+        "`score = add_points(score, amount)`"
+      ],
+      "rationale": "The explanation correctly says that the value goes back to the calling line, and it ties this to this program: the value is saved in score and fed into the next loop pass.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 15,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 15
+  },
+  "feedback": {
+    "strengths": [
+      "`add_points` returns the new score instead of printing it, which is the main skill in this exercise.",
+      "`score = add_points(score, amount)` stores each result and passes it into the next call, so the total builds correctly from 0 to 15.",
+      "Your explanation follows the returned value back to the calling line and shows why saving it matters in your loop."
+    ],
+    "priorityImprovements": [
+      "No correction is needed for this rubric. One simplification: `return score + points` adds two numbers directly, without building a list for `sum` to process."
+    ],
+    "overallFeedback": "Your program meets every part of the exercise. The function returns the updated score, the loop calls it twice with 10 and 5, and the final printed score is 15. Using a loop is a tidy way to make the two calls, and your explanation shows that you understand how the returned value carries from one call to the next.",
+    "nextStep": "Change the function body to `return score + points`, then add a third amount to your loop and predict the new final score before you run it."
+  },
+  "review": {
+    "teacherReviewRequired": true,
+    "reasons": [
+      "The approach is valid but unexpected: the student makes the two calls through a `for` loop rather than writing them out separately, and adds with `sum([score, points])` instead of `+`. The loop still calls the function twice and stores each result, so full credit was given; please confirm this meets the intent of \"call it twice\".",
+      "No program run record was provided, so the runs-without-errors and output scores come from reading and tracing the code."
+    ],
+    "overallConfidence": "high"
+  },
+  "submission_id": "01_valid_alternative",
+  "student_id": "EVAL-01",
+  "assignment_id": "lesson_03_02_return_values"
+}

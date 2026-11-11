@@ -1,0 +1,79 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`def add_points(score, points):` is defined before it is used in `score = add_points(0, 10)`",
+        "`print(score)` uses a variable that has already been assigned"
+      ],
+      "rationale": "No program run record was provided, so this is based on reading the code. The syntax is valid, the function is defined before it is called, and the call passes the two required arguments, so no errors are expected.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`return score + points`",
+        "`score = add_points(0, 10)`"
+      ],
+      "rationale": "The function returns the new score rather than printing it, and the caller stores the returned value.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "`score = add_points(0, 10)` is the only call to the function",
+        "`print(score)` would display 10 based on reading the code"
+      ],
+      "rationale": "The assignment requires adding 10 and then 5, for a final score of 15. The second call is missing, so the program would print 10, which is not the correct final score.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 2,
+      "pointsPossible": 3,
+      "evidence": [
+        "Explanation: \"return gives back the answer.\"",
+        "`return score + points`"
+      ],
+      "rationale": "The explanation is accurate but generic. It does not say what the answer is in this program (the new score) or where it goes (back to the caller, where it is stored in `score`).",
+      "confidence": "medium"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 10,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 10
+  },
+  "feedback": {
+    "strengths": [
+      "`return score + points` sends the new score back instead of only printing it, which is the main idea of this lesson.",
+      "`score = add_points(0, 10)` stores the returned value in a variable so it can be used later.",
+      "Your explanation correctly identifies that return gives a value back."
+    ],
+    "priorityImprovements": [
+      "Add the second call to `add_points`. The assignment asks you to add 10 and then 5, but the program stops after adding 10, so it would print 10 instead of 15.",
+      "Make your explanation specific to this program: say what value is returned and what happens to it after the function finishes."
+    ],
+    "overallFeedback": "Your function is written correctly and uses return the way this lesson intends. The program is one step short: it only adds the first 10 points, so the final score is not yet correct. Your explanation is true but brief, and connecting it to your own code would strengthen it.",
+    "nextStep": "After the line that adds 10, call `add_points` again, passing in your stored `score` and 5, and save the result back into `score`. Then run the program and check that it prints 15."
+  },
+  "review": {
+    "teacherReviewRequired": true,
+    "reasons": [
+      "Part of the required work is missing: the submission calls `add_points` once and omits the second call that adds 5.",
+      "No program run record was provided, so the runs-without-errors score and expected output of 10 are based on reading the code.",
+      "The explanation is accurate but very brief; awarding 2 of 3 points is a judgment call."
+    ],
+    "overallConfidence": "medium"
+  },
+  "submission_id": "03_partial_solution",
+  "student_id": "EVAL-03",
+  "assignment_id": "lesson_03_02_return_values"
+}

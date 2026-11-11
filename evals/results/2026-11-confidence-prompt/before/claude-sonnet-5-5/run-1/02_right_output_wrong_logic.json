@@ -1,0 +1,76 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`def add_points(score, points):` followed by `print(score + points)` and two calls `add_points(0, 10)` and `add_points(10, 5)`"
+      ],
+      "rationale": "The code is syntactically valid and every name it uses is defined, so by reading it I expect it to run without errors. No program run record was provided, so this is based on reading only.",
+      "confidence": "medium"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "`print(score + points)` is the only line in the function body; there is no `return` statement"
+      ],
+      "rationale": "The function prints the new score and never returns it. The calls `add_points(0, 10)` and `add_points(10, 5)` give back `None`, so nothing can be stored. This is the core skill of the exercise, and it is missing.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 2,
+      "pointsPossible": 4,
+      "evidence": [
+        "`add_points(0, 10)` prints 10 and `add_points(10, 5)` prints 15",
+        "No final `print(...)` of a stored score"
+      ],
+      "rationale": "The last number printed is 15, which is the correct final score. But the program prints the intermediate value 10 as well, and it never stores the results or prints a final score as the task asked. The 15 appears only because the second call is hard-coded with 10 as its starting score. Partial credit.",
+      "confidence": "medium"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 0,
+      "pointsPossible": 3,
+      "evidence": [
+        "\"The function returns the score by printing it.\""
+      ],
+      "rationale": "The explanation treats printing as returning. Printing displays a value and `return` hands a value back to the caller so it can be stored and reused. The sentence does not say what `return` does, and it shows the same misunderstanding as the code.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 6,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 6
+  },
+  "feedback": {
+    "strengths": [
+      "Your function takes `score` and `points` as parameters and adds them correctly.",
+      "You called it twice with the right values, 10 and then 5, and the last number printed is 15."
+    ],
+    "priorityImprovements": [
+      "Replace `print(score + points)` inside the function with `return score + points`. Printing only shows the value on screen, while `return` gives it back to the code that called the function.",
+      "Store the result of each call, then print once at the end: `score = add_points(0, 10)`, then `score = add_points(score, 5)`, then `print(score)`. Passing in the stored `score` means you don't hard-code the 10 in the second call.",
+      "Rewrite your explanation. `print` and `return` are different things: `return` sends the new score back to the caller so it can be saved in a variable and used again."
+    ],
+    "overallFeedback": "Your code does the arithmetic and the last number printed is 15, but the function prints the score instead of returning it. That is the main idea of this lesson. Your explanation, \"returns the score by printing it\", treats printing and returning as the same thing. Fixing that is the most important step.",
+    "nextStep": "Change the function to use `return score + points`, store each result in `score`, print `score` once at the end, and then rewrite your explanation."
+  },
+  "review": {
+    "teacherReviewRequired": true,
+    "reasons": [
+      "No program run record was provided, so the 'runs without errors' and output judgments come from reading the code only.",
+      "The submission shows a common misconception that printing is the same as returning. The teacher may want to follow up with the student on it.",
+      "The correct_output score of 2/4 is a best-fit judgment. The last printed value is 15, but the program has no stored results and no final print."
+    ],
+    "overallConfidence": "medium"
+  },
+  "submission_id": "02_right_output_wrong_logic",
+  "student_id": "EVAL-02",
+  "assignment_id": "lesson_03_02_return_values"
+}

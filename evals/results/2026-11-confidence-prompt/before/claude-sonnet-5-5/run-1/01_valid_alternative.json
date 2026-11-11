@@ -1,0 +1,78 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`def add_points(score, points):` is defined before it is used",
+        "`return sum([score, points])` is valid Python, because `sum` accepts a list of numbers",
+        "`for amount in (10, 5):` loops over a valid tuple"
+      ],
+      "rationale": "I read the code and found no syntax or runtime problems. No <program_runs> record was provided, so this score comes from reading the code and not from a run.",
+      "confidence": "medium"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`return sum([score, points])`",
+        "`score = add_points(score, amount)`"
+      ],
+      "rationale": "The function returns the new score and does not print it. The caller stores the returned value each time. Using `sum([...])` is a roundabout way to add two numbers, but it still returns the correct new score.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "`score = 0` then the loop over `(10, 5)` gives 0+10=10, then 10+5=15",
+        "`print(score)` is called after the loop"
+      ],
+      "rationale": "Tracing the code gives a single printed line, `15`, which is the correct final score.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 3,
+      "pointsPossible": 3,
+      "evidence": [
+        "\"return hands the new total back to the line that called add_points, so I can save it in score and use it again in the loop.\""
+      ],
+      "rationale": "The explanation is accurate and matches the code. `score = add_points(score, amount)` stores the returned value, and the next loop pass uses it again.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 15,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 15
+  },
+  "feedback": {
+    "strengths": [
+      "`add_points` returns the new score and does not print it. The calling code stores the result with `score = add_points(score, amount)`.",
+      "The final score of 15 is correct, and it is printed once at the end.",
+      "Your explanation correctly says that the returned value goes back to the caller, is saved in `score`, and is reused on the next pass."
+    ],
+    "priorityImprovements": [
+      "Use `return score + points` instead of `return sum([score, points])`. It does the same thing, but it is simpler and easier to read.",
+      "The prompt asked for two calls. Your loop makes both calls correctly. For this lesson, two separate lines (`score = add_points(score, 10)` and `score = add_points(score, 5)`) would show the pattern more plainly."
+    ],
+    "overallFeedback": "This is a correct, working solution that earns full marks. The function returns the new score, the output is 15, and your explanation matches what your code does. The `sum([...])` call and the loop are valid choices, but they are more complicated than this exercise needs.",
+    "nextStep": "Rewrite the function body as `return score + points`. Then try making the two calls on separate lines without a loop, and check that you still get 15."
+  },
+  "review": {
+    "teacherReviewRequired": true,
+    "reasons": [
+      "The approach is valid but a little unexpected: it uses `sum([score, points])` and a loop in place of two direct calls. The teacher should confirm this meets the \"call it twice\" requirement.",
+      "No <program_runs> record was provided, so the run and output results come from reading the code. A trace of the code gives 15."
+    ],
+    "overallConfidence": "medium"
+  },
+  "submission_id": "01_valid_alternative",
+  "student_id": "EVAL-01",
+  "assignment_id": "lesson_03_02_return_values"
+}

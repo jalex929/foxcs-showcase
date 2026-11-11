@@ -25,7 +25,7 @@ python evals/run_evals.py --outputs evals/runs/baseline/run-1
 - **What gets recorded.** Each run writes one result per case, plus token usage and, on the API backend, estimated cost. `--repeats` runs the same cases again and reports the score spread per case, because one passing sample from a probabilistic system is weak evidence.
 - **Failures are never grades.** A refusal, a truncated response, invalid JSON, an API error, or a CLI error is written to `<case>.error.json`, and the eval reports that case as a missing output.
 
-It is tested with a fake CLI and a fake client, so CI needs neither a subscription nor an API key. Baseline numbers come from a real run.
+It is tested with a fake CLI and a fake client, so CI needs neither a subscription nor an API key. The first recorded results are in [docs/model-comparison.md](../docs/model-comparison.md).
 
 ## Running the checks
 
@@ -78,4 +78,4 @@ python -m unittest discover -s evals/tests -v
 
 - **These checks are deterministic.** They catch rule violations, unsupported credit, and escalation failures. They do not measure whether feedback is genuinely helpful. Planned: educator-scored usefulness on a sample, and a model-graded usefulness rubric validated against those educator scores before it is trusted.
 - **Six cases is a starting set** chosen to cover distinct failure modes, not to produce statistically meaningful rates. Planned: 15 to 25 cases across more skills.
-- **Baseline numbers are next.** The runner is built. The next step is a recorded baseline: pass rates per check and score spread per case across repeated runs, committed alongside the reference judgments.
+- **Baseline numbers are early.** One comparison is recorded in `results/`, covering two models and one prompt change. Planned: held-out cases to test whether prompt changes generalize.

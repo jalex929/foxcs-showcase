@@ -1,0 +1,77 @@
+{
+  "rubricResults": [
+    {
+      "criterionId": "runs_without_errors",
+      "pointsEarned": 4,
+      "pointsPossible": 4,
+      "evidence": [
+        "The file defines `def add_points(score, points):` and calls `add_points(0, 10)` and `add_points(10, 5)`. I found no syntax or name errors when reading it."
+      ],
+      "rationale": "The code is valid Python and should run without exceptions. No <program_runs> record was provided, so this is based on reading the code.",
+      "confidence": "medium"
+    },
+    {
+      "criterionId": "uses_return",
+      "pointsEarned": 0,
+      "pointsPossible": 4,
+      "evidence": [
+        "The function body is only `print(score + points)`.",
+        "There is no `return` statement anywhere in the file."
+      ],
+      "rationale": "The task requires the function to return the new score, not print it. This function prints inside and returns nothing, so it gives back `None`. The calls can't store the result.",
+      "confidence": "high"
+    },
+    {
+      "criterionId": "correct_output",
+      "pointsEarned": 2,
+      "pointsPossible": 4,
+      "evidence": [
+        "`add_points(0, 10)` prints 10 and `add_points(10, 5)` prints 15, so the last line is 15.",
+        "The results are not stored, and the second call uses a hard-coded `10` instead of the earlier result."
+      ],
+      "rationale": "The final number shown is the right value, 15. But the program also prints an intermediate 10. It doesn't store each result or print one final score, so it only gets the right number by accident of printing inside the function. Partial credit.",
+      "confidence": "medium"
+    },
+    {
+      "criterionId": "explanation_matches_code",
+      "pointsEarned": 0,
+      "pointsPossible": 3,
+      "evidence": [
+        "The explanation says: \"The function returns the score by printing it.\""
+      ],
+      "rationale": "The explanation treats printing as the same as returning. That is the exact misconception this lesson targets. `return` sends a value back to the caller so it can be stored and reused, and printing only displays it. The explanation also doesn't describe what return does in the program.",
+      "confidence": "high"
+    }
+  ],
+  "score": {
+    "standardPointsEarned": 6,
+    "standardPointsPossible": 15,
+    "bonusRecommended": 0,
+    "finalPointsEarned": 6
+  },
+  "feedback": {
+    "strengths": [
+      "Your function is defined correctly with the `score` and `points` parameters, and the addition `score + points` is right.",
+      "The program is valid Python, and the last number it displays is the expected 15."
+    ],
+    "priorityImprovements": [
+      "Replace `print(score + points)` with `return score + points`. Printing shows a value on screen, but return hands the value back to the code that called the function.",
+      "Store each result and pass it into the next call, for example `score = add_points(0, 10)` and then `score = add_points(score, 5)`. Print `score` once at the end.",
+      "Rewrite your explanation. For example: `return` sends the new score back to where the function was called, so I can save it in a variable and use it in the next call. `print` only displays it."
+    ],
+    "overallFeedback": "Your program shows the right numbers, but the function prints instead of returning, which is the main skill this exercise checks. Because nothing is returned, you couldn't store the results or chain the calls. Your explanation also treats printing and returning as the same thing. Once you switch to `return` and store the values, the rest of your code is close to correct.",
+    "nextStep": "Change the function to `return score + points`. Then write `score = add_points(0, 10)`, `score = add_points(score, 5)` and `print(score)`. Run it and check that it prints just 15."
+  },
+  "review": {
+    "teacherReviewRequired": true,
+    "reasons": [
+      "The student's explanation shows a misconception: it says the function \"returns the score by printing it.\" A teacher may want to follow up.",
+      "No <program_runs> record was provided. I judged that the program runs and what it outputs by reading the code.",
+      "The partial credit on correct_output (2 of 4) is a judgment call, because the final line is 15 but the program also prints an extra 10 and stores no results."
+    ],
+    "overallConfidence": "medium"
+  },
+  "submission_id": "02_right_output_wrong_logic",
+  "student_id": "EVAL-02",
+  "assignment_id": "lesson_03_02_return_values"
+}
